@@ -17,5 +17,5 @@
         "**/ProjectSettings": true,
         "**/Temp": true
     },
-    "editor.codeLens": false
+    "editor.codeLens": true
 }
