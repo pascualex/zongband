@@ -7,49 +7,75 @@ public class Board : MonoBehaviour {
     public Vector2Int size { get; } = new Vector2Int(10, 10);
     public float scale { get; } = 1.0f;
 
-    private CellContent[][] cellContents;
+    private Entity[][] entities;
 
     private void Awake() {
         if (size == null) throw new ArgumentNullException();
         if (size.x <= 0 || size.y <= 0) throw new ArgumentOutOfRangeException();
 
-        cellContents = new CellContent[size.y][];
+        entities = new Entity[size.y][];
         for (int i = 0; i < size.y; i++) {
-            cellContents[i] = new CellContent[size.x];
+            entities[i] = new Entity[size.x];
         }
     }
 
-    public void AddCellContent(CellContent cellContent, Vector2Int at) {
-        if (cellContent == null && at == null) throw new ArgumentNullException();
-        if (cellContents == null) throw new NullReferenceException();
-        if (at.y < 0 || at.y >= cellContents.Length) throw new IndexOutOfRangeException();
-        if (at.x < 0 || at.x >= cellContents[0].Length) throw new IndexOutOfRangeException();
+    public void AddEntity(Entity entity, Vector2Int at) {
+        if (entities == null) throw new NullReferenceException();
+        if (entity == null) throw new ArgumentNullException();
+        if (!Checker.Range(at, size)) throw new ArgumentOutOfRangeException();
 
-        cellContents[at.y][at.x] = cellContent;
-        cellContent.Move(at, scale);
+        entities[at.y][at.x] = entity;
+        entity.Move(at, scale);
     }
 
-    public void MoveCellContent(Vector2Int from, Vector2Int to) {
-        if (from == null && to == null) throw new ArgumentNullException();
-        if (from.y < 0 || from.y >= cellContents.Length) throw new IndexOutOfRangeException();
-        if (from.x < 0 || from.x >= cellContents[0].Length) throw new IndexOutOfRangeException();
-        if (to.y < 0 || to.y >= cellContents.Length) throw new IndexOutOfRangeException();
-        if (to.x < 0 || to.x >= cellContents[0].Length) throw new IndexOutOfRangeException();
-        if (cellContents[from.y][from.x] == null) throw new EmptyCellException();
-        if (cellContents[to.y][to.x] != null) throw new NotEmptyCellException();
+    public void MoveEntity(Entity entity, Vector2Int to) {
+        if (entity == null) throw new ArgumentNullException();
+        if (!CheckEntityPosition(entity)) throw new NotInPositionException();
 
-        cellContents[to.y][to.x] = cellContents[from.y][from.x];
-        cellContents[from.y][from.x] = null;
-        cellContents[to.y][to.x].Move(to, scale);
+        MoveEntity(entity.position, to);
     }
 
-    public void RemoveCellContent(Vector2Int at) {
-        if (at == null) throw new ArgumentNullException();
-        if (at.y < 0 || at.y >= cellContents.Length) throw new IndexOutOfRangeException();
-        if (at.x < 0 || at.x >= cellContents[0].Length) throw new IndexOutOfRangeException();
-        if (cellContents[at.y][at.x] == null) throw new EmptyCellException();
+    public void MoveEntity(Vector2Int from, Vector2Int to) {
+        if (!Checker.Range(from, size)) throw new ArgumentOutOfRangeException();
+        if (!Checker.Range(to, size)) throw new ArgumentOutOfRangeException();
+        if (entities[from.y][from.x] == null) throw new EmptyCellException();
+        if (entities[to.y][to.x] != null) throw new NotEmptyCellException();
 
-        cellContents[at.y][at.x].Remove();
-        cellContents[at.y][at.x] = null;
+        entities[to.y][to.x] = entities[from.y][from.x];
+        entities[from.y][from.x] = null;
+        entities[to.y][to.x].Move(to, scale);
     }
+
+    public void DisplaceEntity(Entity entity, Vector2Int delta) {
+        if (entity == null) throw new ArgumentNullException();
+        if (!CheckEntityPosition(entity)) throw new NotInPositionException();
+
+        DisplaceEntity(entity.position, delta);
+    }
+
+    public void DisplaceEntity(Vector2Int from, Vector2Int delta) {
+        MoveEntity(from, from + delta);
+    }
+
+    public void RemoveEntity(Entity entity) {
+        if (entity == null) throw new ArgumentNullException();
+        if (!CheckEntityPosition(entity)) throw new NotInPositionException();
+
+        RemoveEntity(entity.position);
+    }
+
+    public void RemoveEntity(Vector2Int at) {
+        if (!Checker.Range(at, size)) throw new ArgumentOutOfRangeException();
+        if (entities[at.y][at.x] == null) throw new EmptyCellException();
+
+        entities[at.y][at.x].Remove();
+        entities[at.y][at.x] = null;
+    }
+
+    private bool CheckEntityPosition(Entity entity) {
+        if (entity == null) throw new ArgumentNullException();
+        if (!Checker.Range(entity.position, size)) throw new ArgumentOutOfRangeException();
+        
+        return entities[entity.position.y][entity.position.x] == entity;
+    } 
 }
