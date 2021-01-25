@@ -17,26 +17,25 @@ public class PlayerInputHandler : MonoBehaviour {
     }
     
     public void OnMoveUp() {
-        if (playerEntity == null) return;
-
-        board.DisplaceEntity(playerEntity, Vector2Int.up);
+        Move(Vector2Int.up);
     }
 
     public void OnMoveRight() {
         if (playerEntity == null) return;
-
-        board.DisplaceEntity(playerEntity, Vector2Int.right);
+        Move(Vector2Int.right);
     }
 
     public void OnMoveDown() {
-        if (playerEntity == null) return;
-
-        board.DisplaceEntity(playerEntity, Vector2Int.down);
+        Move(Vector2Int.down);
     }
 
     public void OnMoveLeft() {
+        Move(Vector2Int.left);
+    }
+
+    private void Move(Vector2Int delta) {
         if (playerEntity == null) return;
-        
-        board.DisplaceEntity(playerEntity, Vector2Int.left);
+        if (!board.IsPositionAvailable(playerEntity, delta)) return;
+        board.DisplaceEntity(playerEntity, delta);
     }
 }
