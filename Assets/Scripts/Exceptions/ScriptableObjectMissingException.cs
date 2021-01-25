@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System;
 
-namespace Zongband {
-    public class ScriptableObjectMissingException : Exception {
+namespace Zongband
+{
+    public class ScriptableObjectMissingException : Exception
+    {
 
-    } 
+    }
 }

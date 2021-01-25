@@ -2,22 +2,29 @@
 
 using Zongband.Utils;
 
-namespace Zongband.Entities {
-    public class Entity : MonoBehaviour {
+namespace Zongband.Entities
+{
+    public class Entity : MonoBehaviour
+    {
         public Vector2Int position { get; private set; } = Vector2Int.zero;
 
-        public void Move(Vector2Int to, float scale) {
+        public void Move(Vector2Int to, float scale)
+        {
             position = to;
             EntityTransformer entityTransformer = GetComponent<EntityTransformer>();
 
-            if (entityTransformer != null) {
+            if (entityTransformer != null)
+            {
                 entityTransformer.Transform(to, scale);
-            } else {
+            }
+            else
+            {
                 Debug.LogWarning(Warnings.missingEntityTransformer);
             }
         }
 
-        public void Remove() {
+        public void Remove()
+        {
             // TODO
         }
     }

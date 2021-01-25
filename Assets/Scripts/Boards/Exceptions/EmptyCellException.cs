@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System;
 
-namespace Zongband.Boards {
-    public class EmptyCellException : Exception {
-        
+namespace Zongband.Boards
+{
+    public class EmptyCellException : Exception
+    {
+
     }
 }
