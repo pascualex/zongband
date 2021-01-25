@@ -17,5 +17,10 @@
         "**/ProjectSettings": true,
         "**/Temp": true
     },
-    "editor.codeLens": true
+    "editor.codeLens": true,
+    "cSpell.words": [
+        "Behaviour",
+        "Mathf",
+        "zongband"
+    ]
 }

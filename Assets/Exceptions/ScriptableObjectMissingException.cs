@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 
-public class ScriptableObjectMissingException : Exception {
+namespace Zongband {
+    public class ScriptableObjectMissingException : Exception {
 
+    } 
 }
