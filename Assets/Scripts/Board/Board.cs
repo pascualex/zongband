@@ -4,14 +4,18 @@ using UnityEngine;
 using System;
 
 public class Board : MonoBehaviour {
-    public Vector2Int size { get; } = new Vector2Int(10, 10);
-    public float scale { get; } = 1.0f;
+    public BoardSO boardData;
+
+    public Vector2Int size { get; private set; }
+    public float scale { get; private set; }
 
     private Entity[][] entities;
 
-    private Board() {
-        if (size == null) throw new ArgumentNullException();
-        if (size.x <= 0 || size.y <= 0) throw new ArgumentOutOfRangeException();
+    private void Awake() {
+        if (boardData == null) throw new ScriptableObjectMissingException();
+
+        size = boardData.size;
+        scale = boardData.scale;
 
         entities = new Entity[size.y][];
         for (int i = 0; i < size.y; i++) {

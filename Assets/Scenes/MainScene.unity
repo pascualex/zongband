@@ -271,7 +271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 059b207b1178a604895bde07c23b55fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 4492399739101815466, guid: c94917070f7eaf54ba6d8acf1f6a3023,
+  playerPrefab: {fileID: 454549392992744140, guid: c94917070f7eaf54ba6d8acf1f6a3023,
     type: 3}
   board: {fileID: 1211860784}
 --- !u!1 &1211860782
@@ -317,6 +317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd49414cf29b69541a672237f0c5b16a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boardData: {fileID: 11400000, guid: ec1ac837efd28224c961953169d49385, type: 2}
 --- !u!4 &1211860785
 Transform:
   m_ObjectHideFlags: 0
@@ -361,7 +362,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   board: {fileID: 1211860784}
-  entityPrefab: {fileID: 4492399739101815466, guid: c94917070f7eaf54ba6d8acf1f6a3023,
+  entityPrefab: {fileID: 454549392992744140, guid: c94917070f7eaf54ba6d8acf1f6a3023,
     type: 3}
 --- !u!4 &1379493069
 Transform:
