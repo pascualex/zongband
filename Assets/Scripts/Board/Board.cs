@@ -25,22 +25,19 @@ public class Board : MonoBehaviour {
 
     public void AddEntity(Entity entity, Vector2Int at) {
         if (entity == null) throw new ArgumentNullException();
-        if (!Checker.Range(at, size)) throw new ArgumentOutOfRangeException();
+        if (!IsPositionEmpty(at)) throw new ArgumentOutOfRangeException();
 
         entities[at.y][at.x] = entity;
         entity.Move(at, scale);
     }
 
     public void MoveEntity(Entity entity, Vector2Int to) {
-        if (entity == null) throw new ArgumentNullException();
         if (!CheckEntityPosition(entity)) throw new NotInPositionException();
 
         MoveEntity(entity.position, to);
     }
 
     public void MoveEntity(Vector2Int from, Vector2Int to) {
-        if (!Checker.Range(from, size)) throw new ArgumentOutOfRangeException();
-        if (!Checker.Range(to, size)) throw new ArgumentOutOfRangeException();
         if (IsPositionEmpty(from)) throw new EmptyCellException();
         if (!IsPositionEmpty(to)) throw new NotEmptyCellException();
 
@@ -50,7 +47,6 @@ public class Board : MonoBehaviour {
     }
 
     public void DisplaceEntity(Entity entity, Vector2Int delta) {
-        if (entity == null) throw new ArgumentNullException();
         if (!CheckEntityPosition(entity)) throw new NotInPositionException();
 
         DisplaceEntity(entity.position, delta);
@@ -61,14 +57,12 @@ public class Board : MonoBehaviour {
     }
 
     public void RemoveEntity(Entity entity) {
-        if (entity == null) throw new ArgumentNullException();
         if (!CheckEntityPosition(entity)) throw new NotInPositionException();
 
         RemoveEntity(entity.position);
     }
 
     public void RemoveEntity(Vector2Int at) {
-        if (!Checker.Range(at, size)) throw new ArgumentOutOfRangeException();
         if (IsPositionEmpty(at)) throw new EmptyCellException();
 
         entities[at.y][at.x].Remove();
@@ -77,6 +71,7 @@ public class Board : MonoBehaviour {
 
     public bool IsPositionAvailable(Entity entity, Vector2Int delta) {
         if (entity == null) throw new ArgumentNullException();
+
         return IsPositionAvailable(entity.position + delta);
     }
 
@@ -86,6 +81,7 @@ public class Board : MonoBehaviour {
 
     private bool IsPositionEmpty(Vector2Int position) {
         if (!Checker.Range(position, size)) throw new ArgumentOutOfRangeException();
+        
         return entities[position.y][position.x] == null;
     }
 
