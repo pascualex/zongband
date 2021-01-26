@@ -1,6 +1,7 @@
 using UnityEngine;
 
 using Zongband.Entities;
+using Zongband.Utils;
 
 namespace Zongband.Boards {
     public class Board : MonoBehaviour {
@@ -9,7 +10,8 @@ namespace Zongband.Boards {
         public Vector2Int size { get; private set; }
         public float scale { get; private set; }
 
-        private EntityLayer entityLayer;
+        private EntityLayer<Agent> agentLayer;
+        private EntityLayer<Entity> entityLayer;
         
         private void Awake() {
             if (boardData == null) throw new ScriptableObjectMissingException();
@@ -17,52 +19,104 @@ namespace Zongband.Boards {
             size = boardData.size;
             scale = boardData.scale;
 
-            entityLayer = new EntityLayer(size, scale);
+            agentLayer = new EntityLayer<Agent>(size, scale);
+            entityLayer = new EntityLayer<Entity>(size, scale);
         }
 
-        public void AddEntity(Entity entity, Vector2Int at)
+        public void Add(Agent agent, Vector2Int at)
         {
-            entityLayer.AddEntity(entity, at);
+            if (!IsPositionAvailable(agent, at)) throw new NotEmptyCellException();
+
+            agentLayer.Add(agent, at);
         }
 
-        public void MoveEntity(Entity entity, Vector2Int to)
+        public void Add(Entity entity, Vector2Int at)
         {
-            entityLayer.MoveEntity(entity, to);
+            if (!IsPositionAvailable(entity, at)) throw new NotEmptyCellException();
+
+            entityLayer.Add(entity, at);
         }
 
-        public void MoveEntity(Vector2Int from, Vector2Int to)
+        public void Move(Agent agent, Vector2Int to)
         {
-            entityLayer.MoveEntity(from, to);
+            if (!IsPositionAvailable(agent, to)) throw new NotEmptyCellException();
+
+            agentLayer.Move(agent, to);
         }
 
-        public void DisplaceEntity(Entity entity, Vector2Int delta)
+        public void Move(Entity entity, Vector2Int to)
         {
-            entityLayer.DisplaceEntity(entity, delta);
+            if (!IsPositionAvailable(entity, to)) throw new NotEmptyCellException();
+            
+            entityLayer.Move(entity, to);
         }
 
-        public void DisplaceEntity(Vector2Int from, Vector2Int delta)
+        public void Displace(Agent agent, Vector2Int delta)
         {
-            entityLayer.DisplaceEntity(from, delta);
+            if (!IsDisplacementAvailable(agent, delta)) throw new NotEmptyCellException();
+
+            agentLayer.Displace(agent, delta);
         }
 
-        public void RemoveEntity(Entity entity)
+        public void Displace(Entity entity, Vector2Int delta)
         {
-            entityLayer.RemoveEntity(entity);
+            if (!IsDisplacementAvailable(entity, delta)) throw new NotEmptyCellException();
+
+            entityLayer.Displace(entity, delta);
         }
 
-        public void RemoveEntity(Vector2Int at)
+        public void Remove(Agent agent)
         {
-            entityLayer.RemoveEntity(at);
+            agentLayer.Remove(agent);
         }
 
-        public bool IsPositionAvailable(Entity entity, Vector2Int delta)
+        public void Remove(Entity entity)
         {
-            return entityLayer.IsPositionAvailable(entity, delta);
+            entityLayer.Remove(entity);
         }
 
-        public bool IsPositionAvailable(Vector2Int position)
+        public bool IsPositionValid(Vector2Int position)
         {
-            return entityLayer.IsPositionAvailable(position);
+            return Checker.Range(position, size);
+        }
+
+        public bool IsPositionEmpty(Vector2Int position)
+        {
+            if (!agentLayer.IsPositionEmpty(position)) return false;
+            if (!entityLayer.IsPositionEmpty(position)) return false;
+            return true;
+        }
+
+        public bool IsPositionAvailable(Agent agent, Vector2Int position)
+        {
+            if (!IsPositionValid(position)) return false;
+            if (!agentLayer.IsPositionEmpty(position)) return false;
+            /* Add here special interactions in the future */
+            if (!entityLayer.IsPositionEmpty(position)) return false;
+            return true;
+        }
+
+        public bool IsPositionAvailable(Entity entity, Vector2Int position)
+        {
+            if (!IsPositionValid(position)) return false;
+            if (!entityLayer.IsPositionEmpty(position)) return false;
+            /* Add here special interactions in the future */
+            if (!agentLayer.IsPositionEmpty(position)) return false;
+            return true;
+        }
+
+        public bool IsDisplacementAvailable(Agent agent, Vector2Int delta)
+        {
+            if (!agentLayer.CheckEntityPosition(agent)) throw new NotInPositionException();
+            
+            return IsPositionAvailable(agent, agent.position + delta);
+        }
+
+        public bool IsDisplacementAvailable(Entity entity, Vector2Int delta)
+        {
+            if (!entityLayer.CheckEntityPosition(entity)) throw new NotInPositionException();
+
+            return IsPositionAvailable(entity, entity.position + delta);
         }
     }
 }

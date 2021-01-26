@@ -360,7 +360,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   board: {fileID: 1211860784}
-  playerPrefab: {fileID: 454549392992744140, guid: c94917070f7eaf54ba6d8acf1f6a3023,
+  playerPrefab: {fileID: 8587418266659207353, guid: a8465489bd2f1da4d8970a38aff5087d,
     type: 3}
   entityPrefab: {fileID: 454549392992744140, guid: c94917070f7eaf54ba6d8acf1f6a3023,
     type: 3}
