@@ -6,6 +6,6 @@ namespace Zongband.Entities
     [RequireComponent(typeof(Entity))]
     public abstract class EntityTransformer : MonoBehaviour
     {
-        abstract public void Transform(Vector2Int to, float scale);
+        public abstract void Transform(Vector2Int to, float scale);
     }
 }
