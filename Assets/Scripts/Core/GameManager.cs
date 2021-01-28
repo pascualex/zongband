@@ -20,7 +20,12 @@ namespace Zongband.Core
             board.Add(entity, new Vector2Int(5, 3));
 
             playerAgent = Instantiate(playerPrefab);
-            board.Add(playerAgent, new Vector2Int(1, 1));
+            board.Add(playerAgent, new Vector2Int(2, 1));
+
+            for (int i = 1; i < (board.size.y - 1); i++)
+            {
+                board.ModifyTerrain(new Vector2Int(1, i), true);
+            }
         }
 
         public void AttemptMovePlayer(Vector2Int movement)

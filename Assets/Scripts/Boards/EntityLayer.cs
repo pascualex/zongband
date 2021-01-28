@@ -5,7 +5,7 @@ using Zongband.Entities;
 using Zongband.Utils;
 
 namespace Zongband.Boards
-{    
+{
     public class EntityLayer<EntityT> : Layer where EntityT : Entity
     {
         private EntityT[][] entities;
@@ -30,59 +30,43 @@ namespace Zongband.Boards
 
         public void Move(EntityT entity, Vector2Int to)
         {
-            if (!CheckEntityPosition(entity)) throw new NotInPositionException();
+            if (!CheckEntityPosition(entity)) throw new NotInTileException(entity);
 
             Move(entity.position, to);
         }
 
         public void Move(Vector2Int from, Vector2Int to)
         {
-            if (IsPositionEmpty(from)) throw new EmptyCellException();
-            if (!IsPositionEmpty(to)) throw new NotEmptyCellException();
+            if (IsPositionEmpty(from)) throw new EmptyTileException(from);
+            if (!IsPositionEmpty(to)) throw new NotEmptyTileException(to);
 
             entities[to.y][to.x] = entities[from.y][from.x];
             entities[from.y][from.x] = null;
             entities[to.y][to.x].Move(to, scale);
         }
 
-        public void Displace(EntityT entity, Vector2Int delta)
-        {
-            if (!CheckEntityPosition(entity)) throw new NotInPositionException();
-
-            Displace(entity.position, delta);
-        }
-
-        public void Displace(Vector2Int from, Vector2Int delta)
-        {
-            Move(from, from + delta);
-        }
-
         public void Remove(EntityT entity)
         {
-            if (!CheckEntityPosition(entity)) throw new NotInPositionException();
+            if (!CheckEntityPosition(entity)) throw new NotInTileException(entity);
 
             Remove(entity.position);
         }
 
         public void Remove(Vector2Int at)
         {
-            if (IsPositionEmpty(at)) throw new EmptyCellException();
+            if (IsPositionEmpty(at)) throw new EmptyTileException(at);
 
             entities[at.y][at.x].Remove();
             entities[at.y][at.x] = null;
         }
 
-        public bool IsPositionValid(Vector2Int position) {
-            return Checker.Range(position, size);
-        }
-
-        public bool IsPositionEmpty(Vector2Int position)
+        public override bool IsPositionEmpty(Vector2Int position)
         {
             if (!IsPositionValid(position)) throw new ArgumentOutOfRangeException();
 
             return entities[position.y][position.x] == null;
         }
-        
+
         public bool CheckEntityPosition(EntityT entity)
         {
             if (entity == null) throw new ArgumentNullException();
