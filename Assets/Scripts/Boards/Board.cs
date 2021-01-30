@@ -33,6 +33,7 @@ namespace Zongband.Boards
             if (!IsPositionAvailable(agent, at)) throw new NotEmptyTileException(at);
 
             agentLayer.Add(agent, at);
+            agent.Move(at, scale);
         }
 
         public void Add(Entity entity, Vector2Int at)
@@ -40,6 +41,7 @@ namespace Zongband.Boards
             if (!IsPositionAvailable(entity, at)) throw new NotEmptyTileException(at);
 
             entityLayer.Add(entity, at);
+            entity.Move(at, scale);
         }
 
         public void Move(Agent agent, Vector2Int to)
@@ -47,6 +49,7 @@ namespace Zongband.Boards
             if (!IsPositionAvailable(agent, to)) throw new NotEmptyTileException(to);
 
             agentLayer.Move(agent, to);
+            agent.Move(to, scale);
         }
 
         public void Move(Entity entity, Vector2Int to)
@@ -54,6 +57,7 @@ namespace Zongband.Boards
             if (!IsPositionAvailable(entity, to)) throw new NotEmptyTileException(to);
 
             entityLayer.Move(entity, to);
+            entity.Move(to, scale);
         }
 
         public void Displace(Agent agent, Vector2Int delta)
@@ -73,11 +77,13 @@ namespace Zongband.Boards
         public void Remove(Agent agent)
         {
             agentLayer.Remove(agent);
+            agent.OnRemove();
         }
 
         public void Remove(Entity entity)
         {
             entityLayer.Remove(entity);
+            entity.OnRemove();
         }
 
         public void ModifyTerrain(Vector2Int position, bool isWall)

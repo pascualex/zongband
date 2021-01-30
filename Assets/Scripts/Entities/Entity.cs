@@ -10,22 +10,13 @@ namespace Zongband.Entities
 
         public void Move(Vector2Int to, float scale)
         {
-            position = to;
-            EntityTransformer entityTransformer = GetComponent<EntityTransformer>();
-
-            if (entityTransformer != null)
-            {
-                entityTransformer.Transform(to, scale);
-            }
-            else
-            {
-                Debug.LogWarning(Warnings.missingEntityTransformer);
-            }
+            this.position = to;
+            transform.position = new Vector3(to.x + 0.5f, 0, to.y + 0.5f) * scale;
         }
 
-        public void Remove()
+        public void OnRemove()
         {
-            // TODO
+            Destroy(this);
         }
     }
 }

@@ -25,7 +25,6 @@ namespace Zongband.Boards
             if (!IsPositionEmpty(at)) throw new ArgumentOutOfRangeException();
 
             entities[at.y][at.x] = entity;
-            entity.Move(at, scale);
         }
 
         public void Move(EntityT entity, Vector2Int to)
@@ -42,7 +41,6 @@ namespace Zongband.Boards
 
             entities[to.y][to.x] = entities[from.y][from.x];
             entities[from.y][from.x] = null;
-            entities[to.y][to.x].Move(to, scale);
         }
 
         public void Remove(EntityT entity)
@@ -56,7 +54,6 @@ namespace Zongband.Boards
         {
             if (IsPositionEmpty(at)) throw new EmptyTileException(at);
 
-            entities[at.y][at.x].Remove();
             entities[at.y][at.x] = null;
         }
 
