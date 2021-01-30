@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Tilemaps;
 
 using Zongband.Boards;
 using Zongband.Entities;
@@ -10,6 +11,8 @@ namespace Zongband.Core
         public Board board;
         public Agent playerPrefab;
         public Entity entityPrefab;
+        public TileBase floorTile;
+        public TileBase wallTile;
 
         private Agent playerAgent;
         private Entity entity;
@@ -26,10 +29,11 @@ namespace Zongband.Core
             Vector2Int downRight = new Vector2Int(board.size.x - 1, 0);
             Vector2Int downLeft = Vector2Int.zero;
             Vector2Int upLeft = new Vector2Int(0, board.size.y - 1);
-            board.ModifyBoxTerrain(upLeft, upRight + new Vector2Int(0, -1), true);
-            board.ModifyBoxTerrain(upRight, downRight + new Vector2Int(-1, 0), true);
-            board.ModifyBoxTerrain(downRight, downLeft + new Vector2Int(0, 1), true);
-            board.ModifyBoxTerrain(downLeft, upLeft + new Vector2Int(1, 0), true);
+            board.ModifyBoxTerrain(downLeft, upRight, false, floorTile);
+            board.ModifyBoxTerrain(upLeft, upRight + new Vector2Int(0, -1), true, wallTile);
+            board.ModifyBoxTerrain(upRight, downRight + new Vector2Int(-1, 0), true, wallTile);
+            board.ModifyBoxTerrain(downRight, downLeft + new Vector2Int(0, 1), true, wallTile);
+            board.ModifyBoxTerrain(downLeft, upLeft + new Vector2Int(1, 0), true, wallTile);
         }
 
         public void AttemptMovePlayer(Vector2Int movement)

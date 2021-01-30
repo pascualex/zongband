@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 using Zongband.Entities;
 using Zongband.Utils;
@@ -8,6 +9,7 @@ namespace Zongband.Boards
     public class Board : MonoBehaviour
     {
         public BoardSO boardData;
+        public Tilemap terrainTilemap;
 
         public Vector2Int size { get; private set; }
         public float scale { get; private set; }
@@ -19,6 +21,7 @@ namespace Zongband.Boards
         private void Awake()
         {
             if (boardData == null) throw new ScriptableObjectMissingException();
+            if (terrainTilemap == null) throw new GameObjectMissingException();
 
             size = boardData.size;
             scale = boardData.scale;
@@ -86,21 +89,22 @@ namespace Zongband.Boards
             entity.OnRemove();
         }
 
-        public void ModifyTerrain(Vector2Int position, bool isWall)
+        public void ModifyTerrain(Vector2Int position, bool isWall, TileBase tilebase)
         {
             if (!IsPositionAvailable(isWall, position)) throw new NotEmptyTileException(position);
 
             terrainLayer.Modify(position, isWall);
+            terrainTilemap.SetTile((Vector3Int) position, tilebase);
         }
 
-        public void ModifyBoxTerrain(Vector2Int from, Vector2Int to, bool isWall)
+        public void ModifyBoxTerrain(Vector2Int from, Vector2Int to, bool isWall, TileBase tilebase)
         {
             Vector2Int lower = new Vector2Int(Mathf.Min(from.x, to.x), Mathf.Min(from.y, to.y));
             Vector2Int higher = new Vector2Int(Mathf.Max(from.x, to.x), Mathf.Max(from.y, to.y));
 
             for (int i = lower.y; i <= higher.y; i++) {
                 for (int j = lower.x; j <= higher.x; j++) {
-                    ModifyTerrain(new Vector2Int(j, i), isWall);
+                    ModifyTerrain(new Vector2Int(j, i), isWall, tilebase);
                 }
             }
         }

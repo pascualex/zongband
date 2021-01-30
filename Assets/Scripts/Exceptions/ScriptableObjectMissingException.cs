@@ -3,7 +3,7 @@ using System;
 
 namespace Zongband
 {
-    public class ScriptableObjectMissingException : Exception
+    public class ScriptableObjectMissingException : GameObjectMissingException
     {
 
     }
