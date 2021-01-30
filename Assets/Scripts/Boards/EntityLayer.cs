@@ -57,7 +57,7 @@ namespace Zongband.Boards
             entities[at.y][at.x] = null;
         }
 
-        public override bool IsPositionEmpty(Vector2Int position)
+        public bool IsPositionEmpty(Vector2Int position)
         {
             if (!IsPositionValid(position)) throw new ArgumentOutOfRangeException();
 

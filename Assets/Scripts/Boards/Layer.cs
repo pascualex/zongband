@@ -19,7 +19,5 @@ namespace Zongband.Boards
         {
             return Checker.Range(position, size);
         }
-
-        public abstract bool IsPositionEmpty(Vector2Int position);
     }
 }

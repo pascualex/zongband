@@ -89,22 +89,22 @@ namespace Zongband.Boards
             entity.OnRemove();
         }
 
-        public void ModifyTerrain(Vector2Int position, bool isWall, TileBase tilebase)
+        public void ModifyTerrain(Vector2Int position, TileSO tile)
         {
-            if (!IsPositionAvailable(isWall, position)) throw new NotEmptyTileException(position);
+            if (!IsPositionAvailable(tile, position)) throw new NotEmptyTileException(position);
 
-            terrainLayer.Modify(position, isWall);
-            terrainTilemap.SetTile((Vector3Int) position, tilebase);
+            terrainLayer.Modify(position, tile);
+            terrainTilemap.SetTile((Vector3Int) position, tile.tileBase);
         }
 
-        public void ModifyBoxTerrain(Vector2Int from, Vector2Int to, bool isWall, TileBase tilebase)
+        public void ModifyBoxTerrain(Vector2Int from, Vector2Int to, TileSO tile)
         {
             Vector2Int lower = new Vector2Int(Mathf.Min(from.x, to.x), Mathf.Min(from.y, to.y));
             Vector2Int higher = new Vector2Int(Mathf.Max(from.x, to.x), Mathf.Max(from.y, to.y));
 
             for (int i = lower.y; i <= higher.y; i++) {
                 for (int j = lower.x; j <= higher.x; j++) {
-                    ModifyTerrain(new Vector2Int(j, i), isWall, tilebase);
+                    ModifyTerrain(new Vector2Int(j, i), tile);
                 }
             }
         }
@@ -127,7 +127,7 @@ namespace Zongband.Boards
             if (!agentLayer.IsPositionEmpty(position)) return false;
             /* Add here special interactions in the future */
             if (!entityLayer.IsPositionEmpty(position)) return false;
-            if (!terrainLayer.IsPositionEmpty(position)) return false;
+            if (terrainLayer.GetTile(position).blocksGround) return false;
             return true;
         }
 
@@ -137,16 +137,16 @@ namespace Zongband.Boards
             if (!entityLayer.IsPositionEmpty(position)) return false;
             /* Add here special interactions in the future */
             if (!agentLayer.IsPositionEmpty(position)) return false;
-            if (!terrainLayer.IsPositionEmpty(position)) return false;
+            if (terrainLayer.GetTile(position).blocksGround) return false;
             return true;
         }
 
-        public bool IsPositionAvailable(bool isWall, Vector2Int position)
+        public bool IsPositionAvailable(TileSO tile, Vector2Int position)
         {
             if (!IsPositionValid(position)) return false;
             /* Add here special interactions in the future */
-            if (isWall && !agentLayer.IsPositionEmpty(position)) return false;
-            if (isWall && !entityLayer.IsPositionEmpty(position)) return false;
+            if (tile.blocksGround && !agentLayer.IsPositionEmpty(position)) return false;
+            if (tile.blocksGround && !entityLayer.IsPositionEmpty(position)) return false;
             return true;
         }
 
