@@ -87,6 +87,18 @@ namespace Zongband.Boards
             terrainLayer.Modify(position, isWall);
         }
 
+        public void ModifyBoxTerrain(Vector2Int from, Vector2Int to, bool isWall)
+        {
+            Vector2Int lower = new Vector2Int(Mathf.Min(from.x, to.x), Mathf.Min(from.y, to.y));
+            Vector2Int higher = new Vector2Int(Mathf.Max(from.x, to.x), Mathf.Max(from.y, to.y));
+
+            for (int i = lower.y; i <= higher.y; i++) {
+                for (int j = lower.x; j <= higher.x; j++) {
+                    ModifyTerrain(new Vector2Int(j, i), isWall);
+                }
+            }
+        }
+
         public bool IsPositionValid(Vector2Int position)
         {
             return Checker.Range(position, size);
