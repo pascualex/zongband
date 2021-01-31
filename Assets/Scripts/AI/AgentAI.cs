@@ -17,7 +17,7 @@ namespace Zongband.Turns
             Vector2Int[] directions = Directions.Randomized();
             foreach (Vector2Int direction in directions)
             {
-                if (!board.IsDisplacementAvailable(agent, direction)) continue;
+                if (!board.IsDisplacementAvailable(agent.GetEntity(), direction)) continue;
                 return direction;
             }
 

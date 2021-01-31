@@ -614,11 +614,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 376829694825e4e409bd79b76dcb4cb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  examplePlayerAgentPrefab: {fileID: 8587418266659207353, guid: 09fb2cc6317f02340a0aef7cd65e0de0,
+  playerPrefab: {fileID: 8587418266659207353, guid: 09fb2cc6317f02340a0aef7cd65e0de0,
     type: 3}
-  exampleAgentPrefab: {fileID: 8587418266659207353, guid: a8465489bd2f1da4d8970a38aff5087d,
+  agentPrefab: {fileID: 8587418266659207353, guid: a8465489bd2f1da4d8970a38aff5087d,
     type: 3}
-  exampleEntityPrefab: {fileID: 454549392992744140, guid: c94917070f7eaf54ba6d8acf1f6a3023,
+  entityPrefab: {fileID: 454549392992744140, guid: c94917070f7eaf54ba6d8acf1f6a3023,
     type: 3}
   floorTile: {fileID: 11400000, guid: c01a94980ed34a940989672df4bbe34d, type: 2}
   wallTile: {fileID: 11400000, guid: d4733fce90b3e6042b7b3784043abe54, type: 2}

@@ -6,20 +6,20 @@ using Zongband.Utils;
 
 namespace Zongband.Boards
 {
-    public class EntityLayer<EntityT> : Layer where EntityT : Entity
+    public class EntityLayer : Layer
     {
-        private EntityT[][] entities;
+        private Entity[][] entities;
 
         public EntityLayer(Vector2Int size, float scale) : base(size, scale)
         {
-            entities = new EntityT[size.y][];
+            entities = new Entity[size.y][];
             for (int i = 0; i < size.y; i++)
             {
-                entities[i] = new EntityT[size.x];
+                entities[i] = new Entity[size.x];
             }
         }
 
-        public void Add(EntityT entity, Vector2Int at)
+        public void Add(Entity entity, Vector2Int at)
         {
             if (entity == null) throw new ArgumentNullException();
             if (!IsPositionEmpty(at)) throw new ArgumentOutOfRangeException();
@@ -27,7 +27,7 @@ namespace Zongband.Boards
             entities[at.y][at.x] = entity;
         }
 
-        public void Move(EntityT entity, Vector2Int to)
+        public void Move(Entity entity, Vector2Int to)
         {
             if (!CheckEntityPosition(entity)) throw new NotInTileException(entity);
 
@@ -43,7 +43,7 @@ namespace Zongband.Boards
             entities[from.y][from.x] = null;
         }
 
-        public void Remove(EntityT entity)
+        public void Remove(Entity entity)
         {
             if (!CheckEntityPosition(entity)) throw new NotInTileException(entity);
 
@@ -64,7 +64,7 @@ namespace Zongband.Boards
             return entities[position.y][position.x] == null;
         }
 
-        public bool CheckEntityPosition(EntityT entity)
+        public bool CheckEntityPosition(Entity entity)
         {
             if (entity == null) throw new ArgumentNullException();
             if (!Checker.Range(entity.position, size)) throw new ArgumentOutOfRangeException();

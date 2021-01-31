@@ -14,8 +14,8 @@ namespace Zongband.Boards
         public Vector2Int size { get; private set; }
         public float scale { get; private set; }
 
-        private EntityLayer<Agent> agentLayer;
-        private EntityLayer<Entity> entityLayer;
+        private EntityLayer agentLayer;
+        private EntityLayer entityLayer;
         private TerrainLayer terrainLayer;
 
         private void Awake()
@@ -26,66 +26,40 @@ namespace Zongband.Boards
             size = boardData.size;
             scale = boardData.scale;
 
-            agentLayer = new EntityLayer<Agent>(size, scale);
-            entityLayer = new EntityLayer<Entity>(size, scale);
+            agentLayer = new EntityLayer(size, scale);
+            entityLayer = new EntityLayer(size, scale);
             terrainLayer = new TerrainLayer(size, scale);
-        }
-
-        public void Add(Agent agent, Vector2Int at)
-        {
-            if (!IsPositionAvailable(agent, at)) throw new NotEmptyTileException(at);
-
-            agentLayer.Add(agent, at);
-            agent.Move(at, scale);
         }
 
         public void Add(Entity entity, Vector2Int at)
         {
             if (!IsPositionAvailable(entity, at)) throw new NotEmptyTileException(at);
 
-            entityLayer.Add(entity, at);
+            if (entity.IsAgent()) agentLayer.Add(entity, at);
+            else entityLayer.Add(entity, at);
             entity.Move(at, scale);
-        }
-
-        public void Move(Agent agent, Vector2Int to)
-        {
-            if (!IsPositionAvailable(agent, to)) throw new NotEmptyTileException(to);
-
-            agentLayer.Move(agent, to);
-            agent.Move(to, scale);
         }
 
         public void Move(Entity entity, Vector2Int to)
         {
             if (!IsPositionAvailable(entity, to)) throw new NotEmptyTileException(to);
 
-            entityLayer.Move(entity, to);
+            if (entity.IsAgent()) agentLayer.Move(entity, to);
+            else entityLayer.Move(entity, to);
             entity.Move(to, scale);
-        }
-
-        public void Displace(Agent agent, Vector2Int delta)
-        {
-            if (!agentLayer.CheckEntityPosition(agent)) throw new NotInTileException(agent);
-
-            Move(agent, agent.position + delta);
         }
 
         public void Displace(Entity entity, Vector2Int delta)
         {
-            if (!entityLayer.CheckEntityPosition(entity)) throw new NotInTileException(entity);
+            if (!CheckEntityPosition(entity)) throw new NotInTileException(entity);
 
             Move(entity, entity.position + delta);
         }
 
-        public void Remove(Agent agent)
-        {
-            agentLayer.Remove(agent);
-            agent.OnRemove();
-        }
-
         public void Remove(Entity entity)
         {
-            entityLayer.Remove(entity);
+            if (entity.IsAgent()) agentLayer.Remove(entity);
+            else entityLayer.Remove(entity);
             entity.OnRemove();
         }
 
@@ -123,22 +97,12 @@ namespace Zongband.Boards
             return true;
         }
 
-        public bool IsPositionAvailable(Agent agent, Vector2Int position)
-        {
-            if (!IsPositionValid(position)) return false;
-            if (!agentLayer.IsPositionEmpty(position)) return false;
-            /* Add here special interactions in the future */
-            if (!entityLayer.IsPositionEmpty(position)) return false;
-            if (terrainLayer.GetTile(position).blocksGround) return false;
-            return true;
-        }
-
         public bool IsPositionAvailable(Entity entity, Vector2Int position)
         {
             if (!IsPositionValid(position)) return false;
-            if (!entityLayer.IsPositionEmpty(position)) return false;
             /* Add here special interactions in the future */
             if (!agentLayer.IsPositionEmpty(position)) return false;
+            if (!entityLayer.IsPositionEmpty(position)) return false;
             if (terrainLayer.GetTile(position).blocksGround) return false;
             return true;
         }
@@ -152,18 +116,16 @@ namespace Zongband.Boards
             return true;
         }
 
-        public bool IsDisplacementAvailable(Agent agent, Vector2Int delta)
-        {
-            if (!agentLayer.CheckEntityPosition(agent)) throw new NotInTileException(agent);
-
-            return IsPositionAvailable(agent, agent.position + delta);
-        }
-
         public bool IsDisplacementAvailable(Entity entity, Vector2Int delta)
         {
-            if (!entityLayer.CheckEntityPosition(entity)) throw new NotInTileException(entity);
+            if (!CheckEntityPosition(entity)) throw new NotInTileException(entity);
 
             return IsPositionAvailable(entity, entity.position + delta);
+        }
+
+        public bool CheckEntityPosition(Entity entity) {
+            if (entity.IsAgent()) return agentLayer.CheckEntityPosition(entity);
+            else return entityLayer.CheckEntityPosition(entity);
         }
     }
 }

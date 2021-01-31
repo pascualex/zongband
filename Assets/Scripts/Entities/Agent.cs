@@ -4,8 +4,11 @@ using Zongband.Utils;
 
 namespace Zongband.Entities
 {
-    public class Agent : Entity
+    [RequireComponent(typeof(Entity))]
+    public class Agent : MonoBehaviour
     {
-        
+        public Entity GetEntity() {
+            return GetComponent<Entity>();
+        }
     }
 }

@@ -9,9 +9,9 @@ namespace Zongband.Core
 {
     public class GameManager : MonoBehaviour
     {
-        public Agent examplePlayerAgentPrefab;
-        public Agent exampleAgentPrefab;
-        public Entity exampleEntityPrefab;
+        public Agent playerPrefab;
+        public Agent agentPrefab;
+        public Entity entityPrefab;
         public TileSO floorTile;
         public TileSO wallTile;
         public Board board;
@@ -22,9 +22,9 @@ namespace Zongband.Core
 
         private void Start()
         {
-            playerAgent = Spawn(examplePlayerAgentPrefab, new Vector2Int(3, 3));
-            Spawn(exampleAgentPrefab, new Vector2Int(5, 3)); ;
-            Spawn(exampleEntityPrefab, new Vector2Int(5, 5));
+            playerAgent = Spawn(playerPrefab.GetEntity(), new Vector2Int(3, 3)).GetAgent();
+            Spawn(agentPrefab.GetEntity(), new Vector2Int(5, 3)); ;
+            Spawn(entityPrefab, new Vector2Int(5, 5));
 
             Vector2Int upRight = board.size - Vector2Int.one;
             Vector2Int downRight = new Vector2Int(board.size.x - 1, 0);
@@ -45,16 +45,13 @@ namespace Zongband.Core
 
             while (turnManager.GetCurrent() != playerAgent)
             {
-                Debug.Log("Agent's turn");
                 Agent agent = turnManager.GetCurrent();
 
                 Vector2Int direction = agentAI.GenerateMovement(agent, board);
-                board.Displace(agent, direction);
+                board.Displace(agent.GetEntity(), direction);
 
                 turnManager.NextTurn();
             }
-
-            Debug.Log("Player's turn");
         }
 
         public Entity Spawn(Entity entityPrefab, Vector2Int at)
@@ -64,23 +61,13 @@ namespace Zongband.Core
 
             Entity entity = Instantiate(entityPrefab);
             board.Add(entity, at);
+            if (entity.IsAgent()) turnManager.Add(entity.GetAgent());
             return entity;
-        }
-
-        public Agent Spawn(Agent agentPrefab, Vector2Int at)
-        {
-            if (agentPrefab == null) throw new ArgumentNullException();
-            if (!board.IsPositionValid(at)) throw new ArgumentOutOfRangeException();
-
-            Agent agent = Instantiate(agentPrefab);
-            board.Add(agent, at);
-            turnManager.Add(agent);
-            return agent;
         }
 
         public void AttemptMovePlayer(Vector2Int movement)
         {
-            if (!board.IsDisplacementAvailable(playerAgent, movement)) return;
+            if (!board.IsDisplacementAvailable(playerAgent.GetEntity(), movement)) return;
             // This check is only temporal and is not thread friendly            
             if (turnManager.GetCurrent() != playerAgent) return;
             MovePlayer(movement);
@@ -88,7 +75,7 @@ namespace Zongband.Core
 
         public void MovePlayer(Vector2Int movement)
         {
-            board.Displace(playerAgent, movement);
+            board.Displace(playerAgent.GetEntity(), movement);
             turnManager.NextTurn();
             ResolveTurns();
         }
