@@ -432,6 +432,7 @@ GameObject:
   - component: {fileID: 1190358109}
   - component: {fileID: 1190358108}
   - component: {fileID: 1190358110}
+  - component: {fileID: 1190358111}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: Untagged
@@ -524,7 +525,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 059b207b1178a604895bde07c23b55fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1379493068}
+--- !u!114 &1190358111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1190358107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 623f9b078ef4e7a42ae935e04b8d0a20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onActionPackReady:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1379493068}
+        m_TargetAssemblyTypeName: Zongband.Core.GameManager, Zongband
+        m_MethodName: ResolvePlayerTurn
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1211860782
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,6 +651,7 @@ MonoBehaviour:
   wallTile: {fileID: 11400000, guid: d4733fce90b3e6042b7b3784043abe54, type: 2}
   board: {fileID: 1211860784}
   turnManager: {fileID: 848178843}
+  playerAgentController: {fileID: 1190358111}
   agentAI: {fileID: 470883251}
 --- !u!4 &1379493069
 Transform:
