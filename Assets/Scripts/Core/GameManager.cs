@@ -3,6 +3,8 @@ using System;
 
 using Zongband.Boards;
 using Zongband.Turns;
+using Zongband.AI;
+using Zongband.Actions;
 using Zongband.Entities;
 
 namespace Zongband.Core
@@ -47,11 +49,28 @@ namespace Zongband.Core
             {
                 Agent agent = turnManager.GetCurrent();
 
-                Vector2Int direction = agentAI.GenerateMovement(agent, board);
-                board.Displace(agent.GetEntity(), direction);
+                ActionPack actionPack = agentAI.GenerateActionPack(agent, board);
+                ConsumeActionPack(actionPack);
 
                 turnManager.NextTurn();
             }
+        }
+
+        public void ConsumeActionPack(ActionPack actionPack)
+        {
+            if (actionPack == null) throw new ArgumentNullException(); 
+
+            foreach (MovementAction movementAction in actionPack.GetMovementActions()) {
+                ConsumeAction(movementAction);
+            }
+        }
+
+        public void ConsumeAction(MovementAction movementAction)
+        {
+            if (movementAction == null) throw new ArgumentNullException();
+
+            if (movementAction.absolute) board.Move(movementAction.entity, movementAction.movement);
+            else board.Displace(movementAction.entity, movementAction.movement);
         }
 
         public Entity Spawn(Entity entityPrefab, Vector2Int at)
