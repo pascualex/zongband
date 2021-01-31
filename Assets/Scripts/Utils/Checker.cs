@@ -3,10 +3,8 @@
 
 namespace Zongband.Utils
 {
-    public class Checker
+    public static class Checker
     {
-        private Checker() { }
-
         public static bool Range(float value, float max)
         {
             return Range(value, 0, max);

@@ -94,7 +94,7 @@ namespace Zongband.Boards
             if (!IsPositionAvailable(tile, position)) throw new NotEmptyTileException(position);
 
             terrainLayer.Modify(position, tile);
-            terrainTilemap.SetTile((Vector3Int) position, tile.tileBase);
+            terrainTilemap.SetTile((Vector3Int)position, tile.tileBase);
         }
 
         public void ModifyBoxTerrain(Vector2Int from, Vector2Int to, TileSO tile)
@@ -102,8 +102,10 @@ namespace Zongband.Boards
             Vector2Int lower = new Vector2Int(Mathf.Min(from.x, to.x), Mathf.Min(from.y, to.y));
             Vector2Int higher = new Vector2Int(Mathf.Max(from.x, to.x), Mathf.Max(from.y, to.y));
 
-            for (int i = lower.y; i <= higher.y; i++) {
-                for (int j = lower.x; j <= higher.x; j++) {
+            for (int i = lower.y; i <= higher.y; i++)
+            {
+                for (int j = lower.x; j <= higher.x; j++)
+                {
                     ModifyTerrain(new Vector2Int(j, i), tile);
                 }
             }
