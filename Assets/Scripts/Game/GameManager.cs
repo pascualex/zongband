@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem;
 using System;
 
 using Zongband.Player;
@@ -9,7 +8,7 @@ using Zongband.Turns;
 using Zongband.Actions;
 using Zongband.Entities;
 
-namespace Zongband.Core
+namespace Zongband.Game
 {
     public class GameManager : MonoBehaviour
     {
@@ -40,7 +39,7 @@ namespace Zongband.Core
             if (agentAI == null) throw new NullReferenceException();
         }
 
-        private void Start()
+        public void SetupExample()
         {
             playerAgent = Spawn(playerPrefab.GetEntity(), new Vector2Int(3, 3)).GetAgent();
             Spawn(agentPrefab.GetEntity(), new Vector2Int(5, 3)); ;
@@ -57,31 +56,24 @@ namespace Zongband.Core
             board.ModifyBoxTerrain(downLeft, upLeft + new Vector2Int(1, 0), wallTile);
         }
 
-        private void Update()
-        {
-            UpdateBeforeInputSystem();
-            InputSystem.Update();
-            UpdateAfterInputSystem();
-        }
-
-        private void UpdateBeforeInputSystem()
+        public void SetupTurn()
         {
             playerAgentController.Setup(playerAgent, board);
         }
 
-        private void UpdateAfterInputSystem()
+        public bool IsReady()
         {
-            ProcessTurn();
+            if (turnManager.GetCurrent() != playerAgent) return true;
+            return playerAgentController.IsReady();
         }
 
-        private void ProcessTurn()
+        public void ProcessTurn()
         {
+            if (!IsReady()) throw new GameNotReadyException();
             if (playerAgent == null) throw new NullReferenceException();
 
             if (turnManager.GetCurrent() == playerAgent)
             {
-                if (!playerAgentController.ActionPerformed()) return;
-
                 ActionPack actionPack = playerAgentController.GetActionPack();
                 ApplyActionPack(actionPack);
 

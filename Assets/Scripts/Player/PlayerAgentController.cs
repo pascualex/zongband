@@ -26,16 +26,16 @@ namespace Zongband.Player
             return actionPack;
         }
 
-        public bool ActionPerformed()
+        public bool IsReady()
         {
             return actionPack != null;
         }
 
         public void AttemptDisplacement(Vector2Int delta)
         {
+            if (IsReady()) return;
             if (agent == null) return;
             if (board == null) return;
-            if (ActionPerformed()) return;
 
             if (!board.IsDisplacementAvailable(agent.GetEntity(), delta)) return;
 
