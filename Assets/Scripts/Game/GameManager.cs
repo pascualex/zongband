@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System;
 
-using Zongband.Player;
-using Zongband.AI;
+using Zongband.Controllers;
 using Zongband.Boards;
 using Zongband.Turns;
 using Zongband.Actions;
@@ -20,8 +19,8 @@ namespace Zongband.Game
 
         public Board board;
         public TurnManager turnManager;
-        public PlayerAgentController playerAgentController;
-        public AgentAI agentAI;
+        public PlayerController playerController;
+        public AIController aiController;
 
         private Agent playerAgent;
 
@@ -35,8 +34,8 @@ namespace Zongband.Game
 
             if (board == null) throw new NullReferenceException();
             if (turnManager == null) throw new NullReferenceException();
-            if (playerAgentController == null) throw new NullReferenceException();
-            if (agentAI == null) throw new NullReferenceException();
+            if (playerController == null) throw new NullReferenceException();
+            if (aiController == null) throw new NullReferenceException();
         }
 
         public void SetupExample()
@@ -58,13 +57,13 @@ namespace Zongband.Game
 
         public void SetupTurn()
         {
-            playerAgentController.Setup(playerAgent, board);
+            playerController.Setup(playerAgent, board);
         }
 
         public bool IsReady()
         {
             if (turnManager.GetCurrent() != playerAgent) return true;
-            return playerAgentController.IsReady();
+            return playerController.IsReady();
         }
 
         public void ProcessTurn()
@@ -74,7 +73,7 @@ namespace Zongband.Game
 
             if (turnManager.GetCurrent() == playerAgent)
             {
-                ActionPack actionPack = playerAgentController.GetActionPack();
+                ActionPack actionPack = playerController.GetActionPack();
                 ApplyActionPack(actionPack);
 
                 turnManager.NextTurn();
@@ -84,7 +83,7 @@ namespace Zongband.Game
             {
                 Agent agent = turnManager.GetCurrent();
 
-                ActionPack actionPack = agentAI.GenerateActionPack(agent, board);
+                ActionPack actionPack = aiController.GenerateActionPack(agent, board);
                 ApplyActionPack(actionPack);
 
                 turnManager.NextTurn();

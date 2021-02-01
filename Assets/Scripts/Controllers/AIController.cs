@@ -6,9 +6,9 @@ using Zongband.Actions;
 using Zongband.Entities;
 using Zongband.Utils;
 
-namespace Zongband.AI
+namespace Zongband.Actions
 {
-    public class AgentAI : MonoBehaviour
+    public class AIController : MonoBehaviour
     {
         public ActionPack GenerateActionPack(Agent agent, Board board)
         {

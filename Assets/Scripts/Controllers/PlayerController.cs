@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
-using System;
 
 using Zongband.Boards;
 using Zongband.Actions;
 using Zongband.Entities;
 
-namespace Zongband.Player
+namespace Zongband.Controllers
 {
-    public class PlayerAgentController : MonoBehaviour
+    public class PlayerController : MonoBehaviour
     {
         public Agent agent { get; private set; }
         public Board board { get; private set; }
