@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 using System;
 
 using Zongband.Player;
@@ -58,12 +59,34 @@ namespace Zongband.Core
 
         private void Update()
         {
-            ResolveTurns();
+            UpdateBeforeInputSystem();
+            InputSystem.Update();
+            UpdateAfterInputSystem();
         }
 
-        private void ResolveTurns()
+        private void UpdateBeforeInputSystem()
+        {
+            playerAgentController.Setup(playerAgent, board);
+        }
+
+        private void UpdateAfterInputSystem()
+        {
+            ProcessTurn();
+        }
+
+        private void ProcessTurn()
         {
             if (playerAgent == null) throw new NullReferenceException();
+
+            if (turnManager.GetCurrent() == playerAgent)
+            {
+                if (!playerAgentController.ActionPerformed()) return;
+
+                ActionPack actionPack = playerAgentController.GetActionPack();
+                ApplyActionPack(actionPack);
+
+                turnManager.NextTurn();
+            }
 
             while (turnManager.GetCurrent() != playerAgent)
             {
@@ -73,17 +96,6 @@ namespace Zongband.Core
                 ApplyActionPack(actionPack);
 
                 turnManager.NextTurn();
-            }
-
-            if (!playerAgentController.isPlayerTurn)
-            {
-                playerAgentController.StartTurn(playerAgent, board);
-            }
-
-            if (playerAgentController.isActionPackReady)
-            {
-                ActionPack playerActionPack = playerAgentController.EndTurn();
-                ApplyActionPack(playerActionPack);
             }
         }
 
