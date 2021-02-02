@@ -141,6 +141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e13adcdc34bc704d9fd82ece0bccb34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tickWait: 25
 --- !u!114 &3216937962292394352
 MonoBehaviour:
   m_ObjectHideFlags: 0

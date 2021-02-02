@@ -79,7 +79,7 @@ namespace Zongband.Game
                 ActionPack actionPack = playerController.GetActionPack();
                 ApplyActionPack(actionPack);
 
-                turnManager.NextTurn();
+                turnManager.Next();
             }
 
             while (turnManager.GetCurrent() != playerAgent)
@@ -89,7 +89,7 @@ namespace Zongband.Game
                 ActionPack actionPack = aiController.GenerateActionPack(agent, board);
                 ApplyActionPack(actionPack);
 
-                turnManager.NextTurn();
+                turnManager.Next();
             }
         }
 

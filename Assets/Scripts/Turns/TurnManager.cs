@@ -8,34 +8,48 @@ namespace Zongband.Turns
 {
     public class TurnManager : MonoBehaviour
     {
-        private List<Agent> agents;
-        private int index;
+        private LinkedList<Turn> turns;
+        private bool hasStarted;
 
         public TurnManager()
         {
-            agents = new List<Agent>();
-            index = 0;
+            turns = new LinkedList<Turn>();
+            hasStarted = false;
         }
 
         public void Add(Agent agent)
         {
-            agents.Add(agent);
+            int currentTick = hasStarted ? turns.First.Value.tick : 0;
+            int additionalTicks = agent.tickWait;
+            Turn turn = new Turn(agent, currentTick + additionalTicks);
+
+            for (LinkedListNode<Turn> node = turns.Last; node != null; node = node.Previous)
+            {
+                if (node.Value.CompareTo(turn) <= 0)
+                {
+                    turns.AddAfter(node, turn);
+                    return;
+                }
+            }
+
+            turns.AddLast(turn);
+        }
+
+        public void Next()
+        {
+            if (turns.Count == 0) throw new NoTurnsException();
+
+            hasStarted = true;
+
+            Add(turns.First.Value.agent);
+            turns.RemoveFirst();
         }
 
         public Agent GetCurrent()
         {
-            if (agents.Count == 0) throw new NoAgentsException();
-            if (index < 0 || index >= agents.Count) throw new IndexOutOfRangeException();
+            if (turns.Count == 0) throw new NoTurnsException();
 
-            return agents[index];
-        }
-
-        public void NextTurn()
-        {
-            if (agents.Count == 0) throw new NoAgentsException();
-            if (index < 0 || index >= agents.Count) throw new IndexOutOfRangeException();
-
-            index = (index + 1) % agents.Count;
+            return turns.First.Value.agent;
         }
     }
 }

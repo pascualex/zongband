@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace Zongband.Actions
 {
@@ -14,7 +13,7 @@ namespace Zongband.Actions
             movementActions = new List<MovementAction>();
         }
 
-        public ReadOnlyCollection<MovementAction> GetMovementActions()
+        public IReadOnlyList<MovementAction> GetMovementActions()
         {
             return movementActions.AsReadOnly();
         }
