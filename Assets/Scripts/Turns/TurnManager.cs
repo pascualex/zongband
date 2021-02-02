@@ -20,7 +20,7 @@ namespace Zongband.Turns
         public void Add(Agent agent)
         {
             int currentTick = hasStarted ? turns.First.Value.tick : 0;
-            int additionalTicks = agent.tickWait;
+            int additionalTicks = agent.GetTurnCooldown();
             Turn turn = new Turn(agent, currentTick + additionalTicks);
 
             for (LinkedListNode<Turn> node = turns.Last; node != null; node = node.Previous)

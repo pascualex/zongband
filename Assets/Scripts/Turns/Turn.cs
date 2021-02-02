@@ -23,7 +23,7 @@ namespace Zongband.Turns
             if (other == null) throw new NullReferenceException();
 
             if (other.tick != tick) return tick - other.tick;
-            return agent.tickWait - other.agent.tickWait;
+            return agent.GetTurnCooldown() - other.agent.GetTurnCooldown();
         }
     }
 }

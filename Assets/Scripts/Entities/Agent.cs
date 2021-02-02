@@ -1,15 +1,25 @@
 ﻿using UnityEngine;
-
-using Zongband.Utils;
+using System;
 
 namespace Zongband.Entities
 {
     [RequireComponent(typeof(Entity))]
     public class Agent : MonoBehaviour
     {
-        public int tickWait = 10;
+        public AgentSO agentSO;
 
-        public Entity GetEntity() {
+        private void Awake()
+        {
+            if (agentSO == null) throw new NullReferenceException();
+        }
+
+        public int GetTurnCooldown()
+        {
+            return agentSO.turnCooldown;
+        }
+
+        public Entity GetEntity()
+        {
             return GetComponent<Entity>();
         }
     }
