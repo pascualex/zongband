@@ -41,8 +41,11 @@ namespace Zongband.Game
         public void SetupExample()
         {
             playerAgent = Spawn(playerPrefab.GetEntity(), new Vector2Int(3, 3)).GetAgent();
-            Spawn(agentPrefab.GetEntity(), new Vector2Int(5, 3)); ;
-            Spawn(entityPrefab, new Vector2Int(5, 5));
+            Spawn(agentPrefab.GetEntity(), new Vector2Int(3, 5));
+            Spawn(agentPrefab.GetEntity(), new Vector2Int(4, 5));
+            Spawn(agentPrefab.GetEntity(), new Vector2Int(5, 5));
+            Spawn(agentPrefab.GetEntity(), new Vector2Int(6, 5));
+            Spawn(entityPrefab, new Vector2Int(3, 7));
 
             Vector2Int upRight = board.size - Vector2Int.one;
             Vector2Int downRight = new Vector2Int(board.size.x - 1, 0);
@@ -55,20 +58,20 @@ namespace Zongband.Game
             board.ModifyBoxTerrain(downLeft, upLeft + new Vector2Int(1, 0), wallTile);
         }
 
-        public void SetupTurn()
+        public void SetupPlayerTurn()
         {
             playerController.Setup(playerAgent, board);
         }
 
-        public bool IsReady()
+        public bool IsPlayerReady()
         {
             if (turnManager.GetCurrent() != playerAgent) return true;
             return playerController.IsReady();
         }
 
-        public void ProcessTurn()
+        public void ProcessTurnsUntilPlayer()
         {
-            if (!IsReady()) throw new GameNotReadyException();
+            if (!IsPlayerReady()) throw new GameNotReadyException();
             if (playerAgent == null) throw new NullReferenceException();
 
             if (turnManager.GetCurrent() == playerAgent)

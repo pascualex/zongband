@@ -22,9 +22,9 @@ namespace Zongband.Core
 
         private void Update()
         {
-            gameManager.SetupTurn();
+            gameManager.SetupPlayerTurn();
             InputSystem.Update();
-            if (gameManager.IsReady()) gameManager.ProcessTurn();
+            if (gameManager.IsPlayerReady()) gameManager.ProcessTurnsUntilPlayer();
         }
     }
 }
