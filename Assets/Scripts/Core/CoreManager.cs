@@ -3,12 +3,15 @@ using UnityEngine.InputSystem;
 using System;
 
 using Zongband.Game;
+using Zongband.Game.Actions;
+using Zongband.Player;
 
 namespace Zongband.Core
 {
     public class CoreManager : MonoBehaviour
     {
         public GameManager gameManager;
+        public PlayerController playerController;
 
         private void Awake()
         {
@@ -22,9 +25,13 @@ namespace Zongband.Core
 
         private void Update()
         {
-            gameManager.SetupPlayerTurn();
+            playerController.ClearActionPack();
             InputSystem.Update();
-            if (gameManager.IsPlayerReady()) gameManager.ProcessTurnsUntilPlayer();
+            if (playerController.ActionPackAvailable())
+            {
+                ActionPack actionPack = playerController.ConsumeActionPack();
+                gameManager.ProcessPlayerTurn(actionPack);
+            }
         }
     }
 }

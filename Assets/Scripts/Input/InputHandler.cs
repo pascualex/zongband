@@ -2,7 +2,8 @@
 using UnityEngine.InputSystem;
 using System;
 
-using Zongband.Controllers;
+using Zongband.Player;
+using Zongband.UI;
 
 namespace Zongband.Input
 {
@@ -10,10 +11,12 @@ namespace Zongband.Input
     public class InputHandler : MonoBehaviour
     {
         public PlayerController playerController;
+        public TileViewer tileViewer;
 
         private void Awake()
         {
             if (playerController == null) throw new NullReferenceException();
+            if (tileViewer == null) throw new NullReferenceException();
         }
 
         public void OnMoveUp()
@@ -34,6 +37,11 @@ namespace Zongband.Input
         public void OnMoveLeft()
         {
             playerController.AttemptDisplacement(Vector2Int.left);
+        }
+
+        public void OnMoveMouse(InputValue value) {
+            Vector2 mousePosition = value.Get<Vector2>();
+            // tileViewer.DebugMouseProjectionPosition(mousePosition);
         }
     }
 }

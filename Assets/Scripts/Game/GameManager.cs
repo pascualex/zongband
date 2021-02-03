@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System;
 
-using Zongband.Controllers;
-using Zongband.Boards;
-using Zongband.Turns;
-using Zongband.Actions;
-using Zongband.Entities;
+using Zongband.Game.AI;
+using Zongband.Game.Boards;
+using Zongband.Game.Turns;
+using Zongband.Game.Actions;
+using Zongband.Game.Entities;
 
 namespace Zongband.Game
 {
@@ -19,10 +19,9 @@ namespace Zongband.Game
 
         public Board board;
         public TurnManager turnManager;
-        public PlayerController playerController;
-        public AIController aiController;
+        public AgentAI aiController;
 
-        private Agent playerAgent;
+        public Agent playerAgent { get; private set; }
 
         private void Awake()
         {
@@ -34,7 +33,6 @@ namespace Zongband.Game
 
             if (board == null) throw new NullReferenceException();
             if (turnManager == null) throw new NullReferenceException();
-            if (playerController == null) throw new NullReferenceException();
             if (aiController == null) throw new NullReferenceException();
         }
 
@@ -56,33 +54,25 @@ namespace Zongband.Game
             board.ModifyBoxTerrain(upRight, downRight + new Vector2Int(-1, 0), wallTile);
             board.ModifyBoxTerrain(downRight, downLeft + new Vector2Int(0, 1), wallTile);
             board.ModifyBoxTerrain(downLeft, upLeft + new Vector2Int(1, 0), wallTile);
+
+            if (!IsPlayerTurn()) ProcessAITurns();
         }
 
-        public void SetupPlayerTurn()
+        public void ProcessPlayerTurn(ActionPack actionPack)
         {
-            playerController.Setup(playerAgent, board);
+            if (!IsPlayerTurn()) throw new IsNotPlayerTurnException();
+
+            ApplyActionPack(actionPack);
+            turnManager.Next();
+
+            if (!IsPlayerTurn()) ProcessAITurns();
         }
 
-        public bool IsPlayerReady()
+        private void ProcessAITurns()
         {
-            if (turnManager.GetCurrent() != playerAgent) return true;
-            return playerController.IsReady();
-        }
+            if (IsPlayerTurn()) throw new IsPlayerTurnException();
 
-        public void ProcessTurnsUntilPlayer()
-        {
-            if (!IsPlayerReady()) throw new GameNotReadyException();
-            if (playerAgent == null) throw new NullReferenceException();
-
-            if (turnManager.GetCurrent() == playerAgent)
-            {
-                ActionPack actionPack = playerController.GetActionPack();
-                ApplyActionPack(actionPack);
-
-                turnManager.Next();
-            }
-
-            while (turnManager.GetCurrent() != playerAgent)
+            while (!IsPlayerTurn())
             {
                 Agent agent = turnManager.GetCurrent();
 
@@ -91,6 +81,13 @@ namespace Zongband.Game
 
                 turnManager.Next();
             }
+        }
+
+        private bool IsPlayerTurn()
+        {
+            if (playerAgent == null) throw new NullReferenceException();
+
+            return turnManager.GetCurrent() == playerAgent;
         }
 
         private void ApplyActionPack(ActionPack actionPack)
