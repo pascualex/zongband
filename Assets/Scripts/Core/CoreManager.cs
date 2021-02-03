@@ -2,7 +2,7 @@
 using UnityEngine.InputSystem;
 using System;
 
-using Zongband.Game;
+using Zongband.Game.Core;
 using Zongband.Game.Actions;
 using Zongband.Player;
 

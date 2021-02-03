@@ -39,9 +39,10 @@ namespace Zongband.Input
             playerController.AttemptDisplacement(Vector2Int.left);
         }
 
-        public void OnMoveMouse(InputValue value) {
+        public void OnMoveMouse(InputValue value)
+        {
             Vector2 mousePosition = value.Get<Vector2>();
-            // tileViewer.DebugMouseProjectionPosition(mousePosition);
+            tileViewer.DebugMouseProjectionPosition(mousePosition);
         }
     }
 }

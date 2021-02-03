@@ -24,10 +24,6 @@ namespace Zongband.UI
                 Vector3 position = ray.GetPoint(distance);
                 Debug.Log("Mouse at " + position);
             }
-            else
-            {
-                Debug.Log("Mouse not projected");
-            }
         }
     }
 }

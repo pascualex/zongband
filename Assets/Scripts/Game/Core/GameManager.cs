@@ -7,7 +7,7 @@ using Zongband.Game.Turns;
 using Zongband.Game.Actions;
 using Zongband.Game.Entities;
 
-namespace Zongband.Game
+namespace Zongband.Game.Core
 {
     public class GameManager : MonoBehaviour
     {

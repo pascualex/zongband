@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 
-using Zongband.Game;
+using Zongband.Game.Core;
 using Zongband.Game.Actions;
 using Zongband.Game.Boards;
 using Zongband.Game.Entities;
