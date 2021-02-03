@@ -13,6 +13,12 @@
         "**/*.tga": true,
         "**/*.cubemap": true,
         "**/*.prefab": true,
+        "**/*.obj": true,
+        "**/*.vox": true,
+        "**/*.lighting": true,
+        "**/*.asset": true,
+        "**/*.preset": true,
+        "**/*.inputactions": true,
         "**/Library": true,
         "**/ProjectSettings": true,
         "**/Temp": true

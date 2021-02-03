@@ -5,6 +5,7 @@ using System;
 using Zongband.Game.Core;
 using Zongband.Game.Actions;
 using Zongband.Player;
+using Zongband.UI;
 
 namespace Zongband.Core
 {
@@ -12,10 +13,13 @@ namespace Zongband.Core
     {
         public GameManager gameManager;
         public PlayerController playerController;
+        public UIManager uiManager;
 
         private void Awake()
         {
             if (gameManager == null) throw new NullReferenceException();
+            if (playerController == null) throw new NullReferenceException();
+            if (uiManager == null) throw new NullReferenceException();
         }
 
         private void Start()
@@ -32,6 +36,7 @@ namespace Zongband.Core
                 ActionPack actionPack = playerController.ConsumeActionPack();
                 gameManager.ProcessPlayerTurn(actionPack);
             }
+            uiManager.UpdateUI();
         }
     }
 }

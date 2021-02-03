@@ -113,7 +113,7 @@ namespace Zongband.Game.Core
             if (entityPrefab == null) throw new ArgumentNullException();
             if (!board.IsPositionValid(at)) throw new ArgumentOutOfRangeException();
 
-            Entity entity = Instantiate(entityPrefab);
+            Entity entity = Instantiate(entityPrefab, turnManager.transform);
             board.Add(entity, at);
             if (entity.IsAgent()) turnManager.Add(entity.GetAgent());
             return entity;

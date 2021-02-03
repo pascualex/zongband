@@ -11,12 +11,12 @@ namespace Zongband.Input
     public class InputHandler : MonoBehaviour
     {
         public PlayerController playerController;
-        public TileViewer tileViewer;
+        public UIManager uiManager;
 
         private void Awake()
         {
             if (playerController == null) throw new NullReferenceException();
-            if (tileViewer == null) throw new NullReferenceException();
+            if (uiManager == null) throw new NullReferenceException();
         }
 
         public void OnMoveUp()
@@ -42,7 +42,7 @@ namespace Zongband.Input
         public void OnMoveMouse(InputValue value)
         {
             Vector2 mousePosition = value.Get<Vector2>();
-            tileViewer.DebugMouseProjectionPosition(mousePosition);
+            uiManager.mousePosition = mousePosition;
         }
     }
 }
