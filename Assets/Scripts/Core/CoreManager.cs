@@ -29,7 +29,10 @@ namespace Zongband.Core
 
         private void Update()
         {
+            #if !UNITY_EDITOR && !DEVELOPMENT_BUILD
             playerController.ClearActionPack();
+            #endif
+            
             InputSystem.Update();
             if (playerController.ActionPackAvailable())
             {
