@@ -50,7 +50,8 @@ namespace Zongband.Game.Core
 
         public void SetupExample()
         {
-            playerAgent = Spawn(playerAgentPrefab.GetEntity(), new Vector2Int(3, 3)).GetAgent();
+            Entity playerEntityPrefab = playerAgentPrefab.GetEntity();
+            playerAgent = Spawn(playerEntityPrefab, new Vector2Int(3, 3), true).GetAgent();
             Spawn(fastAgentPrefab.GetEntity(), new Vector2Int(3, 5));
             Spawn(normalAgentPrefab.GetEntity(), new Vector2Int(4, 5));
             Spawn(normalAgentPrefab.GetEntity(), new Vector2Int(5, 5));
@@ -144,7 +145,7 @@ namespace Zongband.Game.Core
             else board.Displace(movementAction.entity, movementAction.movement);
         }
 
-        private Entity Spawn(Entity entityPrefab, Vector2Int at)
+        private Entity Spawn(Entity entityPrefab, Vector2Int at, bool priority)
         {
             if (entityPrefab == null) throw new ArgumentNullException();
             if (!board.IsPositionValid(at)) throw new ArgumentOutOfRangeException();
@@ -152,10 +153,15 @@ namespace Zongband.Game.Core
             Entity entity = Instantiate(entityPrefab, turnManager.transform);
             board.Add(entity, at);
             if (entity.IsAgent()) {
-                turnManager.Add(entity.GetAgent());
+                turnManager.Add(entity.GetAgent(), priority);
             }
 
             return entity;
+        }
+
+        private Entity Spawn(Entity entityPrefab, Vector2Int at)
+        {
+            return Spawn(entityPrefab, at, false);
         }
     }
 }

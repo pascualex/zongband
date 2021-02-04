@@ -18,6 +18,11 @@ namespace Zongband.Game.Entities
             return agentSO.turnCooldown;
         }
 
+        public int GetTurnPriority()
+        {
+            return agentSO.turnPriority;
+        }
+
         public Entity GetEntity()
         {
             return GetComponent<Entity>();

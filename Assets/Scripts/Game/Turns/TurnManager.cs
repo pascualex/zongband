@@ -17,18 +17,22 @@ namespace Zongband.Game.Turns
             hasStarted = false;
         }
 
-        public void Add(Agent agent)
+        public void Add(Agent agent, bool priority)
         {
-            int currentTick = hasStarted ? turns.First.Value.tick : 0;
-            int additionalTicks = agent.GetTurnCooldown();
-            Turn turn = new Turn(agent, currentTick + additionalTicks);
+            if (agent == null) throw new NullReferenceException();
 
-            for (LinkedListNode<Turn> node = turns.Last; node != null; node = node.Previous)
+            int additionalTicks = priority ? 0 : agent.GetTurnCooldown();
+            Turn turn = new Turn(agent, GetCurrentTick() + additionalTicks);
+
+            if (!priority)
             {
-                if (node.Value.CompareTo(turn) <= 0)
+                for (LinkedListNode<Turn> node = turns.Last; node != null; node = node.Previous)
                 {
-                    turns.AddAfter(node, turn);
-                    return;
+                    if (node.Value.CompareTo(turn) <= 0)
+                    {
+                        turns.AddAfter(node, turn);
+                        return;
+                    }
                 }
             }
 
@@ -41,7 +45,7 @@ namespace Zongband.Game.Turns
 
             hasStarted = true;
 
-            Add(turns.First.Value.agent);
+            Add(turns.First.Value.agent, false);
             turns.RemoveFirst();
         }
 
@@ -50,6 +54,11 @@ namespace Zongband.Game.Turns
             if (turns.Count == 0) throw new NoTurnsException();
 
             return turns.First.Value.agent;
+        }
+
+        private int GetCurrentTick()
+        {
+            return hasStarted ? turns.First.Value.tick : 0;
         }
     }
 }

@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: ExampleSlowAgent
   m_EditorClassIdentifier: 
   turnCooldown: 200
+  turnPriority: 0

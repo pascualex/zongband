@@ -23,6 +23,8 @@ namespace Zongband.Game.Turns
             if (other == null) throw new NullReferenceException();
 
             if (other.tick != tick) return tick - other.tick;
+            int priorityDifference = other.agent.GetTurnPriority() - agent.GetTurnPriority();
+            if (priorityDifference != 0) return priorityDifference;
             return agent.GetTurnCooldown() - other.agent.GetTurnCooldown();
         }
     }
