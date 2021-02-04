@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 using Zongband.Game.AI;
 using Zongband.Game.Boards;
@@ -11,8 +12,10 @@ namespace Zongband.Game.Core
 {
     public class GameManager : MonoBehaviour
     {
-        public Agent playerPrefab;
-        public Agent agentPrefab;
+        public Agent playerAgentPrefab;
+        public Agent fastAgentPrefab;
+        public Agent normalAgentPrefab;
+        public Agent slowAgentPrefab;
         public Entity entityPrefab;
         public TileSO floorTile;
         public TileSO wallTile;
@@ -23,10 +26,19 @@ namespace Zongband.Game.Core
 
         public Agent playerAgent { get; private set; }
 
+        private HashSet<Agent> notInPositionAgents;
+
+        public GameManager()
+        {
+            notInPositionAgents = new HashSet<Agent>();
+        }
+
         private void Awake()
         {
-            if (playerPrefab == null) throw new NullReferenceException();
-            if (agentPrefab == null) throw new NullReferenceException();
+            if (playerAgentPrefab == null) throw new NullReferenceException();
+            if (fastAgentPrefab == null) throw new NullReferenceException();
+            if (normalAgentPrefab == null) throw new NullReferenceException();
+            if (slowAgentPrefab == null) throw new NullReferenceException();
             if (entityPrefab == null) throw new NullReferenceException();
             if (floorTile == null) throw new NullReferenceException();
             if (wallTile == null) throw new NullReferenceException();
@@ -38,11 +50,11 @@ namespace Zongband.Game.Core
 
         public void SetupExample()
         {
-            playerAgent = Spawn(playerPrefab.GetEntity(), new Vector2Int(3, 3)).GetAgent();
-            Spawn(agentPrefab.GetEntity(), new Vector2Int(3, 5));
-            Spawn(agentPrefab.GetEntity(), new Vector2Int(4, 5));
-            Spawn(agentPrefab.GetEntity(), new Vector2Int(5, 5));
-            Spawn(agentPrefab.GetEntity(), new Vector2Int(6, 5));
+            playerAgent = Spawn(playerAgentPrefab.GetEntity(), new Vector2Int(3, 3)).GetAgent();
+            Spawn(fastAgentPrefab.GetEntity(), new Vector2Int(3, 5));
+            Spawn(normalAgentPrefab.GetEntity(), new Vector2Int(4, 5));
+            Spawn(normalAgentPrefab.GetEntity(), new Vector2Int(5, 5));
+            Spawn(slowAgentPrefab.GetEntity(), new Vector2Int(6, 5));
             Spawn(entityPrefab, new Vector2Int(3, 7));
 
             Vector2Int upRight = board.size - Vector2Int.one;
@@ -54,8 +66,18 @@ namespace Zongband.Game.Core
             board.ModifyBoxTerrain(upRight, downRight + new Vector2Int(-1, 0), wallTile);
             board.ModifyBoxTerrain(downRight, downLeft + new Vector2Int(0, 1), wallTile);
             board.ModifyBoxTerrain(downLeft, upLeft + new Vector2Int(1, 0), wallTile);
+        }
 
-            if (!IsPlayerTurn()) ProcessAITurns();
+        public bool ReadyForNewTurn()
+        {
+            return AreAgentsInPosition();
+        }
+
+        public bool IsPlayerTurn()
+        {
+            if (playerAgent == null) throw new NullReferenceException();
+
+            return turnManager.GetCurrent() == playerAgent;
         }
 
         public void ProcessPlayerTurn(ActionPack actionPack)
@@ -68,7 +90,7 @@ namespace Zongband.Game.Core
             if (!IsPlayerTurn()) ProcessAITurns();
         }
 
-        private void ProcessAITurns()
+        public void ProcessAITurns()
         {
             if (IsPlayerTurn()) throw new IsPlayerTurnException();
 
@@ -76,18 +98,32 @@ namespace Zongband.Game.Core
             {
                 Agent agent = turnManager.GetCurrent();
 
+                if (notInPositionAgents.Contains(agent)) break;
+
                 ActionPack actionPack = aiController.GenerateActionPack(agent, board);
                 ApplyActionPack(actionPack);
+                notInPositionAgents.Add(agent);
 
                 turnManager.Next();
             }
         }
 
-        private bool IsPlayerTurn()
+        private bool AreAgentsInPosition()
         {
-            if (playerAgent == null) throw new NullReferenceException();
+            HashSet<Agent> inPositionAgents = new HashSet<Agent>();
 
-            return turnManager.GetCurrent() == playerAgent;
+            foreach (Agent agent in notInPositionAgents)
+            {
+                if (!agent.GetEntity().isInPosition) break;
+                inPositionAgents.Add(agent);
+            }
+
+            foreach (Agent agent in inPositionAgents)
+            {
+                notInPositionAgents.Remove(agent);
+            }
+
+            return (notInPositionAgents.Count == 0);
         }
 
         private void ApplyActionPack(ActionPack actionPack)
@@ -115,7 +151,10 @@ namespace Zongband.Game.Core
 
             Entity entity = Instantiate(entityPrefab, turnManager.transform);
             board.Add(entity, at);
-            if (entity.IsAgent()) turnManager.Add(entity.GetAgent());
+            if (entity.IsAgent()) {
+                turnManager.Add(entity.GetAgent());
+            }
+
             return entity;
         }
     }

@@ -37,23 +37,28 @@ namespace Zongband.Game.Boards
 
             if (entity.IsAgent()) agentLayer.Add(entity, at);
             else entityLayer.Add(entity, at);
-            entity.Move(at, scale);
+            entity.Move(at, scale, true);
         }
 
-        public void Move(Entity entity, Vector2Int to)
+        private void Move(Entity entity, Vector2Int to, bool instant)
         {
             if (!IsPositionAvailable(entity, to)) throw new NotEmptyTileException(to);
 
             if (entity.IsAgent()) agentLayer.Move(entity, to);
             else entityLayer.Move(entity, to);
-            entity.Move(to, scale);
+            entity.Move(to, scale, instant);
+        }
+
+        public void Move(Entity entity, Vector2Int to)
+        {
+            Move(entity, to, true);
         }
 
         public void Displace(Entity entity, Vector2Int delta)
         {
             if (!CheckEntityPosition(entity)) throw new NotInTileException(entity);
 
-            Move(entity, entity.position + delta);
+            Move(entity, entity.position + delta, false);
         }
 
         public void Remove(Entity entity)

@@ -40,8 +40,7 @@ namespace Zongband.Player
 
         public void AttemptDisplacement(Vector2Int delta)
         {
-            if (ActionPackAvailable()) return;
-            if (gameManager.playerAgent == null) return;
+            if (!AcceptsNewAction()) return;
             
             Board board = gameManager.board;
             Agent agent = gameManager.playerAgent;
@@ -53,6 +52,13 @@ namespace Zongband.Player
             actionPack.AddMovementAction(movementAction);
 
             this.actionPack = actionPack;
+        }
+
+        private bool AcceptsNewAction()
+        {
+            if (ActionPackAvailable()) return false;
+            if (!gameManager.ReadyForNewTurn()) return false;
+            return gameManager.IsPlayerTurn();
         }
     }
 }

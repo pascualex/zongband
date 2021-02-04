@@ -106,9 +106,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5190691008327493660}
   - component: {fileID: 8587418266659207353}
-  - component: {fileID: 1583254236759010192}
+  - component: {fileID: 3216937962292394352}
   m_Layer: 0
-  m_Name: ExampleAgent
+  m_Name: ExampleNormalAgent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -141,8 +141,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e13adcdc34bc704d9fd82ece0bccb34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentSO: {fileID: 11400000, guid: 9ed1371c0fcf228409094b6d03a6473e, type: 2}
---- !u!114 &1583254236759010192
+  agentSO: {fileID: 11400000, guid: 8eda823a2b4c4b1448897a7ec2aea3d9, type: 2}
+--- !u!114 &3216937962292394352
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

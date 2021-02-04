@@ -32,7 +32,7 @@ namespace Zongband.Game.Turns
                 }
             }
 
-            turns.AddLast(turn);
+            turns.AddFirst(turn);
         }
 
         public void Next()

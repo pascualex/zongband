@@ -34,10 +34,20 @@ namespace Zongband.Core
             #endif
             
             InputSystem.Update();
-            if (playerController.ActionPackAvailable())
+            if (gameManager.ReadyForNewTurn())
             {
-                ActionPack actionPack = playerController.ConsumeActionPack();
-                gameManager.ProcessPlayerTurn(actionPack);
+                if (gameManager.IsPlayerTurn())
+                {
+                    if (playerController.ActionPackAvailable())
+                    {
+                        ActionPack actionPack = playerController.ConsumeActionPack();
+                        gameManager.ProcessPlayerTurn(actionPack);     
+                    }
+                }
+                else
+                {
+                    gameManager.ProcessAITurns();
+                }
             }
             uiManager.UpdateUI();
         }
