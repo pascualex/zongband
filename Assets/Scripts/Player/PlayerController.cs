@@ -47,18 +47,17 @@ namespace Zongband.Player
 
             if (!board.IsDisplacementAvailable(agent.GetEntity(), delta)) return;
 
-            ActionPack actionPack = new ActionPack();
-            MovementAction movementAction = new MovementAction(agent.GetEntity(), delta);
-            actionPack.AddMovementAction(movementAction);
+            SequentialActionPack newActionPack = new SequentialActionPack();
+            newActionPack.Add(new PositionAction(agent.GetEntity(), delta));
+            newActionPack.Add(new MovementAnimation(agent.GetEntity(), board));
 
-            this.actionPack = actionPack;
+            actionPack = newActionPack;
         }
 
         private bool AcceptsNewAction()
         {
             if (ActionPackAvailable()) return false;
-            if (!gameManager.ReadyForNewTurn()) return false;
-            return gameManager.IsPlayerTurn();
+            return gameManager.CanSetPlayerActionPack();
         }
     }
 }

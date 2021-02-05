@@ -7,10 +7,11 @@ using Zongband.Game.Boards;
 using Zongband.Game.Turns;
 using Zongband.Game.Actions;
 using Zongband.Game.Entities;
+using Zongband.Utils;
 
 namespace Zongband.Game.Core
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : MonoBehaviour, ICustomStartable, ICustomUpdatable
     {
         public Agent playerAgentPrefab;
         public Agent fastAgentPrefab;
@@ -26,11 +27,13 @@ namespace Zongband.Game.Core
 
         public Agent playerAgent { get; private set; }
 
-        private HashSet<Agent> notInPositionAgents;
+        private ActionPack playerActionPack;
+        private ActionPack currentActionPack;
 
         public GameManager()
         {
-            notInPositionAgents = new HashSet<Agent>();
+            playerActionPack = null;
+            currentActionPack = new NullActionPack();
         }
 
         private void Awake()
@@ -48,7 +51,7 @@ namespace Zongband.Game.Core
             if (aiController == null) throw new NullReferenceException();
         }
 
-        public void SetupExample()
+        public void CustomStart()
         {
             Entity playerEntityPrefab = playerAgentPrefab.GetEntity();
             playerAgent = Spawn(playerEntityPrefab, new Vector2Int(3, 3), true).GetAgent();
@@ -69,80 +72,100 @@ namespace Zongband.Game.Core
             board.ModifyBoxTerrain(downLeft, upLeft + new Vector2Int(1, 0), wallTile);
         }
 
-        public bool ReadyForNewTurn()
+        public void CustomUpdate()
         {
-            return AreAgentsInPosition();
+            if (!currentActionPack.IsCompleted()) UpdateCurrentActionPack();
+            else if (!IsPlayerTurn() || IsPlayerActionPackAvailable()) ProcessTurns();
         }
 
-        public bool IsPlayerTurn()
+        public bool CanSetPlayerActionPack()
+        {
+            return IsPlayerTurn() && currentActionPack.IsCompleted();
+        }
+
+        public void SetPlayerActionPack(ActionPack actionPack)
+        {
+            if (!CanSetPlayerActionPack()) throw new IsNotPlayerTurnException();
+
+            playerActionPack = actionPack;
+        }
+
+        private bool IsPlayerTurn()
         {
             if (playerAgent == null) throw new NullReferenceException();
 
             return turnManager.GetCurrent() == playerAgent;
         }
 
-        public void ProcessPlayerTurn(ActionPack actionPack)
+        private bool IsPlayerActionPackAvailable()
         {
-            if (!IsPlayerTurn()) throw new IsNotPlayerTurnException();
-
-            ApplyActionPack(actionPack);
-            turnManager.Next();
-
-            if (!IsPlayerTurn()) ProcessAITurns();
+            return (playerActionPack != null);
         }
 
-        public void ProcessAITurns()
+        private ActionPack ConsumePlayerActionPack()
         {
-            if (IsPlayerTurn()) throw new IsPlayerTurnException();
+            if (!IsPlayerActionPackAvailable()) throw new NullReferenceException();
+            ActionPack consumedPlayerActionPack = playerActionPack;
+            playerActionPack = null;
+            return consumedPlayerActionPack;
+        }
 
-            while (!IsPlayerTurn())
+        private void ProcessTurns()
+        {
+            // TODO: custom exception
+            if (!currentActionPack.IsCompleted()) throw new Exception();
+
+            SequentialActionPack nextActionPack = new SequentialActionPack();
+
+            HashSet<Agent> processedAgents = new HashSet<Agent>();
+            do
             {
                 Agent agent = turnManager.GetCurrent();
 
-                if (notInPositionAgents.Contains(agent)) break;
+                if (processedAgents.Contains(agent)) break;
 
-                ActionPack actionPack = aiController.GenerateActionPack(agent, board);
-                ApplyActionPack(actionPack);
-                notInPositionAgents.Add(agent);
+                ActionPack actionPack;
+                if (IsPlayerTurn()) actionPack = ConsumePlayerActionPack();
+                else actionPack = aiController.GenerateActionPack(agent, board);
 
+                while (actionPack.IsActionAvailable())
+                {
+                    Actions.Action action = actionPack.ConsumeAction();
+                    ApplyAction((PositionAction)action);
+                }
+
+                if (!actionPack.IsCompleted())
+                {
+                    nextActionPack.Add(actionPack);
+                    // TODO: stop if GameActions left
+                }
+
+                processedAgents.Add(agent);
                 turnManager.Next();
             }
+            while (!IsPlayerTurn());
+
+            this.currentActionPack = nextActionPack;
         }
 
-        private bool AreAgentsInPosition()
+        private void UpdateCurrentActionPack()
         {
-            HashSet<Agent> inPositionAgents = new HashSet<Agent>();
-
-            foreach (Agent agent in notInPositionAgents)
+            while (currentActionPack.IsActionAvailable())
             {
-                if (!agent.GetEntity().isInPosition) break;
-                inPositionAgents.Add(agent);
+                Actions.Action action = currentActionPack.ConsumeAction();
+                ApplyAction((PositionAction)action);
+                Debug.Log("Never called");
             }
 
-            foreach (Agent agent in inPositionAgents)
-            {
-                notInPositionAgents.Remove(agent);
-            }
-
-            return (notInPositionAgents.Count == 0);
+            if (!currentActionPack.IsCompleted()) currentActionPack.CustomUpdate();
         }
 
-        private void ApplyActionPack(ActionPack actionPack)
+        private void ApplyAction(PositionAction positionAction)
         {
-            if (actionPack == null) throw new ArgumentNullException();
+            if (positionAction == null) throw new ArgumentNullException();
 
-            foreach (MovementAction movementAction in actionPack.GetMovementActions())
-            {
-                ApplyAction(movementAction);
-            }
-        }
-
-        private void ApplyAction(MovementAction movementAction)
-        {
-            if (movementAction == null) throw new ArgumentNullException();
-
-            if (movementAction.absolute) board.Move(movementAction.entity, movementAction.movement);
-            else board.Displace(movementAction.entity, movementAction.movement);
+            if (positionAction.absolute) board.Move(positionAction.entity, positionAction.position);
+            else board.Displace(positionAction.entity, positionAction.position);
         }
 
         private Entity Spawn(Entity entityPrefab, Vector2Int at, bool priority)
@@ -152,9 +175,14 @@ namespace Zongband.Game.Core
 
             Entity entity = Instantiate(entityPrefab, turnManager.transform);
             board.Add(entity, at);
-            if (entity.IsAgent()) {
-                turnManager.Add(entity.GetAgent(), priority);
-            }
+
+            Vector2Int position = entity.position;
+            float scale = board.scale;
+            Vector3 relativePosition = new Vector3(position.x + 0.5f, 0, position.y + 0.5f) * scale;
+            Vector3 absolutePosition = board.transform.position + relativePosition; 
+            entity.transform.position = absolutePosition;
+
+            if (entity.IsAgent()) turnManager.Add(entity.GetAgent(), priority);
 
             return entity;
         }

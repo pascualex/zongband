@@ -5,22 +5,22 @@ using Zongband.Game.Entities;
 
 namespace Zongband.Game.Actions
 {
-    public class MovementAction
+    public class PositionAction : GameAction
     {
         public Entity entity { get; private set; }
-        public Vector2Int movement { get; private set; }
-        public bool absolute { get; private set; }
+        public Vector2Int position { get; private set; }
+        public bool absolute;
 
-        public MovementAction(Entity entity, Vector2Int to) : this(entity, to, false)
+        public PositionAction(Entity entity, Vector2Int delta) : this(entity, delta, false)
         {
 
         }
 
-        public MovementAction(Entity entity, Vector2Int movement, bool absolute)
+        public PositionAction(Entity entity, Vector2Int position, bool absolute)
         {
             if (entity == null) throw new ArgumentNullException();
             this.entity = entity;
-            this.movement = movement;
+            this.position = position;
             this.absolute = absolute;
         }
     }

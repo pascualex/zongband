@@ -25,6 +25,7 @@ namespace Zongband.Game.Boards
             if (!IsPositionEmpty(at)) throw new ArgumentOutOfRangeException();
 
             entities[at.y][at.x] = entity;
+            entities[at.y][at.x].position = at;
         }
 
         public void Move(Entity entity, Vector2Int to)
@@ -41,6 +42,7 @@ namespace Zongband.Game.Boards
 
             entities[to.y][to.x] = entities[from.y][from.x];
             entities[from.y][from.x] = null;
+            entities[to.y][to.x].position = to;
         }
 
         public void Remove(Entity entity)
@@ -54,6 +56,7 @@ namespace Zongband.Game.Boards
         {
             if (IsPositionEmpty(at)) throw new EmptyTileException(at);
 
+            entities[at.y][at.x].removed = true;
             entities[at.y][at.x] = null;
         }
 

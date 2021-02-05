@@ -4,10 +4,11 @@ using System;
 using Zongband.Game.Core;
 using Zongband.Game.Boards;
 using Zongband.Game.Entities;
+using Zongband.Utils;
 
 namespace Zongband.UI
 {
-    public class UIManager : MonoBehaviour
+    public class UIManager : MonoBehaviour, ICustomStartable, ICustomUpdatable
     {
         public GameObject tileHighlighterPrefab;
         public Camera mainCamera;
@@ -29,12 +30,12 @@ namespace Zongband.UI
             if (gameManager == null) throw new NullReferenceException();
         }
 
-        private void Start()
+        public void CustomStart()
         {
             tileHighlighter = Instantiate(tileHighlighterPrefab, transform).transform;
         }
 
-        public void UpdateUI()
+        public void CustomUpdate()
         {
             HighlightTile();
         }

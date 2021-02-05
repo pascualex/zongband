@@ -19,7 +19,7 @@ namespace Zongband.Game.Turns
 
         public void Add(Agent agent, bool priority)
         {
-            if (agent == null) throw new NullReferenceException();
+            if (agent == null) throw new ArgumentNullException();
 
             int additionalTicks = priority ? 0 : agent.GetTurnCooldown();
             Turn turn = new Turn(agent, GetCurrentTick() + additionalTicks);

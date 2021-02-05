@@ -12,18 +12,13 @@ namespace Zongband.Game.AI
     {
         public ActionPack GenerateActionPack(Agent agent, Board board)
         {
-            ActionPack actionPack = new ActionPack();
-
-            MovementAction randomMovement = GenerateRandomMovement(agent, board);
-            actionPack.AddMovementAction(randomMovement);
-
-            return actionPack;
+            return GenerateRandomMovement(agent, board);;
         }
 
-        private MovementAction GenerateRandomMovement(Agent agent, Board board)
+        private ActionPack GenerateRandomMovement(Agent agent, Board board)
         {
-            if (agent == null) throw new NullReferenceException();
-            if (board == null) throw new NullReferenceException();
+            if (agent == null) throw new ArgumentNullException();
+            if (board == null) throw new ArgumentNullException();
 
             Vector2Int[] directions = Directions.Randomized();
             Vector2Int selectedDirection = Vector2Int.zero;
@@ -36,7 +31,12 @@ namespace Zongband.Game.AI
                 }
             }
 
-            return new MovementAction(agent.GetEntity(), selectedDirection);
+            if (selectedDirection == Vector2Int.zero) return new NullActionPack();
+
+            SequentialActionPack actionPack = new SequentialActionPack();
+            actionPack.Add(new PositionAction(agent.GetEntity(), selectedDirection));
+            actionPack.Add(new MovementAnimation(agent.GetEntity(), board));
+            return actionPack;
         }
     }
 }

@@ -37,7 +37,6 @@ namespace Zongband.Game.Boards
 
             if (entity.IsAgent()) agentLayer.Add(entity, at);
             else entityLayer.Add(entity, at);
-            entity.Move(at, scale, true);
         }
 
         private void Move(Entity entity, Vector2Int to, bool instant)
@@ -46,7 +45,6 @@ namespace Zongband.Game.Boards
 
             if (entity.IsAgent()) agentLayer.Move(entity, to);
             else entityLayer.Move(entity, to);
-            entity.Move(to, scale, instant);
         }
 
         public void Move(Entity entity, Vector2Int to)
@@ -65,7 +63,6 @@ namespace Zongband.Game.Boards
         {
             if (entity.IsAgent()) agentLayer.Remove(entity);
             else entityLayer.Remove(entity);
-            entity.OnRemove();
         }
 
         public void ModifyTerrain(Vector2Int position, TileSO tile)

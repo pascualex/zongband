@@ -12,7 +12,7 @@ namespace Zongband.Game.Turns
 
         public Turn(Agent agent, int tick)
         {
-            if (agent == null) throw new NullReferenceException();
+            if (agent == null) throw new ArgumentNullException();
 
             this.agent = agent;
             this.tick = tick;
@@ -20,7 +20,7 @@ namespace Zongband.Game.Turns
 
         public int CompareTo(Turn other)
         {
-            if (other == null) throw new NullReferenceException();
+            if (other == null) throw new ArgumentNullException();
 
             if (other.tick != tick) return tick - other.tick;
             int priorityDifference = other.agent.GetTurnPriority() - agent.GetTurnPriority();

@@ -24,7 +24,8 @@ namespace Zongband.Core
 
         private void Start()
         {
-            gameManager.SetupExample();
+            gameManager.CustomStart();
+            uiManager.CustomStart();
         }
 
         private void Update()
@@ -34,22 +35,14 @@ namespace Zongband.Core
             #endif
             
             InputSystem.Update();
-            if (gameManager.ReadyForNewTurn())
+
+            if (gameManager.CanSetPlayerActionPack() && playerController.ActionPackAvailable())
             {
-                if (gameManager.IsPlayerTurn())
-                {
-                    if (playerController.ActionPackAvailable())
-                    {
-                        ActionPack actionPack = playerController.ConsumeActionPack();
-                        gameManager.ProcessPlayerTurn(actionPack);     
-                    }
-                }
-                else
-                {
-                    gameManager.ProcessAITurns();
-                }
+                gameManager.SetPlayerActionPack(playerController.ConsumeActionPack());
             }
-            uiManager.UpdateUI();
+
+            gameManager.CustomUpdate();
+            uiManager.CustomUpdate();
         }
     }
 }
