@@ -94,7 +94,7 @@ namespace Zongband.Game.Core
         {
             if (playerAgent == null) throw new NullReferenceException();
 
-            return turnManager.GetCurrent() == playerAgent;
+            return (turnManager.GetCurrent() == playerAgent);
         }
 
         private bool IsPlayerActionPackAvailable()
@@ -112,10 +112,9 @@ namespace Zongband.Game.Core
 
         private void ProcessTurns()
         {
-            // TODO: custom exception
-            if (!currentActionPack.IsCompleted()) throw new Exception();
+            if (!currentActionPack.IsCompleted()) throw new ActionPackNotCompletedException();
 
-            SequentialActionPack nextActionPack = new SequentialActionPack();
+            ParallelActionPack nextActionPack = new ParallelActionPack();
 
             HashSet<Agent> processedAgents = new HashSet<Agent>();
             do
@@ -134,14 +133,12 @@ namespace Zongband.Game.Core
                     ApplyAction((PositionAction)action);
                 }
 
-                if (!actionPack.IsCompleted())
-                {
-                    nextActionPack.Add(actionPack);
-                    // TODO: stop if GameActions left
-                }
+                if (!actionPack.IsCompleted()) nextActionPack.Add(actionPack);
 
                 processedAgents.Add(agent);
                 turnManager.Next();
+
+                if (actionPack.AreActionsLeft()) break;
             }
             while (!IsPlayerTurn());
 
@@ -152,20 +149,34 @@ namespace Zongband.Game.Core
         {
             while (currentActionPack.IsActionAvailable())
             {
-                Actions.Action action = currentActionPack.ConsumeAction();
-                ApplyAction((PositionAction)action);
-                Debug.Log("Never called");
+                GameAction action = currentActionPack.ConsumeAction();
+                ApplyAction(action);
             }
 
             if (!currentActionPack.IsCompleted()) currentActionPack.CustomUpdate();
         }
 
-        private void ApplyAction(PositionAction positionAction)
+        private void ApplyAction(GameAction action)
         {
-            if (positionAction == null) throw new ArgumentNullException();
+            if (action is PositionAction) ApplyAction((PositionAction)action);
+        }
 
-            if (positionAction.absolute) board.Move(positionAction.entity, positionAction.position);
-            else board.Displace(positionAction.entity, positionAction.position);
+        private void ApplyAction(PositionAction action)
+        {
+            if (action == null) throw new ArgumentNullException();
+
+            Entity entity = action.entity;
+            Vector2Int position = action.position;
+            bool absolute = action.absolute;
+
+            if (absolute && board.IsPositionAvailable(entity, position))
+            {
+                board.Move(entity, position);
+            }
+            else if (!absolute && board.IsDisplacementAvailable(entity, position))
+            {
+                board.Displace(entity, position);
+            }
         }
 
         private Entity Spawn(Entity entityPrefab, Vector2Int at, bool priority)
@@ -179,7 +190,7 @@ namespace Zongband.Game.Core
             Vector2Int position = entity.position;
             float scale = board.scale;
             Vector3 relativePosition = new Vector3(position.x + 0.5f, 0, position.y + 0.5f) * scale;
-            Vector3 absolutePosition = board.transform.position + relativePosition; 
+            Vector3 absolutePosition = board.transform.position + relativePosition;
             entity.transform.position = absolutePosition;
 
             if (entity.IsAgent()) turnManager.Add(entity.GetAgent(), priority);

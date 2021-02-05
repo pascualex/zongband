@@ -8,8 +8,8 @@ namespace Zongband.Game.Actions
     {
         public abstract void CustomUpdate();
         public abstract bool IsActionAvailable();
-        public abstract GameAction ConsumeAction();
         public abstract bool IsCompleted();
-        public abstract bool IsSimple();
+        public abstract bool AreActionsLeft();
+        public abstract GameAction ConsumeAction();
     }
 }

@@ -18,12 +18,25 @@ namespace Zongband.Game.Actions
 
         public override void CustomUpdate()
         {
-            action.CustomUpdate();
+            if (action != null) action.CustomUpdate();
         }
 
         public override bool IsActionAvailable()
         {
-            return isActionAvailable && action.IsForGame();
+            if (action == null) return false;
+            return isActionAvailable && action.IsGameAction();
+        }
+        
+        public override bool IsCompleted()
+        {
+            if (action == null) return true;
+            return !IsActionAvailable() && action.IsCompleted();
+        }
+
+        public override bool AreActionsLeft()
+        {
+            if (action != null) return false;
+            return action.IsGameAction();
         }
 
         public override GameAction ConsumeAction()
@@ -32,16 +45,6 @@ namespace Zongband.Game.Actions
 
             isActionAvailable = false;
             return (GameAction)action;
-        }
-        
-        public override bool IsCompleted()
-        {
-            return !IsActionAvailable() && action.IsCompleted();
-        }
-
-        public override bool IsSimple()
-        {
-            return true;
         }
     }
 }

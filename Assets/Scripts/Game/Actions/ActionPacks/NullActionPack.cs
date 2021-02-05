@@ -14,20 +14,20 @@ namespace Zongband.Game.Actions
         {
             return false;
         }
-
-        public override GameAction ConsumeAction()
-        {
-            throw new NoActionAvailableException();
-        }
         
         public override bool IsCompleted()
         {
             return true;
         }
 
-        public override bool IsSimple()
+        public override bool AreActionsLeft()
         {
-            return true;
+            return false;
+        }
+
+        public override GameAction ConsumeAction()
+        {
+            throw new NoActionAvailableException();
         }
     }
 }

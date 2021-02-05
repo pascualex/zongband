@@ -4,7 +4,7 @@ namespace Zongband.Game.Actions
 {
     public abstract class GameAction : SyncAction
     {
-        public override bool IsForGame()
+        public override bool IsGameAction()
         {
             return true;
         }

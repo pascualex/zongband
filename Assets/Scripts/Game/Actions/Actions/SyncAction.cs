@@ -14,10 +14,5 @@ namespace Zongband.Game.Actions
         {
             return true;
         }
-
-        public override bool IsSync()
-        {
-            return true;
-        }
     }
 }

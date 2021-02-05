@@ -8,9 +8,8 @@ namespace Zongband.Game.Actions
     {
         public abstract void CustomUpdate();
         public abstract bool IsCompleted();
-        public abstract bool IsSync();
 
-        public virtual bool IsForGame()
+        public virtual bool IsGameAction()
         {
             return false;
         }

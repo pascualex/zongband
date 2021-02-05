@@ -18,7 +18,7 @@ namespace Zongband.Game.Actions
             if (IsCompleted()) return;
 
             if (actionPacks.Peek().IsCompleted()) actionPacks.Dequeue();
-            else actionPacks.Peek().CustomUpdate();
+            else if (!actionPacks.Peek().IsActionAvailable()) actionPacks.Peek().CustomUpdate();
         }
 
         public void Add(ActionPack actionPack)
@@ -37,21 +37,26 @@ namespace Zongband.Game.Actions
             return actionPacks.Peek().IsActionAvailable();
         }
 
-        public override GameAction ConsumeAction()
-        {
-            if (!IsActionAvailable()) throw new NoActionAvailableException();
-
-            return actionPacks.Peek().ConsumeAction();
-        }
-
         public override bool IsCompleted()
         {
             return (actionPacks.Count == 0);
         }
 
-        public override bool IsSimple()
+        public override bool AreActionsLeft()
         {
+            foreach (ActionPack actionPack in actionPacks)
+            {
+                if (actionPack.AreActionsLeft()) return true;
+            }
+
             return false;
+        }
+
+        public override GameAction ConsumeAction()
+        {
+            if (!IsActionAvailable()) throw new NoActionAvailableException();
+
+            return actionPacks.Peek().ConsumeAction();
         }
     }
 }
