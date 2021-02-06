@@ -24,19 +24,20 @@ namespace Zongband.Game.Actions
         public override bool IsActionAvailable()
         {
             if (action == null) return false;
-            return isActionAvailable && action.IsGameAction();
+            if (!action.IsGameAction()) return false;
+            return isActionAvailable;
         }
         
         public override bool IsCompleted()
         {
             if (action == null) return true;
-            return !IsActionAvailable() && action.IsCompleted();
+            if (IsActionAvailable()) return false;
+            return action.IsCompleted();
         }
 
         public override bool AreActionsLeft()
         {
-            if (action != null) return false;
-            return action.IsGameAction();
+            return IsActionAvailable();
         }
 
         public override GameAction ConsumeAction()
