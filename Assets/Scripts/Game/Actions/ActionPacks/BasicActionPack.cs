@@ -3,12 +3,12 @@ using System;
 
 namespace Zongband.Game.Actions
 {
-    public class SimpleActionPack : ActionPack
+    public class BasicActionPack : ActionPack
     {
         private Action action;
         private bool isActionAvailable;
 
-        public SimpleActionPack(Action action)
+        public BasicActionPack(Action action)
         {
             if (action == null) throw new ArgumentNullException();
 

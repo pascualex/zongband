@@ -28,7 +28,7 @@ namespace Zongband.Game.Actions
 
         public void Add(Action action)
         {
-            Add(new SimpleActionPack(action));
+            Add(new BasicActionPack(action));
         }
 
         public override bool IsActionAvailable()
