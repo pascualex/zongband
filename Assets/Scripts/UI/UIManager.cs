@@ -8,15 +8,13 @@ using Zongband.Utils;
 
 namespace Zongband.UI
 {
-    public class UIManager : MonoBehaviour, ICustomStartable, ICustomUpdatable
+    public class UIManager : MonoBehaviour, ICustomUpdatable
     {
-        public GameObject tileHighlighterPrefab;
+        public TileHighlighter tileHighlighter;
         public Camera mainCamera;
         public GameManager gameManager;
 
-        public Vector2 mousePosition { get; set; }
-
-        private Transform tileHighlighter;
+        private Vector2 mousePosition;
 
         public UIManager()
         {
@@ -25,51 +23,36 @@ namespace Zongband.UI
 
         private void Awake()
         {
-            if (tileHighlighterPrefab == null) throw new NullReferenceException();
+            if (tileHighlighter == null) throw new NullReferenceException();
             if (mainCamera == null) throw new NullReferenceException();
             if (gameManager == null) throw new NullReferenceException();
         }
 
-        public void CustomStart()
-        {
-            tileHighlighter = Instantiate(tileHighlighterPrefab, transform).transform;
-        }
-
         public void CustomUpdate()
         {
-            HighlightTile();
+            tileHighlighter.CustomUpdate();
         }
 
-        private void HighlightTile()
+        public void SetMousePosition(Vector2 mousePosition)
         {
-            bool highlight = false;
+            this.mousePosition = mousePosition;
 
             Ray ray = mainCamera.ScreenPointToRay(mousePosition);
             Plane plane = new Plane(Vector3.up, Vector3.zero);
 
+            
+            Vector2Int boardPosition = new Vector2Int(-1, -1);
             float distance;
             if (plane.Raycast(ray, out distance))
             {
-                Agent agent = gameManager.playerAgent;
                 Board board = gameManager.board;
 
                 Vector3 worldPosition = ray.GetPoint(distance);
                 Vector3 localPosition = worldPosition - board.transform.position;
-                Vector2Int position = new Vector2Int((int)localPosition.x, (int)localPosition.z);
-
-                if (board.IsPositionAvailable(agent.GetEntity(), position))
-                {
-                    Vector3 finalLocalPosition = new Vector3(position.x, 0, position.y);
-                    finalLocalPosition += new Vector3(0.5f, 0, 0.5f);
-                    finalLocalPosition *= board.scale;
-                    Vector3 finalWorldPosition = finalLocalPosition + board.transform.position;
-
-                    tileHighlighter.transform.position = finalWorldPosition;
-                    highlight = true;
-                }
+                boardPosition = new Vector2Int((int)localPosition.x, (int)localPosition.z);
             }
 
-            tileHighlighter.gameObject.SetActive(highlight);
+            tileHighlighter.boardPosition = boardPosition;
         }
     }
 }

@@ -105,8 +105,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5190691008327493660}
-  - component: {fileID: 8587418266659207353}
-  - component: {fileID: 3216937962292394352}
   m_Layer: 0
   m_Name: ExampleFastAgent
   m_TagString: Untagged
@@ -129,28 +127,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8587418266659207353
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4644097584919031478}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e13adcdc34bc704d9fd82ece0bccb34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentSO: {fileID: 11400000, guid: 9ed1371c0fcf228409094b6d03a6473e, type: 2}
---- !u!114 &3216937962292394352
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4644097584919031478}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc66d6232febc794f87f0dddcb88b750, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -8,9 +8,22 @@ namespace Zongband.Game.Entities
     {
         public AgentSO agentSO;
 
-        private void Awake()
+        private int currentHealth;
+
+        public Agent()
+        {
+            currentHealth = 0;
+        }
+
+        private void Start()
         {
             if (agentSO == null) throw new NullReferenceException();
+        }
+
+        public void SetAgentSO(AgentSO agentSO)
+        {
+            this.agentSO = agentSO;
+            currentHealth = GetMaxHealth();
         }
 
         public int GetTurnCooldown()
@@ -21,6 +34,33 @@ namespace Zongband.Game.Entities
         public int GetTurnPriority()
         {
             return agentSO.turnPriority;
+        }
+
+        public int GetMaxHealth()
+        {
+            return agentSO.maxHealth;
+        }
+
+        public int GetCurrentHealth()
+        {
+            return currentHealth;
+        }
+
+        public void Damage(int amount)
+        {
+            if (amount <= 0) return;
+            ChangeHealth(-amount);
+        }
+
+        public void Heal(int amount)
+        {
+            if (amount <= 0) return;
+            ChangeHealth(amount);
+        }
+
+        private void ChangeHealth(int amount)
+        {
+            currentHealth = Mathf.Max(Mathf.Min(currentHealth + amount, GetMaxHealth()), 0);
         }
 
         public Entity GetEntity()

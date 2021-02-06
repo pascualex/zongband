@@ -9,10 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65755f9dc1bb2cd429011fab999aaa4e, type: 3}
-  m_Name: ExampleFastAgent
+  m_Script: {fileID: 11500000, guid: 374fb3f55da16d74fb8c284fefb0fd3a, type: 3}
+  m_Name: BoxEntity
   m_EditorClassIdentifier: 
-  model: {fileID: 4644097584919031478, guid: cd7f837b5bcdd9040acf3af10456cdda, type: 3}
-  turnCooldown: 50
-  turnPriority: 0
-  maxHealth: 100
+  model: {fileID: 4644097584919031478, guid: c94917070f7eaf54ba6d8acf1f6a3023, type: 3}

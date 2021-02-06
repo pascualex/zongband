@@ -25,7 +25,6 @@ namespace Zongband.Core
         private void Start()
         {
             gameManager.CustomStart();
-            uiManager.CustomStart();
         }
 
         private void Update()

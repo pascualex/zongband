@@ -12,7 +12,7 @@ namespace Zongband.Game.AI
     {
         public ActionPack GenerateActionPack(Agent agent, Board board)
         {
-            return GenerateRandomMovement(agent, board);;
+            return GenerateRandomMovement(agent, board);
         }
 
         private ActionPack GenerateRandomMovement(Agent agent, Board board)

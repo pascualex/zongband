@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65755f9dc1bb2cd429011fab999aaa4e, type: 3}
   m_Name: ExamplePlayerAgent
   m_EditorClassIdentifier: 
+  model: {fileID: 4644097584919031478, guid: 526e57f7b0e1f6a4e85ebae02df36384, type: 3}
   turnCooldown: 100
   turnPriority: 1
+  maxHealth: 100

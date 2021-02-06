@@ -42,7 +42,7 @@ namespace Zongband.Input
         public void OnMoveMouse(InputValue value)
         {
             Vector2 mousePosition = value.Get<Vector2>();
-            uiManager.mousePosition = mousePosition;
+            uiManager.SetMousePosition(mousePosition);
         }
     }
 }
