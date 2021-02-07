@@ -10,7 +10,7 @@ namespace Zongband.Game.Actions
             
         }
 
-        public override bool IsActionAvailable()
+        public override bool IsGameActionAvailable()
         {
             return false;
         }
@@ -20,14 +20,14 @@ namespace Zongband.Game.Actions
             return true;
         }
 
-        public override bool AreActionsLeft()
+        public override bool AreGameActionsLeft()
         {
             return false;
         }
 
-        public override GameAction RemoveAction()
+        public override GameAction RemoveGameAction()
         {
-            throw new NoActionAvailableException();
+            throw new NoGameActionAvailableException();
         }
     }
 }

@@ -41,15 +41,13 @@ namespace Zongband.Player
             if (!AcceptsNewAction()) return;
             
             Board board = gameManager.board;
-            Agent agent = gameManager.playerAgent;
+            Entity entity = gameManager.playerAgent.GetEntity();
 
-            if (!board.IsDisplacementAvailable(agent.GetEntity(), delta)) return;
+            if (!board.IsDisplacementAvailable(entity, delta)) return;
 
-            SequentialActionPack newActionPack = new SequentialActionPack();
-            newActionPack.Add(new PositionAction(agent.GetEntity(), delta));
-            newActionPack.Add(new MovementAnimation(agent.GetEntity(), board));
-
-            actionPack = newActionPack;
+            MovementGameAction gameAction = new MovementGameAction(entity, delta);
+            MovementAction action = new MovementAction(gameAction, board, false);
+            actionPack = new BasicActionPack(action);
         }
 
         private bool AcceptsNewAction()

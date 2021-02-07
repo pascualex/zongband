@@ -33,10 +33,10 @@ namespace Zongband.Game.AI
 
             if (selectedDirection == Vector2Int.zero) return new NullActionPack();
 
-            SequentialActionPack actionPack = new SequentialActionPack();
-            actionPack.Add(new PositionAction(agent.GetEntity(), selectedDirection));
-            actionPack.Add(new MovementAnimation(agent.GetEntity(), board));
-            return actionPack;
+            Entity entity = agent.GetEntity();
+            MovementGameAction gameAction = new MovementGameAction(entity, selectedDirection);
+            MovementAction action = new MovementAction(gameAction, board, false);
+            return new BasicActionPack(action);
         }
     }
 }

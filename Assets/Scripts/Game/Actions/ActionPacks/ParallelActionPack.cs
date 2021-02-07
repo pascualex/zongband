@@ -16,7 +16,7 @@ namespace Zongband.Game.Actions
 
         public override void CustomUpdate()
         {
-            if (IsActionAvailable()) return;
+            if (IsGameActionAvailable()) return;
             if (IsCompleted()) return;
 
             LinkedListNode<ActionPack> node = actionPacks.First;
@@ -25,9 +25,9 @@ namespace Zongband.Game.Actions
                 LinkedListNode<ActionPack> next = node.Next;
 
                 if (node.Value.IsCompleted()) actionPacks.Remove(node);
-                else if (!node.Value.IsActionAvailable()) node.Value.CustomUpdate();
+                else if (!node.Value.IsGameActionAvailable()) node.Value.CustomUpdate();
 
-                if (node.Value.IsActionAvailable())
+                if (node.Value.IsGameActionAvailable())
                 {
                     actionPacksAvailable.Enqueue(node.Value);
                     actionPacks.Remove(node);
@@ -47,7 +47,7 @@ namespace Zongband.Game.Actions
             Add(new BasicActionPack(action));
         }
 
-        public override bool IsActionAvailable()
+        public override bool IsGameActionAvailable()
         {
             return (actionPacksAvailable.Count > 0);
         }
@@ -57,28 +57,28 @@ namespace Zongband.Game.Actions
             return (actionPacks.Count == 0) && (actionPacksAvailable.Count == 0);
         }
 
-        public override bool AreActionsLeft()
+        public override bool AreGameActionsLeft()
         {
             foreach (ActionPack actionPack in actionPacks)
             {
-                if (actionPack.AreActionsLeft()) return true;
+                if (actionPack.AreGameActionsLeft()) return true;
             }
 
             foreach (ActionPack actionPack in actionPacksAvailable)
             {
-                if (actionPack.AreActionsLeft()) return true;
+                if (actionPack.AreGameActionsLeft()) return true;
             }
 
             return false;
         }
 
-        public override GameAction RemoveAction()
+        public override GameAction RemoveGameAction()
         {
-            if (!IsActionAvailable()) throw new NoActionAvailableException();
+            if (!IsGameActionAvailable()) throw new NoGameActionAvailableException();
 
-            GameAction action = actionPacksAvailable.Peek().RemoveAction();
+            GameAction action = actionPacksAvailable.Peek().RemoveGameAction();
 
-            if (!actionPacksAvailable.Peek().IsActionAvailable())
+            if (!actionPacksAvailable.Peek().IsGameActionAvailable())
             {
                 ActionPack actionPack = actionPacksAvailable.Dequeue();
                 actionPacks.AddLast(actionPack);

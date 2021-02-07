@@ -14,11 +14,11 @@ namespace Zongband.Game.Actions
 
         public override void CustomUpdate()
         {
-            if (IsActionAvailable()) return;
+            if (IsGameActionAvailable()) return;
             if (IsCompleted()) return;
 
             if (actionPacks.Peek().IsCompleted()) actionPacks.Dequeue();
-            else if (!actionPacks.Peek().IsActionAvailable()) actionPacks.Peek().CustomUpdate();
+            else if (!actionPacks.Peek().IsGameActionAvailable()) actionPacks.Peek().CustomUpdate();
         }
 
         public void Add(ActionPack actionPack)
@@ -31,10 +31,10 @@ namespace Zongband.Game.Actions
             Add(new BasicActionPack(action));
         }
 
-        public override bool IsActionAvailable()
+        public override bool IsGameActionAvailable()
         {
             if (actionPacks.Count == 0) return false;
-            return actionPacks.Peek().IsActionAvailable();
+            return actionPacks.Peek().IsGameActionAvailable();
         }
 
         public override bool IsCompleted()
@@ -42,21 +42,21 @@ namespace Zongband.Game.Actions
             return (actionPacks.Count == 0);
         }
 
-        public override bool AreActionsLeft()
+        public override bool AreGameActionsLeft()
         {
             foreach (ActionPack actionPack in actionPacks)
             {
-                if (actionPack.AreActionsLeft()) return true;
+                if (actionPack.AreGameActionsLeft()) return true;
             }
 
             return false;
         }
 
-        public override GameAction RemoveAction()
+        public override GameAction RemoveGameAction()
         {
-            if (!IsActionAvailable()) throw new NoActionAvailableException();
+            if (!IsGameActionAvailable()) throw new NoGameActionAvailableException();
 
-            return actionPacks.Peek().RemoveAction();
+            return actionPacks.Peek().RemoveGameAction();
         }
     }
 }

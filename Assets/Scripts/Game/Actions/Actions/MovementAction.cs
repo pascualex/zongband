@@ -6,7 +6,7 @@ using Zongband.Game.Entities;
 
 namespace Zongband.Game.Actions
 {
-    public class MovementAnimation : AsyncAction
+    public class MovementAction : Action
     {
         private const float animationFixedSpeed = 1.0f;
         private const float animationVariableSpeed = 10.0f;
@@ -15,14 +15,16 @@ namespace Zongband.Game.Actions
         private Board board;
         private bool isCompleted;
 
-        public MovementAnimation(Entity entity, Board board)
+        public MovementAction(MovementGameAction movementGameAction, Board board, bool instant)
         {
-            if (entity == null) throw new ArgumentNullException();
+            if (movementGameAction == null) throw new ArgumentNullException();
             if (board == null) throw new ArgumentNullException();
 
-            this.entity = entity;
+            this.entity = movementGameAction.entity;
             this.board = board;
             isCompleted = false;
+
+            this.gameAction = movementGameAction;
         }
 
         public override void CustomUpdate()
@@ -32,7 +34,7 @@ namespace Zongband.Game.Actions
             MoveTowardsTarget();
         }
 
-        public override bool IsCompleted()
+        protected override bool IsAnimationCompleted()
         {
             return isCompleted;
         }

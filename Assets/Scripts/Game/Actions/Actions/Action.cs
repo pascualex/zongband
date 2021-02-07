@@ -6,12 +6,35 @@ namespace Zongband.Game.Actions
 {
     public abstract class Action : ICustomUpdatable
     {
-        public abstract void CustomUpdate();
-        public abstract bool IsCompleted();
+        protected GameAction gameAction;
 
-        public virtual bool IsGameAction()
+        public virtual void CustomUpdate()
         {
-            return false;
+
+        }
+
+        public bool IsGameActionAvailable()
+        {
+            return (gameAction != null);
+        }
+
+        protected virtual bool IsAnimationCompleted()
+        {
+            return true;
+        }
+
+        public bool IsCompleted()
+        {
+            return !IsGameActionAvailable() && IsAnimationCompleted();
+        }
+
+        public GameAction RemoveGameAction()
+        {
+            if (!IsGameActionAvailable()) throw new NoGameActionAvailableException();
+
+            GameAction removedGameAction = gameAction;
+            gameAction = null;
+            return removedGameAction;
         }
     }
 }

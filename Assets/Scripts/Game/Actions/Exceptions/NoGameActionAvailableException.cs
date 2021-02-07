@@ -3,7 +3,7 @@ using System;
 
 namespace Zongband.Game.Actions
 {
-    public class NoActionAvailableException : Exception
+    public class NoGameActionAvailableException : Exception
     {
 
     }

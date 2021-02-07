@@ -39,9 +39,9 @@ namespace Zongband.Game.Core
             turnActionPack = actionPack;
         }
 
-        public void ConsumeAction(GameAction action)
+        public void ConsumeGameAction(GameAction action)
         {
-            if (action is PositionAction) ConsumeAction((PositionAction)action);
+            if (action is MovementGameAction) ConsumeGameAction((MovementGameAction)action);
         }
 
         public bool IsCompleted()
@@ -51,16 +51,16 @@ namespace Zongband.Game.Core
 
         private void UpdateTurnActionPack()
         {
-            while (turnActionPack.IsActionAvailable())
+            while (turnActionPack.IsGameActionAvailable())
             {
-                GameAction action = turnActionPack.RemoveAction();
-                ConsumeAction(action);
+                GameAction action = turnActionPack.RemoveGameAction();
+                ConsumeGameAction(action);
             }
 
             if (!turnActionPack.IsCompleted()) turnActionPack.CustomUpdate();
         }
 
-        private void ConsumeAction(PositionAction action)
+        private void ConsumeGameAction(MovementGameAction action)
         {
             if (action == null) throw new ArgumentNullException();
 

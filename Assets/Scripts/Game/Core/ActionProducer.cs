@@ -48,10 +48,10 @@ namespace Zongband.Game.Core
                 if (IsPlayerTurn()) actionPack = RemovePlayerActionPack();
                 else actionPack = agentAI.GenerateActionPack(agent, gameManager.board);
 
-                while (actionPack.IsActionAvailable())
+                while (actionPack.IsGameActionAvailable())
                 {
-                    GameAction action = actionPack.RemoveAction();
-                    actionConsumer.ConsumeAction(action);
+                    GameAction action = actionPack.RemoveGameAction();
+                    actionConsumer.ConsumeGameAction(action);
                 }
 
                 if (!actionPack.IsCompleted()) turnActionPack.Add(actionPack);
@@ -59,7 +59,7 @@ namespace Zongband.Game.Core
                 processedAgents.Add(agent);
                 gameManager.turnManager.Next();
 
-                if (actionPack.AreActionsLeft()) break;
+                if (actionPack.AreGameActionsLeft()) break;
             }
             while (!IsPlayerTurn());
 
