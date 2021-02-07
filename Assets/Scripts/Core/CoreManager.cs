@@ -29,15 +29,13 @@ namespace Zongband.Core
 
         private void Update()
         {
-            #if !UNITY_EDITOR && !DEVELOPMENT_BUILD
-            playerController.ClearActionPack();
-            #endif
+            if (Debug.isDebugBuild) playerController.ClearActionpack();
             
             InputSystem.Update();
 
-            if (gameManager.CanSetPlayerActionPack() && playerController.ActionPackAvailable())
+            if (gameManager.IsPlayerTurn() && playerController.IsActionPackAvailable())
             {
-                gameManager.SetPlayerActionPack(playerController.ConsumeActionPack());
+                gameManager.SetPlayerActionPack(playerController.RemoveActionPack());
             }
 
             gameManager.CustomUpdate();

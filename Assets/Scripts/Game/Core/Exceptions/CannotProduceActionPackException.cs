@@ -3,7 +3,7 @@ using System;
 
 namespace Zongband.Game.Core
 {
-    public class ActionPackNotCompletedException : Exception
+    public class CannotProduceActionPackException : Exception
     {
 
     }

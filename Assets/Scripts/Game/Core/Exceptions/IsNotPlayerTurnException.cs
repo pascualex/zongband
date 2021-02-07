@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 
-namespace Zongband.Game.Boards
+namespace Zongband.Game.Core
 {
     public class IsNotPlayerTurnException : Exception
     {

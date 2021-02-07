@@ -10,6 +10,6 @@ namespace Zongband.Game.Actions
         public abstract bool IsActionAvailable();
         public abstract bool IsCompleted();
         public abstract bool AreActionsLeft();
-        public abstract GameAction ConsumeAction();
+        public abstract GameAction RemoveAction();
     }
 }

@@ -19,21 +19,19 @@ namespace Zongband.Player
             if (gameManager == null) throw new NullReferenceException();
         }
 
-        public bool ActionPackAvailable()
+        public bool IsActionPackAvailable()
         {
             return actionPack != null;
         }
 
-        public ActionPack ConsumeActionPack()
+        public ActionPack RemoveActionPack()
         {
-            if (actionPack == null) throw new NullReferenceException();
-
-            ActionPack consumedActionPack = actionPack;
-            ClearActionPack();
-            return consumedActionPack;
+            ActionPack removedActionPack = actionPack;
+            ClearActionpack();
+            return removedActionPack;
         }
 
-        public void ClearActionPack()
+        public void ClearActionpack()
         {
             actionPack = null;
         }
@@ -56,8 +54,8 @@ namespace Zongband.Player
 
         private bool AcceptsNewAction()
         {
-            if (ActionPackAvailable()) return false;
-            return gameManager.CanSetPlayerActionPack();
+            if (IsActionPackAvailable()) return false;
+            return gameManager.IsPlayerTurn();
         }
     }
 }

@@ -6,14 +6,12 @@ namespace Zongband.Game.Actions
     public class BasicActionPack : ActionPack
     {
         private Action action;
-        private bool isActionAvailable;
 
         public BasicActionPack(Action action)
         {
             if (action == null) throw new ArgumentNullException();
 
             this.action = action;
-            isActionAvailable = true;
         }
 
         public override void CustomUpdate()
@@ -24,8 +22,7 @@ namespace Zongband.Game.Actions
         public override bool IsActionAvailable()
         {
             if (action == null) return false;
-            if (!action.IsGameAction()) return false;
-            return isActionAvailable;
+            return action.IsGameAction();
         }
         
         public override bool IsCompleted()
@@ -40,12 +37,13 @@ namespace Zongband.Game.Actions
             return IsActionAvailable();
         }
 
-        public override GameAction ConsumeAction()
+        public override GameAction RemoveAction()
         {
             if (!IsActionAvailable()) throw new NoActionAvailableException();
 
-            isActionAvailable = false;
-            return (GameAction)action;
+            GameAction removedAction = (GameAction)action;
+            action = null;
+            return removedAction;
         }
     }
 }

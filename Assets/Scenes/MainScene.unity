@@ -583,6 +583,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1379493069}
   - component: {fileID: 1379493068}
+  - component: {fileID: 1379493071}
+  - component: {fileID: 1379493070}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -613,9 +615,10 @@ MonoBehaviour:
   boxEntitySO: {fileID: 11400000, guid: 0c048d90f6057844d8beefc3a49a025e, type: 2}
   floorTile: {fileID: 11400000, guid: c01a94980ed34a940989672df4bbe34d, type: 2}
   wallTile: {fileID: 11400000, guid: d4733fce90b3e6042b7b3784043abe54, type: 2}
-  board: {fileID: 1211860784}
+  actionProducer: {fileID: 1379493071}
+  actionConsumer: {fileID: 1379493070}
   turnManager: {fileID: 848178843}
-  aiController: {fileID: 470883251}
+  board: {fileID: 1211860784}
 --- !u!4 &1379493069
 Transform:
   m_ObjectHideFlags: 0
@@ -633,6 +636,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1379493070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379493067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb6b629df828457439b1d6f3e1b63795, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 1379493068}
+--- !u!114 &1379493071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379493067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e2087ca5c8485e42a2ad01c2f511102, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 1379493068}
+  actionConsumer: {fileID: 1379493070}
+  agentAI: {fileID: 470883251}
 --- !u!1 &1426462653
 GameObject:
   m_ObjectHideFlags: 0

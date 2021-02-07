@@ -52,11 +52,11 @@ namespace Zongband.Game.Actions
             return false;
         }
 
-        public override GameAction ConsumeAction()
+        public override GameAction RemoveAction()
         {
             if (!IsActionAvailable()) throw new NoActionAvailableException();
 
-            return actionPacks.Peek().ConsumeAction();
+            return actionPacks.Peek().RemoveAction();
         }
     }
 }

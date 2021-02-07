@@ -23,20 +23,16 @@ namespace Zongband.Game.Core
         public TileSO floorTile;
         public TileSO wallTile;
 
-        public Board board;
+        public ActionProducer actionProducer;
+        public ActionConsumer actionConsumer;
         public TurnManager turnManager;
-        public AgentAI aiController;
+        public Board board;
 
         public Agent playerAgent { get; private set; }
-
-        private ActionPack playerActionPack;
-        private ActionPack currentActionPack;
 
         public GameManager()
         {
             playerAgent = null;
-            playerActionPack = null;
-            currentActionPack = new NullActionPack();
         }
 
         private void Awake()
@@ -51,9 +47,10 @@ namespace Zongband.Game.Core
             if (floorTile == null) throw new NullReferenceException();
             if (wallTile == null) throw new NullReferenceException();
 
-            if (board == null) throw new NullReferenceException();
+            if (actionProducer == null) throw new NullReferenceException();
+            if (actionConsumer == null) throw new NullReferenceException();
             if (turnManager == null) throw new NullReferenceException();
-            if (aiController == null) throw new NullReferenceException();
+            if (board == null) throw new NullReferenceException();
         }
 
         public void CustomStart()
@@ -78,109 +75,27 @@ namespace Zongband.Game.Core
 
         public void CustomUpdate()
         {
-            if (!currentActionPack.IsCompleted()) UpdateCurrentActionPack();
-            else if (!IsPlayerTurn() || IsPlayerActionPackAvailable()) ProcessTurns();
+            if (!actionConsumer.IsCompleted())
+            {
+                actionConsumer.CustomUpdate();
+            }
+            else if (actionProducer.CanProduceTurnActionPack())
+            {
+                ActionPack turnActionPack = actionProducer.ProduceTurnActionPack();
+                actionConsumer.ConsumeTurnActionPack(turnActionPack);
+            }
         }
 
-        public bool CanSetPlayerActionPack()
+        public bool IsPlayerTurn()
         {
-            return IsPlayerTurn() && currentActionPack.IsCompleted();
+            return actionProducer.IsPlayerTurn() && actionConsumer.IsCompleted();
         }
 
         public void SetPlayerActionPack(ActionPack actionPack)
         {
-            if (!CanSetPlayerActionPack()) throw new IsNotPlayerTurnException();
+            if (!IsPlayerTurn()) throw new IsNotPlayerTurnException();
 
-            playerActionPack = actionPack;
-        }
-
-        private bool IsPlayerTurn()
-        {
-            if (playerAgent == null) throw new NullReferenceException();
-
-            return (turnManager.GetCurrent() == playerAgent);
-        }
-
-        private bool IsPlayerActionPackAvailable()
-        {
-            return (playerActionPack != null);
-        }
-
-        private ActionPack ConsumePlayerActionPack()
-        {
-            if (!IsPlayerActionPackAvailable()) throw new NullReferenceException();
-            ActionPack consumedPlayerActionPack = playerActionPack;
-            playerActionPack = null;
-            return consumedPlayerActionPack;
-        }
-
-        private void ProcessTurns()
-        {
-            if (!currentActionPack.IsCompleted()) throw new ActionPackNotCompletedException();
-
-            ParallelActionPack nextActionPack = new ParallelActionPack();
-
-            HashSet<Agent> processedAgents = new HashSet<Agent>();
-            do
-            {
-                Agent agent = turnManager.GetCurrent();
-
-                if (processedAgents.Contains(agent)) break;
-
-                ActionPack actionPack;
-                if (IsPlayerTurn()) actionPack = ConsumePlayerActionPack();
-                else actionPack = aiController.GenerateActionPack(agent, board);
-
-                while (actionPack.IsActionAvailable())
-                {
-                    Actions.Action action = actionPack.ConsumeAction();
-                    ApplyAction((PositionAction)action);
-                }
-
-                if (!actionPack.IsCompleted()) nextActionPack.Add(actionPack);
-
-                processedAgents.Add(agent);
-                turnManager.Next();
-
-                if (actionPack.AreActionsLeft()) break;
-            }
-            while (!IsPlayerTurn());
-
-            this.currentActionPack = nextActionPack;
-        }
-
-        private void UpdateCurrentActionPack()
-        {
-            while (currentActionPack.IsActionAvailable())
-            {
-                GameAction action = currentActionPack.ConsumeAction();
-                ApplyAction(action);
-            }
-
-            if (!currentActionPack.IsCompleted()) currentActionPack.CustomUpdate();
-        }
-
-        private void ApplyAction(GameAction action)
-        {
-            if (action is PositionAction) ApplyAction((PositionAction)action);
-        }
-
-        private void ApplyAction(PositionAction action)
-        {
-            if (action == null) throw new ArgumentNullException();
-
-            Entity entity = action.entity;
-            Vector2Int position = action.position;
-            bool absolute = action.absolute;
-
-            if (absolute && board.IsPositionAvailable(entity, position))
-            {
-                board.Move(entity, position);
-            }
-            else if (!absolute && board.IsDisplacementAvailable(entity, position))
-            {
-                board.Displace(entity, position);
-            }
+            actionProducer.SetPlayerActionPack(actionPack);
         }
 
         private Entity Spawn(EntitySO entitySO, Vector2Int at)

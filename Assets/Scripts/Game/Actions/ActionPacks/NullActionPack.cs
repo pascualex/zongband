@@ -25,7 +25,7 @@ namespace Zongband.Game.Actions
             return false;
         }
 
-        public override GameAction ConsumeAction()
+        public override GameAction RemoveAction()
         {
             throw new NoActionAvailableException();
         }
