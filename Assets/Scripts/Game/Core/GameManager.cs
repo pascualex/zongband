@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 
-using Zongband.Game.AI;
 using Zongband.Game.Boards;
 using Zongband.Game.Turns;
 using Zongband.Game.Actions;
@@ -28,7 +27,7 @@ namespace Zongband.Game.Core
         public TurnManager turnManager;
         public Board board;
 
-        public Agent playerAgent { get; private set; }
+        public Agent playerAgent { get; set; }
 
         public GameManager()
         {
@@ -55,12 +54,23 @@ namespace Zongband.Game.Core
 
         public void CustomStart()
         {
-            playerAgent = Spawn(playerAgentSO, new Vector2Int(3, 3), true);
-            Spawn(fastAgentSO, new Vector2Int(3, 5));
-            Spawn(normalAgentSO, new Vector2Int(4, 5));
-            Spawn(normalAgentSO, new Vector2Int(5, 5));
-            Spawn(slowAgentSO, new Vector2Int(6, 5));
-            Spawn(boxEntitySO, new Vector2Int(3, 7));
+            ParallelActionPack actionPack = new ParallelActionPack();
+
+            SequentialActionPack playerActionPack = new SequentialActionPack();
+            Vector2Int position = new Vector2Int(3, 3);
+            SpawnAction spawnPlayer = new SpawnAction(playerAgentSO, board, position, true);
+            playerActionPack.Add(spawnPlayer);
+            playerActionPack.Add(new MakePlayerAction(spawnPlayer));
+            actionPack.Add(playerActionPack);
+
+            actionPack.Add(new SpawnAction(fastAgentSO, board, new Vector2Int(3, 5)));
+            actionPack.Add(new SpawnAction(normalAgentSO, board, new Vector2Int(4, 5)));
+            actionPack.Add(new SpawnAction(normalAgentSO, board, new Vector2Int(5, 5)));
+            actionPack.Add(new SpawnAction(slowAgentSO, board, new Vector2Int(6, 3)));
+            actionPack.Add(new SpawnAction(boxEntitySO, board, new Vector2Int(3, 7)));
+
+            actionConsumer.TryToConsumeActionPack(actionPack);
+            if (!actionPack.IsCompleted()) actionConsumer.ConsumeTurnActionPack(actionPack);
 
             Vector2Int upRight = board.size - Vector2Int.one;
             Vector2Int downRight = new Vector2Int(board.size.x - 1, 0);
@@ -96,55 +106,6 @@ namespace Zongband.Game.Core
             if (!IsPlayerTurn()) throw new IsNotPlayerTurnException();
 
             actionProducer.SetPlayerActionPack(actionPack);
-        }
-
-        private Entity Spawn(EntitySO entitySO, Vector2Int at)
-        {
-            if (entitySO == null) throw new ArgumentNullException();
-            if (!board.IsPositionValid(at)) throw new ArgumentOutOfRangeException();
-
-            Entity entity = Instantiate(entityPrefab, turnManager.transform);
-            entity.entitySO = entitySO;
-            entity.gameObject.SetActive(true);
-
-            board.Add(entity, at);
-
-            UpdateEntityPosition(entity);
-
-            return entity;
-        }
-
-        private Agent Spawn(AgentSO agentSO, Vector2Int at, bool priority)
-        {
-            if (agentSO == null) throw new ArgumentNullException();
-            if (!board.IsPositionValid(at)) throw new ArgumentOutOfRangeException();
-
-            Agent agent = Instantiate(agentPrefab, turnManager.transform);
-            agent.agentSO = agentSO;
-            agent.GetEntity().entitySO = agentSO;
-            agent.gameObject.SetActive(true);
-
-            board.Add(agent.GetEntity(), at);
-
-            turnManager.Add(agent, priority);
-
-            UpdateEntityPosition(agent.GetEntity());
-
-            return agent;
-        }
-
-        private Agent Spawn(AgentSO agentSO, Vector2Int at)
-        {
-            return Spawn(agentSO, at, false);
-        }
-
-        private void UpdateEntityPosition(Entity entity)
-        {
-            Vector2Int position = entity.position;
-            float scale = board.scale;
-            Vector3 relativePosition = new Vector3(position.x + 0.5f, 0, position.y + 0.5f) * scale;
-            Vector3 absolutePosition = board.transform.position + relativePosition;
-            entity.transform.position = absolutePosition;
         }
     }
 }

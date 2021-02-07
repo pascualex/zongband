@@ -4,9 +4,14 @@ using Zongband.Utils;
 
 namespace Zongband.Game.Actions
 {
-    public abstract class Action : ICustomUpdatable
+    public abstract class Action : ICustomStartable, ICustomUpdatable
     {
         protected GameAction gameAction;
+
+        public virtual void CustomStart()
+        {
+
+        }
 
         public virtual void CustomUpdate()
         {

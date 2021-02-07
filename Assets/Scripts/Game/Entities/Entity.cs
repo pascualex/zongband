@@ -1,16 +1,14 @@
 ﻿using UnityEngine;
-
 using System;
 
 namespace Zongband.Game.Entities
 {
     public class Entity : MonoBehaviour
     {
-        public EntitySO entitySO;
-        public GameObject defaultModel;
-
         public Vector2Int position { get; set; }
         public bool removed { get; set; }
+
+        private EntitySO entitySO;
 
         public Entity()
         {
@@ -18,24 +16,13 @@ namespace Zongband.Game.Entities
             removed = false;
         }
 
-        private void Start()
+        public virtual void Setup(EntitySO entitySO)
         {
-            if (entitySO == null) throw new NullReferenceException();
-            if (defaultModel == null) throw new NullReferenceException();
+            if (entitySO == null) throw new ArgumentNullException();
 
-            GameObject model = (entitySO.model != null) ? entitySO.model : defaultModel;
-            Instantiate(model, transform);
-        }
+            this.entitySO = entitySO;
 
-        public bool IsAgent()
-        {
-            return GetComponent<Agent>() != null;
-        }
-
-        public Agent GetAgent()
-        {
-            if (!IsAgent()) throw new NullReferenceException();
-            return GetComponent<Agent>();
+            if (entitySO.model != null) Instantiate(entitySO.model, transform);
         }
     }
 }

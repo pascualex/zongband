@@ -3,11 +3,8 @@ using System;
 using System.Collections.Generic;
 
 using Zongband.Game.AI;
-using Zongband.Game.Boards;
-using Zongband.Game.Turns;
 using Zongband.Game.Actions;
 using Zongband.Game.Entities;
-using Zongband.Utils;
 
 namespace Zongband.Game.Core
 {
@@ -48,11 +45,7 @@ namespace Zongband.Game.Core
                 if (IsPlayerTurn()) actionPack = RemovePlayerActionPack();
                 else actionPack = agentAI.GenerateActionPack(agent, gameManager.board);
 
-                while (actionPack.IsGameActionAvailable())
-                {
-                    GameAction action = actionPack.RemoveGameAction();
-                    actionConsumer.ConsumeGameAction(action);
-                }
+                actionConsumer.TryToConsumeActionPack(actionPack);
 
                 if (!actionPack.IsCompleted()) turnActionPack.Add(actionPack);
 

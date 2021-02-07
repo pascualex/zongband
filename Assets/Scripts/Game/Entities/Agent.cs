@@ -3,8 +3,7 @@ using System;
 
 namespace Zongband.Game.Entities
 {
-    [RequireComponent(typeof(Entity))]
-    public class Agent : MonoBehaviour
+    public class Agent : Entity
     {
         public AgentSO agentSO;
 
@@ -15,9 +14,18 @@ namespace Zongband.Game.Entities
             currentHealth = 0;
         }
 
-        private void Start()
+        public void Setup(AgentSO agentSO)
         {
-            if (agentSO == null) throw new NullReferenceException();
+            if (agentSO == null) throw new ArgumentNullException();
+
+            base.Setup(agentSO);
+
+            this.agentSO = agentSO;
+        }
+
+        public override void Setup(EntitySO entitySO)
+        {
+            throw new NotImplementedException();
         }
 
         public void SetAgentSO(AgentSO agentSO)
@@ -61,11 +69,6 @@ namespace Zongband.Game.Entities
         private void ChangeHealth(int amount)
         {
             currentHealth = Mathf.Max(Mathf.Min(currentHealth + amount, GetMaxHealth()), 0);
-        }
-
-        public Entity GetEntity()
-        {
-            return GetComponent<Entity>();
         }
     }
 }

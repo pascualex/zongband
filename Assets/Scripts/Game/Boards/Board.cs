@@ -35,7 +35,7 @@ namespace Zongband.Game.Boards
         {
             if (!IsPositionAvailable(entity, at)) throw new NotEmptyTileException(at);
 
-            if (entity.IsAgent()) agentLayer.Add(entity, at);
+            if (entity is Agent) agentLayer.Add(entity, at);
             else entityLayer.Add(entity, at);
         }
 
@@ -43,7 +43,7 @@ namespace Zongband.Game.Boards
         {
             if (!IsPositionAvailable(entity, to)) throw new NotEmptyTileException(to);
 
-            if (entity.IsAgent()) agentLayer.Move(entity, to);
+            if (entity is Agent) agentLayer.Move(entity, to);
             else entityLayer.Move(entity, to);
         }
 
@@ -61,7 +61,7 @@ namespace Zongband.Game.Boards
 
         public void Remove(Entity entity)
         {
-            if (entity.IsAgent()) agentLayer.Remove(entity);
+            if (entity is Agent) agentLayer.Remove(entity);
             else entityLayer.Remove(entity);
         }
 
@@ -126,7 +126,7 @@ namespace Zongband.Game.Boards
         }
 
         public bool CheckEntityPosition(Entity entity) {
-            if (entity.IsAgent()) return agentLayer.CheckEntityPosition(entity);
+            if (entity is Agent) return agentLayer.CheckEntityPosition(entity);
             else return entityLayer.CheckEntityPosition(entity);
         }
     }

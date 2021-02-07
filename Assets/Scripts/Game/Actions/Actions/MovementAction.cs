@@ -13,24 +13,42 @@ namespace Zongband.Game.Actions
 
         private Entity entity;
         private Board board;
+        private bool instant;
         private bool isCompleted;
 
-        public MovementAction(MovementGameAction movementGameAction, Board board, bool instant)
+        public MovementAction(Entity entity, Board board, Vector2Int delta)
+        : this(entity, board, delta, false)
         {
-            if (movementGameAction == null) throw new ArgumentNullException();
+
+        }
+
+        public MovementAction(Entity entity, Board board, Vector2Int position, bool absolute)
+        : this(entity, board, position, absolute, false)
+        {
+
+        }
+
+        public MovementAction(Entity entity, Board board, Vector2Int position, bool absolute,
+                              bool instant)
+        {
+            if (entity == null) throw new ArgumentNullException();
             if (board == null) throw new ArgumentNullException();
 
-            this.entity = movementGameAction.entity;
+            this.entity = entity;
             this.board = board;
+            this.instant = instant;
             isCompleted = false;
 
-            this.gameAction = movementGameAction;
+            this.gameAction = new MovementGameAction(entity, position, absolute);
+        }
+
+        public override void CustomStart()
+        {
+            if (instant) MoveToTarget();
         }
 
         public override void CustomUpdate()
         {
-            if (IsCompleted()) return;
-
             MoveTowardsTarget();
         }
 
@@ -38,9 +56,19 @@ namespace Zongband.Game.Actions
         {
             return isCompleted;
         }
+        
+        private void MoveToTarget()
+        {
+            if (isCompleted) return;
+
+            entity.transform.position = GetTargetPosition();
+            isCompleted = true;
+        }
 
         private void MoveTowardsTarget()
         {
+            if (isCompleted) return;
+
             Vector3 targetPosition = GetTargetPosition();
 
             Transform transform = entity.transform;
@@ -48,7 +76,7 @@ namespace Zongband.Game.Actions
             float variableDistance = remainingDistance * animationVariableSpeed;
             float distance = (variableDistance + animationFixedSpeed) * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, distance);
-            
+
             isCompleted = (transform.position == targetPosition);
         }
 

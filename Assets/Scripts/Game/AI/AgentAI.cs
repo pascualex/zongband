@@ -24,7 +24,7 @@ namespace Zongband.Game.AI
             Vector2Int selectedDirection = Vector2Int.zero;
             foreach (Vector2Int direction in directions)
             {
-                if (board.IsDisplacementAvailable(agent.GetEntity(), direction))
+                if (board.IsDisplacementAvailable(agent, direction))
                 {
                     selectedDirection = direction;
                     break;
@@ -33,9 +33,7 @@ namespace Zongband.Game.AI
 
             if (selectedDirection == Vector2Int.zero) return new NullActionPack();
 
-            Entity entity = agent.GetEntity();
-            MovementGameAction gameAction = new MovementGameAction(entity, selectedDirection);
-            MovementAction action = new MovementAction(gameAction, board, false);
+            MovementAction action = new MovementAction(agent, board, selectedDirection);
             return new BasicActionPack(action);
         }
     }

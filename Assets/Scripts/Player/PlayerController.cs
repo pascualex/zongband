@@ -40,13 +40,12 @@ namespace Zongband.Player
         {
             if (!AcceptsNewAction()) return;
             
+            Entity entity = gameManager.playerAgent;
             Board board = gameManager.board;
-            Entity entity = gameManager.playerAgent.GetEntity();
 
             if (!board.IsDisplacementAvailable(entity, delta)) return;
 
-            MovementGameAction gameAction = new MovementGameAction(entity, delta);
-            MovementAction action = new MovementAction(gameAction, board, false);
+            MovementAction action = new MovementAction(entity, board, delta);
             actionPack = new BasicActionPack(action);
         }
 

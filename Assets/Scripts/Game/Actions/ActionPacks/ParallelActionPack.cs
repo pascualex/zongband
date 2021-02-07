@@ -14,6 +14,26 @@ namespace Zongband.Game.Actions
             actionPacksAvailable = new Queue<ActionPack>();
         }
 
+        public override void CustomStart()
+        {
+            LinkedListNode<ActionPack> node = actionPacks.First;
+            while (node != null)
+            {
+                LinkedListNode<ActionPack> next = node.Next;
+
+                node.Value.CustomStart();
+
+                if (node.Value.IsCompleted()) actionPacks.Remove(node);
+                else if (node.Value.IsGameActionAvailable())
+                {
+                    actionPacksAvailable.Enqueue(node.Value);
+                    actionPacks.Remove(node);
+                }
+
+                node = next;
+            }
+        }
+
         public override void CustomUpdate()
         {
             if (IsGameActionAvailable()) return;
@@ -24,10 +44,13 @@ namespace Zongband.Game.Actions
             {
                 LinkedListNode<ActionPack> next = node.Next;
 
-                if (node.Value.IsCompleted()) actionPacks.Remove(node);
-                else if (!node.Value.IsGameActionAvailable()) node.Value.CustomUpdate();
+                if (!node.Value.IsGameActionAvailable() && !node.Value.IsCompleted())
+                {
+                    node.Value.CustomUpdate();
+                }
 
-                if (node.Value.IsGameActionAvailable())
+                if (node.Value.IsCompleted()) actionPacks.Remove(node);
+                else if (node.Value.IsGameActionAvailable())
                 {
                     actionPacksAvailable.Enqueue(node.Value);
                     actionPacks.Remove(node);
@@ -81,7 +104,8 @@ namespace Zongband.Game.Actions
             if (!actionPacksAvailable.Peek().IsGameActionAvailable())
             {
                 ActionPack actionPack = actionPacksAvailable.Dequeue();
-                actionPacks.AddLast(actionPack);
+
+                if (!actionPack.IsCompleted()) actionPacks.AddLast(actionPack);
             }
 
             return action;

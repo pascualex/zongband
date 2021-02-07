@@ -12,13 +12,22 @@ namespace Zongband.Game.Actions
             actionPacks = new Queue<ActionPack>();
         }
 
+        public override void CustomStart()
+        {
+            if (actionPacks.Count > 0) actionPacks.Peek().CustomStart();
+        }
+
         public override void CustomUpdate()
         {
             if (IsGameActionAvailable()) return;
             if (IsCompleted()) return;
 
-            if (actionPacks.Peek().IsCompleted()) actionPacks.Dequeue();
-            else if (!actionPacks.Peek().IsGameActionAvailable()) actionPacks.Peek().CustomUpdate();
+            if (!actionPacks.Peek().IsGameActionAvailable() && !actionPacks.Peek().IsCompleted())
+            {
+                actionPacks.Peek().CustomUpdate();
+            }
+
+            RemoveCompletedActionPacks();
         }
 
         public void Add(ActionPack actionPack)
@@ -56,7 +65,18 @@ namespace Zongband.Game.Actions
         {
             if (!IsGameActionAvailable()) throw new NoGameActionAvailableException();
 
-            return actionPacks.Peek().RemoveGameAction();
+            GameAction removedAction = actionPacks.Peek().RemoveGameAction();
+            RemoveCompletedActionPacks();
+            return removedAction;
+        }
+
+        private void RemoveCompletedActionPacks()
+        {
+            while ((actionPacks.Count > 0) && actionPacks.Peek().IsCompleted())
+            {
+                actionPacks.Dequeue();
+                if (actionPacks.Count > 0) actionPacks.Peek().CustomStart();
+            }
         }
     }
 }

@@ -43,7 +43,7 @@ namespace Zongband.UI
             Agent agent = gameManager.playerAgent;
             Board board = gameManager.board;
 
-            if (board.IsPositionAvailable(agent.GetEntity(), boardPosition))
+            if (board.IsPositionAvailable(agent, boardPosition))
             {
                 Vector3 finalLocalPosition = new Vector3(boardPosition.x, 0, boardPosition.y);
                 finalLocalPosition += new Vector3(0.5f, 0, 0.5f);

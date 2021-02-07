@@ -14,6 +14,11 @@ namespace Zongband.Game.Actions
             this.action = action;
         }
 
+        public override void CustomStart()
+        {
+            action.CustomStart();
+        }
+
         public override void CustomUpdate()
         {
             action.CustomUpdate();
