@@ -29,6 +29,7 @@ namespace Zongband.Game.Actions
             this.entitySO = entitySO;
             this.board = board;
             this.position = position;
+            this.priority = priority;
             isCompleted = false;
         }
 
@@ -44,7 +45,7 @@ namespace Zongband.Game.Actions
 
         private Entity SpawnEntity()
         {
-            GameObject gameObject = new GameObject();
+            GameObject gameObject = new GameObject(entitySO.name);
 
             if (entitySO is AgentSO) gameObject.AddComponent<Agent>().Setup((AgentSO)entitySO);
             else gameObject.AddComponent<Entity>().Setup(entitySO);
