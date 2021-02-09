@@ -44,17 +44,15 @@ namespace Zongband.Game.Boards
 
         public void Move(Entity entity, Vector2Int to)
         {
-            if (!IsPositionAvailable(entity, to)) throw new NotEmptyTileException(to);
-
-            if (entity is Agent) agentLayer.Move(entity, to);
-            else entityLayer.Move(entity, to);
+            Move(entity, to, false);
         }
 
-        public void Displace(Entity entity, Vector2Int delta)
+        public void Move(Entity entity, Vector2Int to, bool relative)
         {
-            if (!CheckEntityPosition(entity)) throw new NotInTileException(entity);
+            if (!IsPositionAvailable(entity, to)) throw new NotEmptyTileException(to);
 
-            Move(entity, entity.position + delta);
+            if (entity is Agent) agentLayer.Move(entity, to, relative);
+            else entityLayer.Move(entity, to, relative);
         }
 
         public void Remove(Entity entity)
@@ -96,9 +94,20 @@ namespace Zongband.Game.Boards
             if (!entityLayer.IsPositionEmpty(position)) return false;
             return true;
         }
-
+        
         public bool IsPositionAvailable(Entity entity, Vector2Int position)
         {
+            return IsPositionAvailable(entity, position, false);
+        }
+
+        public bool IsPositionAvailable(Entity entity, Vector2Int position, bool relative)
+        {
+            if (relative)
+            {
+                if (CheckEntityPosition(entity)) throw new NotInTileException(entity);
+                position += entity.position;
+            }
+
             if (!IsPositionValid(position)) return false;
             /* Add here special interactions in the future */
             if (!agentLayer.IsPositionEmpty(position)) return false;
@@ -115,13 +124,6 @@ namespace Zongband.Game.Boards
             if (tile.blocksGround && !agentLayer.IsPositionEmpty(position)) return false;
             if (tile.blocksGround && !entityLayer.IsPositionEmpty(position)) return false;
             return true;
-        }
-
-        public bool IsDisplacementAvailable(Entity entity, Vector2Int delta)
-        {
-            if (!CheckEntityPosition(entity)) throw new NotInTileException(entity);
-
-            return IsPositionAvailable(entity, entity.position + delta);
         }
 
         public bool CheckEntityPosition(Entity entity) {

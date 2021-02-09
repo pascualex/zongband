@@ -7,14 +7,14 @@ using Zongband.Utils;
 
 namespace Zongband.UI
 {
-    public class UIManager : MonoBehaviour, ICustomUpdatable
+    public class UIManager : MonoBehaviour
     {
         [SerializeField] private Camera? mainCamera;
         [SerializeField] private TileHighlighter? tileHighlighter;
 
-        public void CustomUpdate()
+        public void Refresh()
         {
-            tileHighlighter?.CustomUpdate();
+            tileHighlighter?.Refresh();
         }
 
         public void SetMousePosition(Vector2 mousePosition)

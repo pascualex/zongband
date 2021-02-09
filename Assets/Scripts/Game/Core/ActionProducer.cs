@@ -4,7 +4,6 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-using Zongband.Game.AI;
 using Zongband.Game.Actions;
 using Zongband.Game.Entities;
 

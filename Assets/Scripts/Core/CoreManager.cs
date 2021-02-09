@@ -1,21 +1,18 @@
 ﻿#nullable enable
 
 using UnityEngine;
-using UnityEngine.InputSystem;
-using System;
 
-using Zongband.Game.Core;
-using Zongband.Game.Actions;
-using Zongband.Player;
+using Zongband.Input;
 using Zongband.UI;
+using Zongband.Game.Core;
 
 namespace Zongband.Core
 {
     public class CoreManager : MonoBehaviour
     {
-        [SerializeField] private GameManager? gameManager;
-        [SerializeField] private PlayerController? playerController;
+        [SerializeField] private InputManager? inputManager;
         [SerializeField] private UIManager? uiManager;
+        [SerializeField] private GameManager? gameManager;
 
         private void Start()
         {
@@ -24,22 +21,14 @@ namespace Zongband.Core
 
         private void Update()
         {
+            if (inputManager == null) return;
             if (gameManager == null) return;
-            if (playerController == null) return;
             if (uiManager == null) return;
-
-            if (Debug.isDebugBuild) playerController.ClearActionpack();
             
-            InputSystem.Update();
-
-            if (gameManager.IsPlayerTurn())
-            {
-                var actionPack = playerController.RemoveActionPack();
-                if (actionPack != null) gameManager.SetPlayerActionPack(actionPack);
-            }
-
+            inputManager.ProcessInput();
             gameManager.CustomUpdate();
-            uiManager.CustomUpdate();
+            uiManager.Refresh();
+            inputManager.ClearInput();
         }
     }
 }

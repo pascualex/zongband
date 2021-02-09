@@ -36,12 +36,17 @@ namespace Zongband.Game.Boards
             entity.position = at;
             entities[at.y][at.x] = entity;
         }
-
         public void Move(Entity entity, Vector2Int to)
+        {
+            Move(entity, to, false);
+        }
+
+        public void Move(Entity entity, Vector2Int to, bool relative)
         {
             if (!CheckEntityPosition(entity)) throw new NotInTileException(entity);
 
-            Move(entity.position, to);
+            if (relative) Move(entity.position, entity.position + to);
+            else Move(entity.position, to);
         }
 
         public void Move(Vector2Int from, Vector2Int to)

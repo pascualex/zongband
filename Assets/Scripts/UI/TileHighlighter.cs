@@ -7,7 +7,7 @@ using Zongband.Utils;
 
 namespace Zongband.UI
 {
-    public class TileHighlighter : MonoBehaviour, ICustomUpdatable
+    public class TileHighlighter : MonoBehaviour
     {
         public Vector2Int boardPosition = new Vector2Int(-1, -1);
 
@@ -20,7 +20,7 @@ namespace Zongband.UI
             HighlightTile();
         }
 
-        private void Start()
+        public void Refresh()
         {
             if (initialCursorPrefab != null) ChangeCursor(initialCursorPrefab);
         }

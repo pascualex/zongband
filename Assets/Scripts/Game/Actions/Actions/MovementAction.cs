@@ -18,19 +18,19 @@ namespace Zongband.Game.Actions
         private readonly bool instant;
         private bool isCompleted;
 
-        public MovementAction(Entity entity, Board board, Vector2Int delta)
-        : this(entity, board, delta, false)
+        public MovementAction(Entity entity, Board board, Vector2Int position)
+        : this(entity, board, position, false)
         {
 
         }
 
-        public MovementAction(Entity entity, Board board, Vector2Int position, bool absolute)
-        : this(entity, board, position, absolute, false)
+        public MovementAction(Entity entity, Board board, Vector2Int position, bool relative)
+        : this(entity, board, position, relative, false)
         {
 
         }
 
-        public MovementAction(Entity entity, Board board, Vector2Int position, bool absolute,
+        public MovementAction(Entity entity, Board board, Vector2Int position, bool relative,
                               bool instant)
         {
             this.entity = entity;
@@ -38,7 +38,7 @@ namespace Zongband.Game.Actions
             this.instant = instant;
             isCompleted = false;
 
-            gameAction = new MovementGameAction(entity, position, absolute);
+            gameAction = new MovementGameAction(entity, position, relative);
         }
 
         public override void CustomStart()

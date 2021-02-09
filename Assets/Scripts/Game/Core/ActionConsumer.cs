@@ -102,18 +102,14 @@ namespace Zongband.Game.Core
 
             var entity = action.entity;
             var position = action.position;
-            var absolute = action.absolute;
+            var relative = action.relative;
 
             var board = gameManager.board;
             if (board == null) return;
 
-            if (absolute && board.IsPositionAvailable(entity, position))
+            if (board.IsPositionAvailable(entity, position, relative))
             {
-                board.Move(entity, position);
-            }
-            else if (!absolute && board.IsDisplacementAvailable(entity, position))
-            {
-                board.Displace(entity, position);
+                board.Move(entity, position, relative);
             }
         }
 
