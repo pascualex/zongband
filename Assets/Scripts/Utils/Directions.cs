@@ -1,11 +1,13 @@
-﻿using UnityEngine;
+﻿#nullable enable
+
+using UnityEngine;
 
 namespace Zongband.Utils
 {
     public static class Directions
     {
         public static Vector2Int[] Randomized() {
-            Vector2Int[] directions = new Vector2Int[4];
+            var directions = new Vector2Int[4];
             directions[0] = Vector2Int.up;
             directions[1] = Vector2Int.right;
             directions[2] = Vector2Int.down;

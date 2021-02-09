@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿#nullable enable
+
+using UnityEngine;
 
 namespace Zongband.Utils
 {
@@ -6,11 +8,11 @@ namespace Zongband.Utils
     {
         public static void Shuffle<T>(T[] array)
         {
-            int n = array.Length;
-            for (int i = n - 1; i >= 0; i--)
+            var n = array.Length;
+            for (var i = n - 1; i >= 0; i--)
             {
-                int k = Random.Range(0, i + 1);
-                T temp = array[i];
+                var k = Random.Range(0, i + 1);
+                var temp = array[i];
                 array[i] = array[k];
                 array[k] = temp;
             }

@@ -1,3 +1,5 @@
+#nullable enable
+
 using UnityEngine;
 using System;
 
@@ -12,8 +14,6 @@ namespace Zongband.Game.Turns
 
         public Turn(Agent agent, int tick)
         {
-            if (agent == null) throw new ArgumentNullException();
-
             this.agent = agent;
             this.tick = tick;
         }
@@ -23,9 +23,9 @@ namespace Zongband.Game.Turns
             if (other == null) throw new ArgumentNullException();
 
             if (other.tick != tick) return tick - other.tick;
-            int priorityDifference = other.agent.GetTurnPriority() - agent.GetTurnPriority();
+            var priorityDifference = other.agent.TurnPriority - agent.TurnPriority;
             if (priorityDifference != 0) return priorityDifference;
-            return agent.GetTurnCooldown() - other.agent.GetTurnCooldown();
+            return agent.TurnCooldown - other.agent.TurnCooldown;
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿using UnityEngine;
-using System;
-using System.Collections.Generic;
+﻿#nullable enable
+
+using UnityEngine;
 
 using Zongband.Game.Boards;
 using Zongband.Game.Turns;
@@ -12,53 +12,42 @@ namespace Zongband.Game.Core
 {
     public class GameManager : MonoBehaviour, ICustomStartable, ICustomUpdatable
     {
-        public Agent agentPrefab;
-        public Entity entityPrefab;
-        public AgentSO playerAgentSO;
-        public AgentSO fastAgentSO;
-        public AgentSO normalAgentSO;
-        public AgentSO slowAgentSO;
-        public EntitySO boxEntitySO;
-        public TileSO floorTile;
-        public TileSO wallTile;
+        [SerializeField] private AgentSO? playerAgentSO;
+        [SerializeField] private AgentSO? fastAgentSO;
+        [SerializeField] private AgentSO? normalAgentSO;
+        [SerializeField] private AgentSO? slowAgentSO;
+        [SerializeField] private EntitySO? boxEntitySO;
+        [SerializeField] private TileSO? floorTile;
+        [SerializeField] private TileSO? wallTile;
+        [SerializeField] private BoardSO? boardSO;
 
-        public ActionProducer actionProducer;
-        public ActionConsumer actionConsumer;
-        public TurnManager turnManager;
-        public Board board;
+        public readonly Board? board;
+        public readonly TurnManager? turnManager;
+        [SerializeField] private ActionProducer? actionProducer;
+        [SerializeField] private ActionConsumer? actionConsumer;
 
-        public Agent playerAgent { get; set; }
-
-        public GameManager()
-        {
-            playerAgent = null;
-        }
-
-        private void Awake()
-        {
-            if (agentPrefab == null) throw new NullReferenceException();
-            if (entityPrefab == null) throw new NullReferenceException();
-            if (playerAgentSO == null) throw new NullReferenceException();
-            if (fastAgentSO == null) throw new NullReferenceException();
-            if (normalAgentSO == null) throw new NullReferenceException();
-            if (slowAgentSO == null) throw new NullReferenceException();
-            if (boxEntitySO == null) throw new NullReferenceException();
-            if (floorTile == null) throw new NullReferenceException();
-            if (wallTile == null) throw new NullReferenceException();
-
-            if (actionProducer == null) throw new NullReferenceException();
-            if (actionConsumer == null) throw new NullReferenceException();
-            if (turnManager == null) throw new NullReferenceException();
-            if (board == null) throw new NullReferenceException();
-        }
+        public Agent? PlayerAgent { get; set; } // TODO: remove
 
         public void CustomStart()
         {
-            ParallelActionPack actionPack = new ParallelActionPack();
+            if (playerAgentSO == null) return;
+            if (fastAgentSO == null) return;
+            if (normalAgentSO == null) return;
+            if (slowAgentSO == null) return;
+            if (boxEntitySO == null) return;
+            if (floorTile == null) return;
+            if (wallTile == null) return;
+            if (boardSO == null) return;
 
-            SequentialActionPack playerActionPack = new SequentialActionPack();
-            Vector2Int position = new Vector2Int(3, 3);
-            SpawnAction spawnPlayer = new SpawnAction(playerAgentSO, board, position, true);
+            if (board == null) return;
+            if (actionProducer == null) return;
+            if (actionConsumer == null) return;
+
+            var actionPack = new ParallelActionPack();
+
+            var playerActionPack = new SequentialActionPack();
+            var position = new Vector2Int(3, 3);
+            var spawnPlayer = new SpawnAction(playerAgentSO, board, position, true);
             playerActionPack.Add(spawnPlayer);
             playerActionPack.Add(new MakePlayerAction(spawnPlayer));
             actionPack.Add(playerActionPack);
@@ -72,10 +61,10 @@ namespace Zongband.Game.Core
             actionConsumer.TryToConsumeActionPack(actionPack);
             if (!actionPack.IsCompleted()) actionConsumer.ConsumeTurnActionPack(actionPack);
 
-            Vector2Int upRight = board.size - Vector2Int.one;
-            Vector2Int downRight = new Vector2Int(board.size.x - 1, 0);
-            Vector2Int downLeft = Vector2Int.zero;
-            Vector2Int upLeft = new Vector2Int(0, board.size.y - 1);
+            var upRight = board.Size - Vector2Int.one;
+            var downRight = new Vector2Int(board.Size.x - 1, 0);
+            var downLeft = Vector2Int.zero;
+            var upLeft = new Vector2Int(0, board.Size.y - 1);
             board.ModifyBoxTerrain(downLeft, upRight, floorTile);
             board.ModifyBoxTerrain(upLeft, upRight + new Vector2Int(0, -1), wallTile);
             board.ModifyBoxTerrain(upRight, downRight + new Vector2Int(-1, 0), wallTile);
@@ -85,19 +74,24 @@ namespace Zongband.Game.Core
 
         public void CustomUpdate()
         {
+            if (actionConsumer == null) return;
+            if (actionProducer == null) return;
+
             if (!actionConsumer.IsCompleted())
             {
                 actionConsumer.CustomUpdate();
             }
             else if (actionProducer.CanProduceTurnActionPack())
             {
-                ActionPack turnActionPack = actionProducer.ProduceTurnActionPack();
+                var turnActionPack = actionProducer.ProduceTurnActionPack();
                 actionConsumer.ConsumeTurnActionPack(turnActionPack);
             }
         }
 
         public bool IsPlayerTurn()
         {
+            if (actionConsumer == null) return false;
+            if (actionProducer == null) return false;
             return actionProducer.IsPlayerTurn() && actionConsumer.IsCompleted();
         }
 
@@ -105,7 +99,7 @@ namespace Zongband.Game.Core
         {
             if (!IsPlayerTurn()) throw new IsNotPlayerTurnException();
 
-            actionProducer.SetPlayerActionPack(actionPack);
+            actionProducer?.SetPlayerActionPack(actionPack);
         }
     }
 }

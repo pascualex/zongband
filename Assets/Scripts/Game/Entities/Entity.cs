@@ -1,28 +1,21 @@
-﻿using UnityEngine;
+﻿#nullable enable
+
+using UnityEngine;
 using System;
 
 namespace Zongband.Game.Entities
 {
     public class Entity : MonoBehaviour
     {
-        public Vector2Int position { get; set; }
-        public bool removed { get; set; }
+        public Vector2Int position = new Vector2Int(-1, -1);
+        public bool removed = false;
 
-        private EntitySO entitySO;
+        private GameObject? gameModel;
 
-        public Entity()
+        public void ApplySO(EntitySO entitySO)
         {
-            position = Vector2Int.zero;
-            removed = false;
-        }
-
-        public virtual void Setup(EntitySO entitySO)
-        {
-            if (entitySO == null) throw new ArgumentNullException();
-
-            this.entitySO = entitySO;
-
-            if (entitySO.model != null) Instantiate(entitySO.model, transform);
+            if (gameModel != null) Destroy(gameModel);
+            gameModel = Instantiate(entitySO.gameModel);
         }
     }
 }

@@ -1,58 +1,37 @@
+#nullable enable
+
 using UnityEngine;
-using System;
 
 using Zongband.Game.Core;
-using Zongband.Game.Boards;
-using Zongband.Game.Entities;
 using Zongband.Utils;
 
 namespace Zongband.UI
 {
     public class UIManager : MonoBehaviour, ICustomUpdatable
     {
-        public TileHighlighter tileHighlighter;
-        public Camera mainCamera;
-        public GameManager gameManager;
-
-        private Vector2 mousePosition;
-
-        public UIManager()
-        {
-            mousePosition = new Vector2(-1, -1);
-        }
-
-        private void Awake()
-        {
-            if (tileHighlighter == null) throw new NullReferenceException();
-            if (mainCamera == null) throw new NullReferenceException();
-            if (gameManager == null) throw new NullReferenceException();
-        }
+        [SerializeField] private Camera? mainCamera;
+        [SerializeField] private TileHighlighter? tileHighlighter;
 
         public void CustomUpdate()
         {
-            tileHighlighter.CustomUpdate();
+            tileHighlighter?.CustomUpdate();
         }
 
         public void SetMousePosition(Vector2 mousePosition)
         {
-            this.mousePosition = mousePosition;
+            if (mainCamera == null) return;
 
-            Ray ray = mainCamera.ScreenPointToRay(mousePosition);
-            Plane plane = new Plane(Vector3.up, Vector3.zero);
-
+            var ray = mainCamera.ScreenPointToRay(mousePosition);
+            var plane = new Plane(Vector3.up, Vector3.zero);
             
-            Vector2Int boardPosition = new Vector2Int(-1, -1);
-            float distance;
-            if (plane.Raycast(ray, out distance))
+            var boardPosition = new Vector2Int(-1, -1);
+            if (plane.Raycast(ray, out var distance))
             {
-                Board board = gameManager.board;
-
-                Vector3 worldPosition = ray.GetPoint(distance);
-                Vector3 localPosition = worldPosition - board.transform.position;
-                boardPosition = new Vector2Int((int)localPosition.x, (int)localPosition.z);
+                var position = ray.GetPoint(distance);
+                boardPosition = new Vector2Int((int)position.x, (int)position.z);
             }
 
-            tileHighlighter.boardPosition = boardPosition;
+            if (tileHighlighter != null) tileHighlighter.boardPosition = boardPosition;
         }
     }
 }

@@ -1,3 +1,5 @@
+#nullable enable
+
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -5,7 +7,7 @@ namespace Zongband.Game.Actions
 {
     public class SequentialActionPack : ActionPack
     {
-        private Queue<ActionPack> actionPacks;
+        private readonly Queue<ActionPack> actionPacks;
 
         public SequentialActionPack()
         {
@@ -19,19 +21,15 @@ namespace Zongband.Game.Actions
 
         public override void CustomUpdate()
         {
-            if (IsGameActionAvailable()) return;
             if (IsCompleted()) return;
 
-            if (!actionPacks.Peek().IsGameActionAvailable() && !actionPacks.Peek().IsCompleted())
-            {
-                actionPacks.Peek().CustomUpdate();
-            }
-
+            actionPacks.Peek().CustomUpdate();
             RemoveCompletedActionPacks();
         }
 
         public void Add(ActionPack actionPack)
         {
+            if (actionPack.IsCompleted()) return;
             actionPacks.Enqueue(actionPack);
         }
 
@@ -40,20 +38,14 @@ namespace Zongband.Game.Actions
             Add(new BasicActionPack(action));
         }
 
-        public override bool IsGameActionAvailable()
-        {
-            if (actionPacks.Count == 0) return false;
-            return actionPacks.Peek().IsGameActionAvailable();
-        }
-
         public override bool IsCompleted()
         {
-            return (actionPacks.Count == 0);
+            return actionPacks.Count == 0;
         }
 
         public override bool AreGameActionsLeft()
         {
-            foreach (ActionPack actionPack in actionPacks)
+            foreach (var actionPack in actionPacks)
             {
                 if (actionPack.AreGameActionsLeft()) return true;
             }
@@ -61,11 +53,9 @@ namespace Zongband.Game.Actions
             return false;
         }
 
-        public override GameAction RemoveGameAction()
+        public override GameAction? RemoveGameAction()
         {
-            if (!IsGameActionAvailable()) throw new NoGameActionAvailableException();
-
-            GameAction removedAction = actionPacks.Peek().RemoveGameAction();
+            var removedAction = actionPacks.Peek().RemoveGameAction();
             RemoveCompletedActionPacks();
             return removedAction;
         }

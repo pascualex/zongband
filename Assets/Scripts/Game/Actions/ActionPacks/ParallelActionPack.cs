@@ -1,3 +1,5 @@
+#nullable enable
+
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -5,63 +7,40 @@ namespace Zongband.Game.Actions
 {
     public class ParallelActionPack : ActionPack
     {
-        private LinkedList<ActionPack> actionPacks;
-        private Queue<ActionPack> actionPacksAvailable;
+        private readonly LinkedList<ActionPack> actionPacks;
 
         public ParallelActionPack()
         {
             actionPacks = new LinkedList<ActionPack>();
-            actionPacksAvailable = new Queue<ActionPack>();
         }
 
         public override void CustomStart()
         {
-            LinkedListNode<ActionPack> node = actionPacks.First;
+            var node = actionPacks.First;
             while (node != null)
             {
-                LinkedListNode<ActionPack> next = node.Next;
-
+                var next = node.Next;
                 node.Value.CustomStart();
-
                 if (node.Value.IsCompleted()) actionPacks.Remove(node);
-                else if (node.Value.IsGameActionAvailable())
-                {
-                    actionPacksAvailable.Enqueue(node.Value);
-                    actionPacks.Remove(node);
-                }
-
                 node = next;
             }
         }
 
         public override void CustomUpdate()
         {
-            if (IsGameActionAvailable()) return;
-            if (IsCompleted()) return;
-
-            LinkedListNode<ActionPack> node = actionPacks.First;
+            var node = actionPacks.First;
             while (node != null)
             {
-                LinkedListNode<ActionPack> next = node.Next;
-
-                if (!node.Value.IsGameActionAvailable() && !node.Value.IsCompleted())
-                {
-                    node.Value.CustomUpdate();
-                }
-
+                var next = node.Next;
+                node.Value.CustomUpdate();
                 if (node.Value.IsCompleted()) actionPacks.Remove(node);
-                else if (node.Value.IsGameActionAvailable())
-                {
-                    actionPacksAvailable.Enqueue(node.Value);
-                    actionPacks.Remove(node);
-                }
-
                 node = next;
             }
         }
 
         public void Add(ActionPack actionPack)
         {
+            if (actionPack.IsCompleted()) return;
             actionPacks.AddLast(actionPack);
         }
 
@@ -70,24 +49,14 @@ namespace Zongband.Game.Actions
             Add(new BasicActionPack(action));
         }
 
-        public override bool IsGameActionAvailable()
-        {
-            return (actionPacksAvailable.Count > 0);
-        }
-
         public override bool IsCompleted()
         {
-            return (actionPacks.Count == 0) && (actionPacksAvailable.Count == 0);
+            return actionPacks.Count == 0;
         }
 
         public override bool AreGameActionsLeft()
         {
-            foreach (ActionPack actionPack in actionPacks)
-            {
-                if (actionPack.AreGameActionsLeft()) return true;
-            }
-
-            foreach (ActionPack actionPack in actionPacksAvailable)
+            foreach (var actionPack in actionPacks)
             {
                 if (actionPack.AreGameActionsLeft()) return true;
             }
@@ -95,20 +64,20 @@ namespace Zongband.Game.Actions
             return false;
         }
 
-        public override GameAction RemoveGameAction()
+        public override GameAction? RemoveGameAction()
         {
-            if (!IsGameActionAvailable()) throw new NoGameActionAvailableException();
-
-            GameAction action = actionPacksAvailable.Peek().RemoveGameAction();
-
-            if (!actionPacksAvailable.Peek().IsGameActionAvailable())
+            var node = actionPacks.First;
+            while (node != null)
             {
-                ActionPack actionPack = actionPacksAvailable.Dequeue();
-
-                if (!actionPack.IsCompleted()) actionPacks.AddLast(actionPack);
+                var gameAction = node.Value.RemoveGameAction();
+                if (gameAction != null)
+                {
+                    actionPacks.Remove(node);
+                    return gameAction;
+                }
+                node = node.Next;
             }
-
-            return action;
+            return null;
         }
     }
 }

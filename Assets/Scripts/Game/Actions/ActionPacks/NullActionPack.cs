@@ -1,3 +1,5 @@
+#nullable enable
+
 using UnityEngine;
 using System;
 
@@ -14,11 +16,6 @@ namespace Zongband.Game.Actions
         {
             
         }
-
-        public override bool IsGameActionAvailable()
-        {
-            return false;
-        }
         
         public override bool IsCompleted()
         {
@@ -30,9 +27,9 @@ namespace Zongband.Game.Actions
             return false;
         }
 
-        public override GameAction RemoveGameAction()
+        public override GameAction? RemoveGameAction()
         {
-            throw new NoGameActionAvailableException();
+            return null;
         }
     }
 }

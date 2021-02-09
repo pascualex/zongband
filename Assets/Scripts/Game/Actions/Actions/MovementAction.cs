@@ -1,3 +1,5 @@
+#nullable enable
+
 using UnityEngine;
 using System;
 
@@ -11,9 +13,9 @@ namespace Zongband.Game.Actions
         private const float animationFixedSpeed = 1.0f;
         private const float animationVariableSpeed = 10.0f;
 
-        private Entity entity;
-        private Board board;
-        private bool instant;
+        private readonly Entity entity;
+        private readonly Board board;
+        private readonly bool instant;
         private bool isCompleted;
 
         public MovementAction(Entity entity, Board board, Vector2Int delta)
@@ -31,15 +33,12 @@ namespace Zongband.Game.Actions
         public MovementAction(Entity entity, Board board, Vector2Int position, bool absolute,
                               bool instant)
         {
-            if (entity == null) throw new ArgumentNullException();
-            if (board == null) throw new ArgumentNullException();
-
             this.entity = entity;
             this.board = board;
             this.instant = instant;
             isCompleted = false;
 
-            this.gameAction = new MovementGameAction(entity, position, absolute);
+            gameAction = new MovementGameAction(entity, position, absolute);
         }
 
         public override void CustomStart()
@@ -49,7 +48,7 @@ namespace Zongband.Game.Actions
 
         public override void CustomUpdate()
         {
-            MoveTowardsTarget();
+            //MoveTowardsTarget();
         }
 
         protected override bool IsAnimationCompleted()
@@ -61,34 +60,34 @@ namespace Zongband.Game.Actions
         {
             if (isCompleted) return;
 
-            entity.transform.position = GetTargetPosition();
+            // TODO: entity.transform.position = GetTargetPosition();
             isCompleted = true;
         }
 
-        private void MoveTowardsTarget()
+        /*private void MoveTowardsTarget()
         {
             if (isCompleted) return;
 
-            Vector3 targetPosition = GetTargetPosition();
+            var targetPosition = GetTargetPosition();
 
-            Transform transform = entity.transform;
-            float remainingDistance = Vector3.Distance(transform.position, targetPosition);
-            float variableDistance = remainingDistance * animationVariableSpeed;
-            float distance = (variableDistance + animationFixedSpeed) * Time.deltaTime;
+            var transform = entity.transform;
+            var remainingDistance = Vector3.Distance(transform.position, targetPosition);
+            var variableDistance = remainingDistance * animationVariableSpeed;
+            var distance = (variableDistance + animationFixedSpeed) * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, distance);
 
-            isCompleted = (transform.position == targetPosition);
+            isCompleted = transform.position == targetPosition;
         }
 
         private Vector3 GetTargetPosition()
         {
-            Vector2Int position = entity.position;
-            float scale = board.scale;
+            var position = entity.position;
+            var scale = board.scale;
 
-            Vector3 relativePosition = new Vector3(position.x + 0.5f, 0, position.y + 0.5f) * scale;
-            Vector3 absolutePosition = board.transform.position + relativePosition;
+            var relativePosition = new Vector3(position.x + 0.5f, 0, position.y + 0.5f) * scale;
+            var absolutePosition = board.transform.position + relativePosition;
 
             return absolutePosition;
-        }
+        }*/
     }
 }

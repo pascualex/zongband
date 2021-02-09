@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿#nullable enable
+
+using UnityEngine;
 using System;
 
 using Zongband.Game.Boards;
@@ -11,18 +13,13 @@ namespace Zongband.Game.Core
 {
     public class ActionConsumer : MonoBehaviour, ICustomUpdatable
     {
-        public GameManager gameManager;
-
+        [SerializeField] private GameManager? gameManager;
         private ActionPack turnActionPack;
 
-        public ActionConsumer()
+        public ActionConsumer(GameManager gameManager)
         {
+            this.gameManager = gameManager;
             turnActionPack = new NullActionPack();
-        }
-
-        private void Awake()
-        {
-            if (gameManager == null) throw new NullReferenceException();
         }
 
         public void CustomUpdate()
@@ -40,9 +37,9 @@ namespace Zongband.Game.Core
         public void TryToConsumeActionPack(ActionPack actionPack)
         {
             actionPack.CustomStart();
-            while (actionPack.IsGameActionAvailable())
+            GameAction? action;
+            while ((action = actionPack.RemoveGameAction()) != null)
             {
-                GameAction action = actionPack.RemoveGameAction();
                 ConsumeGameAction(action);
             }
         }
@@ -67,45 +64,48 @@ namespace Zongband.Game.Core
 
         public bool IsCompleted()
         {
-            return turnActionPack.IsCompleted();
+            return turnActionPack?.IsCompleted() ?? true;
         }
 
         private void UpdateTurnActionPack()
         {
-            while (turnActionPack.IsGameActionAvailable())
+
+            GameAction? action;
+            while ((action = turnActionPack.RemoveGameAction()) != null)
             {
-                GameAction action = turnActionPack.RemoveGameAction();
                 ConsumeGameAction(action);
             }
 
-            if (!turnActionPack.IsCompleted()) turnActionPack.CustomUpdate();
+            turnActionPack.CustomUpdate();
         }
 
         private void ConsumeGameAction(SpawnGameAction action)
-        {
-            if (action == null) throw new ArgumentNullException();
+        { 
+            if (gameManager == null) return;
 
-            Entity entity = action.entity;
-            Vector2Int position = action.position;
-            bool priority = action.priority;
-            Board board = gameManager.board;
-            TurnManager turnManager = gameManager.turnManager;
+            var board = gameManager.board;
+            if (board == null) return;
 
-            if (board.IsPositionAvailable(entity, position))
+            var turnManager = gameManager.turnManager;
+            if (turnManager == null) return;
+
+            if (board.IsPositionAvailable(action.entity, action.position))
             {
-                board.Add(entity, position);
-                if (entity is Agent) turnManager.Add((Agent)entity, priority);
+                board.Add(action.entity, action.position);
+                if (action.entity is Agent agent) turnManager.Add(agent, action.priority);
             }
         }
 
         private void ConsumeGameAction(MovementGameAction action)
         {
-            if (action == null) throw new ArgumentNullException();
+            if (gameManager == null) return;
 
-            Entity entity = action.entity;
-            Vector2Int position = action.position;
-            bool absolute = action.absolute;
-            Board board = gameManager.board;
+            var entity = action.entity;
+            var position = action.position;
+            var absolute = action.absolute;
+
+            var board = gameManager.board;
+            if (board == null) return;
 
             if (absolute && board.IsPositionAvailable(entity, position))
             {
@@ -119,9 +119,9 @@ namespace Zongband.Game.Core
 
         private void ConsumeGameAction(MakePlayerGameAction action)
         {
-            if (action == null) throw new ArgumentNullException();
+            if (gameManager == null) return;
 
-            gameManager.playerAgent = action.agent;
+            gameManager.PlayerAgent = action.agent;
         }
     }
 }

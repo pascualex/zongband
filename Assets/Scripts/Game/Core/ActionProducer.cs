@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿#nullable enable
+
+using UnityEngine;
 using System;
 using System.Collections.Generic;
 
@@ -10,40 +12,33 @@ namespace Zongband.Game.Core
 {
     public class ActionProducer : MonoBehaviour
     {
-        public GameManager gameManager;
-        public ActionConsumer actionConsumer;
-        public AgentAI agentAI;
+        [SerializeField] private GameManager? gameManager;
+        [SerializeField] private ActionConsumer? actionConsumer;
+        private ActionPack? playerActionPack;
 
-        private ActionPack playerActionPack;
-
-        public ActionProducer()
+        public ActionProducer(GameManager gameManager, ActionConsumer actionConsumer)
         {
-            playerActionPack = null;
-        }
-
-        private void Awake()
-        {
-            if (gameManager == null) throw new NullReferenceException();
-            if (actionConsumer == null) throw new NullReferenceException();
-            if (agentAI == null) throw new NullReferenceException();
+            this.gameManager = gameManager;
+            this.actionConsumer = actionConsumer;
         }
 
         public ActionPack ProduceTurnActionPack()
         {
-            if (!CanProduceTurnActionPack()) throw new CannotProduceActionPackException();
+            throw new CannotProduceActionPackException();
+            /*if (!CanProduceTurnActionPack()) throw new CannotProduceActionPackException();
+            if (gameManager == null) return;
 
-            ParallelActionPack turnActionPack = new ParallelActionPack();
-
-            HashSet<Agent> processedAgents = new HashSet<Agent>();
+            var turnActionPack = new ParallelActionPack();
+            var processedAgents = new HashSet<Agent>();
             do
             {
-                Agent agent = gameManager.turnManager.GetCurrent();
+                var agent = gameManager.turnManager.GetCurrent();
 
                 if (processedAgents.Contains(agent)) break;
-
-                ActionPack actionPack;
-                if (IsPlayerTurn()) actionPack = RemovePlayerActionPack();
-                else actionPack = agentAI.GenerateActionPack(agent, gameManager.board);
+                
+                var actionPack = RemovePlayerActionPack();
+                // if (IsPlayerTurn()) actionPack = RemovePlayerActionPack();
+                // TODO: else actionPack = AgentAI.GenerateActionPack(agent, gameManager.board);
 
                 actionConsumer.TryToConsumeActionPack(actionPack);
 
@@ -56,13 +51,13 @@ namespace Zongband.Game.Core
             }
             while (!IsPlayerTurn());
 
-            return turnActionPack;
+            return turnActionPack;*/
         }
 
         public bool CanProduceTurnActionPack()
         {
             if (!IsPlayerTurn()) return true;
-            return IsPlayerActionPackAvailable();
+            return playerActionPack != null;
         }
 
         public void SetPlayerActionPack(ActionPack actionPack)
@@ -72,22 +67,18 @@ namespace Zongband.Game.Core
 
         public bool IsPlayerTurn()
         {
-            if (gameManager.playerAgent == null) throw new NullReferenceException();
+            throw new NullReferenceException();
+            /*if (gameManager.PlayerAgent == null) throw new NullReferenceException();
 
-            return (gameManager.turnManager.GetCurrent() == gameManager.playerAgent);
+            return gameManager.turnManager.GetCurrent() == gameManager.PlayerAgent;*/
         }
 
         private ActionPack RemovePlayerActionPack()
         {
-            if (!IsPlayerActionPackAvailable()) throw new NullReferenceException();
-            ActionPack removedPlayerActionPack = playerActionPack;
+            if (playerActionPack == null) throw new NullReferenceException();
+            var removedPlayerActionPack = playerActionPack;
             playerActionPack = null;
             return removedPlayerActionPack;
-        }
-
-        private bool IsPlayerActionPackAvailable()
-        {
-            return (playerActionPack != null);
         }
     }
 }

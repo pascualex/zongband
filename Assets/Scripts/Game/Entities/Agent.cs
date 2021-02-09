@@ -1,57 +1,33 @@
-﻿using UnityEngine;
+﻿#nullable enable
+
+using UnityEngine;
 using System;
 
 namespace Zongband.Game.Entities
 {
     public class Agent : Entity
     {
-        public AgentSO agentSO;
-
-        private int currentHealth;
+        public int TurnCooldown { get; private set; } = 100;
+        public int TurnPriority { get; private set; } = 0;
+        public int MaxHealth { get; private set; } = 100;
+        public bool IsGhost { get; private set; } = false;
+        public int CurrentHealth { get; private set; }
 
         public Agent()
         {
-            currentHealth = 0;
+            CurrentHealth = MaxHealth;
         }
 
-        public void Setup(AgentSO agentSO)
+        public void ApplySO(AgentSO agentSO)
         {
-            if (agentSO == null) throw new ArgumentNullException();
+            base.ApplySO(agentSO);
 
-            base.Setup(agentSO);
+            TurnCooldown = agentSO.turnCooldown;
+            TurnPriority = agentSO.turnPriority;
+            MaxHealth = agentSO.maxHealth;
+            IsGhost = agentSO.isGhost;
 
-            this.agentSO = agentSO;
-        }
-
-        public override void Setup(EntitySO entitySO)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetAgentSO(AgentSO agentSO)
-        {
-            this.agentSO = agentSO;
-            currentHealth = GetMaxHealth();
-        }
-
-        public int GetTurnCooldown()
-        {
-            return agentSO.turnCooldown;
-        }
-
-        public int GetTurnPriority()
-        {
-            return agentSO.turnPriority;
-        }
-
-        public int GetMaxHealth()
-        {
-            return agentSO.maxHealth;
-        }
-
-        public int GetCurrentHealth()
-        {
-            return currentHealth;
+            CurrentHealth = MaxHealth;
         }
 
         public void Damage(int amount)
@@ -68,7 +44,7 @@ namespace Zongband.Game.Entities
 
         private void ChangeHealth(int amount)
         {
-            currentHealth = Mathf.Max(Mathf.Min(currentHealth + amount, GetMaxHealth()), 0);
+            CurrentHealth = Mathf.Max(Mathf.Min(CurrentHealth + amount, MaxHealth), 0);
         }
     }
 }

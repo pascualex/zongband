@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿#nullable enable
+
+using UnityEngine;
 
 namespace Zongband.Game.Boards
 {
@@ -10,8 +12,8 @@ namespace Zongband.Game.Boards
 
         private void OnValidate()
         {
-            size.x = Mathf.Max(size.x, 1);
-            size.x = Mathf.Max(size.x, 1);
+            size.x = Mathf.Max(size.x, 0);
+            size.y = Mathf.Max(size.y, 0);
             if (scale <= 0) scale = 1.0f;
         }
     }

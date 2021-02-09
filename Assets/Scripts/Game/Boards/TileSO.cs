@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿#nullable enable
+
+using UnityEngine;
 using UnityEngine.Tilemaps;
 
 namespace Zongband.Game.Boards
@@ -8,11 +10,6 @@ namespace Zongband.Game.Boards
     {
         public bool blocksGround = false;
         public bool blocksAir = false;
-        public TileBase tileBase;
-        
-        private void OnValidate()
-        {
-            
-        }
+        public TileBase? tileBase;
     }
 }

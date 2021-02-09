@@ -1,3 +1,5 @@
+#nullable enable
+
 using UnityEngine;
 using System;
 
@@ -7,9 +9,9 @@ namespace Zongband.Game.Actions
 {
     public class SpawnGameAction : GameAction
     {
-        public Entity entity { get; private set; }
-        public Vector2Int position { get; private set; }
-        public bool priority { get; private set; }
+        public readonly Entity entity;
+        public readonly Vector2Int position;
+        public readonly bool priority;
 
         public SpawnGameAction(Entity entity, Vector2Int position)
         : this(entity, position, false)
@@ -19,8 +21,6 @@ namespace Zongband.Game.Actions
 
         public SpawnGameAction(Entity entity, Vector2Int position, bool priority)
         {
-            if (entity == null) throw new ArgumentNullException();
-
             this.entity = entity;
             this.position = position;
             this.priority = priority;

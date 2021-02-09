@@ -1,3 +1,5 @@
+#nullable enable
+
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -8,27 +10,28 @@ namespace Zongband.Game.Boards
 {
     public class Board : MonoBehaviour
     {
-        public BoardSO boardData;
-        public Tilemap terrainTilemap;
+        [SerializeField] private BoardSO? initialBoardSO;
+        [SerializeField] private Tilemap? terrainTilemap;
 
-        public Vector2Int size { get; private set; }
-        public float scale { get; private set; }
+        public Vector2Int Size { get; private set; } = Vector2Int.zero;
+        public float Scale { get; private set; } = 1.0f;
 
-        private EntityLayer agentLayer;
-        private EntityLayer entityLayer;
-        private TerrainLayer terrainLayer;
+        private readonly EntityLayer agentLayer = new EntityLayer();
+        private readonly EntityLayer entityLayer = new EntityLayer();
+        private readonly TerrainLayer terrainLayer = new TerrainLayer();
 
-        private void Awake()
+        private void Start()
         {
-            if (boardData == null) throw new ScriptableObjectMissingException();
-            if (terrainTilemap == null) throw new GameObjectMissingException();
+            if (initialBoardSO != null) ApplySO(initialBoardSO);
+        }
 
-            size = boardData.size;
-            scale = boardData.scale;
-
-            agentLayer = new EntityLayer(size, scale);
-            entityLayer = new EntityLayer(size, scale);
-            terrainLayer = new TerrainLayer(size, scale);
+        public void ApplySO(BoardSO boardSO)
+        {
+            Size = boardSO.size;
+            Scale = boardSO.scale;
+            agentLayer.ChangeSize(Size);
+            entityLayer.ChangeSize(Size);
+            terrainLayer.ChangeSize(Size);
         }
 
         public void Add(Entity entity, Vector2Int at)
@@ -39,7 +42,7 @@ namespace Zongband.Game.Boards
             else entityLayer.Add(entity, at);
         }
 
-        private void Move(Entity entity, Vector2Int to, bool instant)
+        public void Move(Entity entity, Vector2Int to)
         {
             if (!IsPositionAvailable(entity, to)) throw new NotEmptyTileException(to);
 
@@ -47,16 +50,11 @@ namespace Zongband.Game.Boards
             else entityLayer.Move(entity, to);
         }
 
-        public void Move(Entity entity, Vector2Int to)
-        {
-            Move(entity, to, true);
-        }
-
         public void Displace(Entity entity, Vector2Int delta)
         {
             if (!CheckEntityPosition(entity)) throw new NotInTileException(entity);
 
-            Move(entity, entity.position + delta, false);
+            Move(entity, entity.position + delta);
         }
 
         public void Remove(Entity entity)
@@ -70,17 +68,17 @@ namespace Zongband.Game.Boards
             if (!IsPositionAvailable(tile, position)) throw new NotEmptyTileException(position);
 
             terrainLayer.Modify(position, tile);
-            terrainTilemap.SetTile((Vector3Int)position, tile.tileBase);
+            terrainTilemap?.SetTile((Vector3Int)position, tile.tileBase);
         }
 
         public void ModifyBoxTerrain(Vector2Int from, Vector2Int to, TileSO tile)
         {
-            Vector2Int lower = new Vector2Int(Mathf.Min(from.x, to.x), Mathf.Min(from.y, to.y));
-            Vector2Int higher = new Vector2Int(Mathf.Max(from.x, to.x), Mathf.Max(from.y, to.y));
+            var lower = new Vector2Int(Mathf.Min(from.x, to.x), Mathf.Min(from.y, to.y));
+            var higher = new Vector2Int(Mathf.Max(from.x, to.x), Mathf.Max(from.y, to.y));
 
-            for (int i = lower.y; i <= higher.y; i++)
+            for (var i = lower.y; i <= higher.y; i++)
             {
-                for (int j = lower.x; j <= higher.x; j++)
+                for (var j = lower.x; j <= higher.x; j++)
                 {
                     ModifyTerrain(new Vector2Int(j, i), tile);
                 }
@@ -89,7 +87,7 @@ namespace Zongband.Game.Boards
 
         public bool IsPositionValid(Vector2Int position)
         {
-            return Checker.Range(position, size);
+            return Checker.Range(position, Size);
         }
 
         public bool IsPositionEmpty(Vector2Int position)
@@ -104,8 +102,9 @@ namespace Zongband.Game.Boards
             if (!IsPositionValid(position)) return false;
             /* Add here special interactions in the future */
             if (!agentLayer.IsPositionEmpty(position)) return false;
-            if (!entityLayer.IsPositionEmpty(position)) return false;
-            if (terrainLayer.GetTile(position).blocksGround) return false;
+            var isGhost = (entity is Agent agent) && agent.IsGhost;
+            if (!isGhost && !entityLayer.IsPositionEmpty(position)) return false;
+            if (!isGhost && terrainLayer.GetTile(position).BlocksGround) return false;
             return true;
         }
 

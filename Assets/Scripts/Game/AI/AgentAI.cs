@@ -1,3 +1,5 @@
+#nullable enable
+
 using UnityEngine;
 using System;
 
@@ -20,9 +22,9 @@ namespace Zongband.Game.AI
             if (agent == null) throw new ArgumentNullException();
             if (board == null) throw new ArgumentNullException();
 
-            Vector2Int[] directions = Directions.Randomized();
-            Vector2Int selectedDirection = Vector2Int.zero;
-            foreach (Vector2Int direction in directions)
+            var directions = Directions.Randomized();
+            var selectedDirection = Vector2Int.zero;
+            foreach (var direction in directions)
             {
                 if (board.IsDisplacementAvailable(agent, direction))
                 {
@@ -33,7 +35,7 @@ namespace Zongband.Game.AI
 
             if (selectedDirection == Vector2Int.zero) return new NullActionPack();
 
-            MovementAction action = new MovementAction(agent, board, selectedDirection);
+            var action = new MovementAction(agent, board, selectedDirection);
             return new BasicActionPack(action);
         }
     }

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿#nullable enable
+
+using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 
@@ -10,39 +12,33 @@ namespace Zongband.Input
     [RequireComponent(typeof(PlayerInput))]
     public class InputHandler : MonoBehaviour
     {
-        public PlayerController playerController;
-        public UIManager uiManager;
-
-        private void Awake()
-        {
-            if (playerController == null) throw new NullReferenceException();
-            if (uiManager == null) throw new NullReferenceException();
-        }
+        public PlayerController? playerController;
+        public UIManager? uiManager;
 
         public void OnMoveUp()
         {
-            playerController.AttemptDisplacement(Vector2Int.up);
+            playerController?.AttemptDisplacement(Vector2Int.up);
         }
 
         public void OnMoveRight()
         {
-            playerController.AttemptDisplacement(Vector2Int.right);
+            playerController?.AttemptDisplacement(Vector2Int.right);
         }
 
         public void OnMoveDown()
         {
-            playerController.AttemptDisplacement(Vector2Int.down);
+            playerController?.AttemptDisplacement(Vector2Int.down);
         }
 
         public void OnMoveLeft()
         {
-            playerController.AttemptDisplacement(Vector2Int.left);
+            playerController?.AttemptDisplacement(Vector2Int.left);
         }
 
         public void OnMoveMouse(InputValue value)
         {
-            Vector2 mousePosition = value.Get<Vector2>();
-            uiManager.SetMousePosition(mousePosition);
+            var mousePosition = value.Get<Vector2>();
+            uiManager?.SetMousePosition(mousePosition);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿#nullable enable
+
+using UnityEngine;
 using System;
 
 using Zongband.Game.Entities;
@@ -8,12 +10,20 @@ namespace Zongband.Game.Boards
 {
     public class EntityLayer : Layer
     {
-        private Entity[][] entities;
+        private Entity?[][] entities = new Entity[0][];
 
-        public EntityLayer(Vector2Int size, float scale) : base(size, scale)
+        public override void ChangeSize(Vector2Int size)
         {
+            foreach (var row in entities)
+            {
+                foreach (var entity in row)
+                {
+                    if (entity != null) Remove(entity);
+                }
+            }
+
             entities = new Entity[size.y][];
-            for (int i = 0; i < size.y; i++)
+            for (var i = 0; i < size.y; i++)
             {
                 entities[i] = new Entity[size.x];
             }
@@ -21,11 +31,10 @@ namespace Zongband.Game.Boards
 
         public void Add(Entity entity, Vector2Int at)
         {
-            if (entity == null) throw new ArgumentNullException();
             if (!IsPositionEmpty(at)) throw new ArgumentOutOfRangeException();
 
+            entity.position = at;
             entities[at.y][at.x] = entity;
-            entities[at.y][at.x].position = at;
         }
 
         public void Move(Entity entity, Vector2Int to)
@@ -42,7 +51,7 @@ namespace Zongband.Game.Boards
 
             entities[to.y][to.x] = entities[from.y][from.x];
             entities[from.y][from.x] = null;
-            entities[to.y][to.x].position = to;
+            entities[to.y][to.x]!.position = to;
         }
 
         public void Remove(Entity entity)
@@ -56,7 +65,7 @@ namespace Zongband.Game.Boards
         {
             if (IsPositionEmpty(at)) throw new EmptyTileException(at);
 
-            entities[at.y][at.x].removed = true;
+            entities[at.y][at.x]!.removed = true;
             entities[at.y][at.x] = null;
         }
 
@@ -69,7 +78,6 @@ namespace Zongband.Game.Boards
 
         public bool CheckEntityPosition(Entity entity)
         {
-            if (entity == null) throw new ArgumentNullException();
             if (!Checker.Range(entity.position, size)) throw new ArgumentOutOfRangeException();
 
             return entities[entity.position.y][entity.position.x] == entity;

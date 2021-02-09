@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿#nullable enable
+
+using UnityEngine;
 
 namespace Zongband.Game.Entities
 {
@@ -8,6 +10,7 @@ namespace Zongband.Game.Entities
         public int turnCooldown = 100;
         public int turnPriority = 0;
         public int maxHealth = 100;
+        public bool isGhost = false;
 
         private void OnValidate()
         {

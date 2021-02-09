@@ -1,3 +1,5 @@
+#nullable enable
+
 using UnityEngine;
 using System;
 
@@ -7,12 +9,10 @@ namespace Zongband.Game.Actions
 {
     public class MakePlayerGameAction : GameAction
     {
-        public Agent agent { get; private set; }
+        public readonly Agent agent;
 
         public MakePlayerGameAction(Agent agent)
         {
-            if (agent == null) throw new ArgumentNullException();
-
             this.agent = agent;
         }
     }

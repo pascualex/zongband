@@ -1,3 +1,5 @@
+#nullable enable
+
 using UnityEngine;
 
 using Zongband.Utils;
@@ -6,7 +8,7 @@ namespace Zongband.Game.Actions
 {
     public abstract class Action : ICustomStartable, ICustomUpdatable
     {
-        protected GameAction gameAction;
+        protected GameAction? gameAction;
 
         public virtual void CustomStart()
         {
@@ -18,11 +20,6 @@ namespace Zongband.Game.Actions
 
         }
 
-        public bool IsGameActionAvailable()
-        {
-            return (gameAction != null);
-        }
-
         protected virtual bool IsAnimationCompleted()
         {
             return true;
@@ -30,16 +27,12 @@ namespace Zongband.Game.Actions
 
         public bool IsCompleted()
         {
-            return !IsGameActionAvailable() && IsAnimationCompleted();
+            return (gameAction == null) && IsAnimationCompleted();
         }
 
-        public GameAction RemoveGameAction()
+        public GameAction? RemoveGameAction()
         {
-            if (!IsGameActionAvailable()) throw new NoGameActionAvailableException();
-
-            GameAction removedGameAction = gameAction;
-            gameAction = null;
-            return removedGameAction;
+            return gameAction;
         }
     }
 }

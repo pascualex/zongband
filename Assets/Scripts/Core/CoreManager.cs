@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿#nullable enable
+
+using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 
@@ -11,31 +13,29 @@ namespace Zongband.Core
 {
     public class CoreManager : MonoBehaviour
     {
-        public GameManager gameManager;
-        public PlayerController playerController;
-        public UIManager uiManager;
-
-        private void Awake()
-        {
-            if (gameManager == null) throw new NullReferenceException();
-            if (playerController == null) throw new NullReferenceException();
-            if (uiManager == null) throw new NullReferenceException();
-        }
+        [SerializeField] private GameManager? gameManager;
+        [SerializeField] private PlayerController? playerController;
+        [SerializeField] private UIManager? uiManager;
 
         private void Start()
         {
-            gameManager.CustomStart();
+            gameManager?.CustomStart();
         }
 
         private void Update()
         {
+            if (gameManager == null) return;
+            if (playerController == null) return;
+            if (uiManager == null) return;
+
             if (Debug.isDebugBuild) playerController.ClearActionpack();
             
             InputSystem.Update();
 
-            if (gameManager.IsPlayerTurn() && playerController.IsActionPackAvailable())
+            if (gameManager.IsPlayerTurn())
             {
-                gameManager.SetPlayerActionPack(playerController.RemoveActionPack());
+                var actionPack = playerController.RemoveActionPack();
+                if (actionPack != null) gameManager.SetPlayerActionPack(actionPack);
             }
 
             gameManager.CustomUpdate();

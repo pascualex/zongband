@@ -1,3 +1,5 @@
+#nullable enable
+
 using UnityEngine;
 using System;
 using System.Collections.Generic;
@@ -8,25 +10,17 @@ namespace Zongband.Game.Turns
 {
     public class TurnManager : MonoBehaviour
     {
-        private LinkedList<Turn> turns;
-        private bool hasStarted;
-
-        public TurnManager()
-        {
-            turns = new LinkedList<Turn>();
-            hasStarted = false;
-        }
+        private readonly LinkedList<Turn> turns = new LinkedList<Turn>();
+        private bool hasStarted = false;
 
         public void Add(Agent agent, bool priority)
         {
-            if (agent == null) throw new ArgumentNullException();
-
-            int additionalTicks = priority ? 0 : agent.GetTurnCooldown();
-            Turn turn = new Turn(agent, GetCurrentTick() + additionalTicks);
+            var additionalTicks = priority ? 0 : agent.TurnCooldown;
+            var turn = new Turn(agent, GetCurrentTick() + additionalTicks);
 
             if (!priority)
             {
-                for (LinkedListNode<Turn> node = turns.Last; node != null; node = node.Previous)
+                for (var node = turns.Last; node != null; node = node.Previous)
                 {
                     if (node.Value.CompareTo(turn) <= 0)
                     {

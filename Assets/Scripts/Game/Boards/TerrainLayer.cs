@@ -1,38 +1,35 @@
-﻿using UnityEngine;
-using System;
+﻿#nullable enable
 
-using Zongband.Game.Entities;
-using Zongband.Utils;
+using UnityEngine;
+using System;
 
 namespace Zongband.Game.Boards
 {
     public class TerrainLayer : Layer
     {
-        private TileSO[][] tiles;
+        private Tile[][] tiles = new Tile[0][];
 
-        public TerrainLayer(Vector2Int size, float scale) : base(size, scale)
+        public override void ChangeSize(Vector2Int size)
         {
-            TileSO defaultTile = ScriptableObject.CreateInstance<TileSO>();
-
-            tiles = new TileSO[size.y][];
-            for (int i = 0; i < size.y; i++)
+            tiles = new Tile[size.y][];
+            for (var i = 0; i < size.y; i++)
             {
-                tiles[i] = new TileSO[size.x];
-                for (int j = 0; j < size.x; j++)
+                tiles[i] = new Tile[size.x];
+                for (var j = 0; j < size.x; j++)
                 {
-                    tiles[i][j] = defaultTile;
+                    tiles[i][j] = new Tile();
                 }
             }
         }
 
-        public void Modify(Vector2Int position, TileSO tile)
+        public void Modify(Vector2Int position, TileSO tileSO)
         {
             if (!IsPositionValid(position)) throw new ArgumentOutOfRangeException();
 
-            tiles[position.y][position.x] = tile;
+            tiles[position.y][position.x].ApplySO(tileSO);
         }
 
-        public TileSO GetTile(Vector2Int position)
+        public Tile GetTile(Vector2Int position)
         {
             if (!IsPositionValid(position)) throw new ArgumentOutOfRangeException();
 

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿#nullable enable
+
+using UnityEngine;
 
 
 namespace Zongband.Utils
@@ -12,7 +14,7 @@ namespace Zongband.Utils
 
         public static bool Range(float value, float min, float max)
         {
-            return value >= 0 && value < max;
+            return value >= min && value < max;
         }
 
         public static bool Range(Vector2 value, Vector2 max)

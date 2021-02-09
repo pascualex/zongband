@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿#nullable enable
+
+using UnityEngine;
 using System;
 
 using Zongband.Game.Core;
@@ -10,23 +12,18 @@ namespace Zongband.Player
 {
     public class PlayerController : MonoBehaviour
     {
-        public GameManager gameManager;
+        [SerializeField] private GameManager? gameManager;
 
-        private ActionPack actionPack;
-
-        private void Awake()
-        {
-            if (gameManager == null) throw new NullReferenceException();
-        }
+        private ActionPack? actionPack;
 
         public bool IsActionPackAvailable()
         {
             return actionPack != null;
         }
 
-        public ActionPack RemoveActionPack()
+        public ActionPack? RemoveActionPack()
         {
-            ActionPack removedActionPack = actionPack;
+            var removedActionPack = actionPack;
             ClearActionpack();
             return removedActionPack;
         }
@@ -38,21 +35,26 @@ namespace Zongband.Player
 
         public void AttemptDisplacement(Vector2Int delta)
         {
+            if (gameManager == null) return;
             if (!AcceptsNewAction()) return;
             
-            Entity entity = gameManager.playerAgent;
-            Board board = gameManager.board;
+            var entity = gameManager.PlayerAgent;
+            if (entity == null) return;
+
+            var board = gameManager.board;
+            if (board == null) return;
 
             if (!board.IsDisplacementAvailable(entity, delta)) return;
 
-            MovementAction action = new MovementAction(entity, board, delta);
+            var action = new MovementAction(entity, board, delta);
             actionPack = new BasicActionPack(action);
         }
 
         private bool AcceptsNewAction()
         {
+            if (gameManager )
             if (IsActionPackAvailable()) return false;
-            return gameManager.IsPlayerTurn();
+            return gameManager?.IsPlayerTurn() ?? false;
         }
     }
 }
