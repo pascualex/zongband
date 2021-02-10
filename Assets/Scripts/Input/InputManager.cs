@@ -22,8 +22,7 @@ namespace Zongband.Input
 
         public void ClearInput()
         {
-            if (playerController == null) return;
-            playerController.PlayerAction = null;
+            playerController?.Clear();
         }
 
         public void OnMove(InputValue value)

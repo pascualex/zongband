@@ -16,7 +16,7 @@ namespace Zongband.Core
 
         private void Start()
         {
-            gameManager?.CustomStart();
+            gameManager?.SetupExample();
         }
 
         private void Update()
@@ -26,7 +26,7 @@ namespace Zongband.Core
             if (uiManager == null) return;
             
             inputManager.ProcessInput();
-            gameManager.CustomUpdate();
+            gameManager.GameLoop();
             uiManager.Refresh();
             inputManager.ClearInput();
         }

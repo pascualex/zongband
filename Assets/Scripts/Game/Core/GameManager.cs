@@ -1,105 +1,121 @@
 ﻿#nullable enable
 
 using UnityEngine;
+using System.Collections.Generic;
 
-using Zongband.Game.Boards;
-using Zongband.Game.Turns;
+using Zongband.Game.Controllers;
 using Zongband.Game.Actions;
+using Zongband.Game.Turns;
+using Zongband.Game.Boards;
 using Zongband.Game.Entities;
 using Zongband.Utils;
 
 namespace Zongband.Game.Core
 {
-    public class GameManager : MonoBehaviour, ICustomStartable, ICustomUpdatable
+    public class GameManager : MonoBehaviour
     {
+        [SerializeField] private BoardSO? boardSO;
+        [SerializeField] private TileSO? floorTileSO;
+        [SerializeField] private TileSO? wallTileSO;
         [SerializeField] private AgentSO? playerAgentSO;
         [SerializeField] private AgentSO? fastAgentSO;
         [SerializeField] private AgentSO? normalAgentSO;
         [SerializeField] private AgentSO? slowAgentSO;
         [SerializeField] private EntitySO? boxEntitySO;
-        [SerializeField] private TileSO? floorTile;
-        [SerializeField] private TileSO? wallTile;
-        [SerializeField] private BoardSO? boardSO;
 
-        public readonly Board? board;
-        public readonly TurnManager? turnManager;
-        [SerializeField] private ActionProducer? actionProducer;
-        [SerializeField] private ActionConsumer? actionConsumer;
+        public PlayerController? playerController;
+        public AIController? aiController;
+        public TurnManager? turnManager;
+        public Board? board;
 
-        public Agent? PlayerAgent { get; set; } // TODO: remove
+        public Agent? LastPlayer { get; private set; }
 
-        public void CustomStart()
+        private Action currentAction = new NullAction();
+
+        public void SetupExample()
         {
+            if (boardSO == null) return;
+            if (floorTileSO == null) return;
+            if (wallTileSO == null) return;
             if (playerAgentSO == null) return;
             if (fastAgentSO == null) return;
             if (normalAgentSO == null) return;
             if (slowAgentSO == null) return;
             if (boxEntitySO == null) return;
-            if (floorTile == null) return;
-            if (wallTile == null) return;
-            if (boardSO == null) return;
 
+            if (playerController == null) return;
+            if (aiController == null) return;
+            if (turnManager == null) return;
             if (board == null) return;
-            if (actionProducer == null) return;
-            if (actionConsumer == null) return;
 
-            var actionPack = new ParallelActionPack();
+            var newAction = new ParallelAction();
 
-            var playerActionPack = new SequentialActionPack();
-            var position = new Vector2Int(3, 3);
-            var spawnPlayer = new SpawnAction(playerAgentSO, board, position, true);
-            playerActionPack.Add(spawnPlayer);
-            playerActionPack.Add(new MakePlayerAction(spawnPlayer));
-            actionPack.Add(playerActionPack);
+            var playerAction = new SequentialAction();
+            // TODO: fix verbose
+            var spawnPlayerAction = new SpawnAction(playerAgentSO, board, turnManager, new Vector2Int(3, 3), true);
+            playerAction.Add(spawnPlayerAction);
+            playerAction.Add(new MakePlayerAction(spawnPlayerAction));
+            newAction.Add(playerAction);
 
-            actionPack.Add(new SpawnAction(fastAgentSO, board, new Vector2Int(3, 5)));
-            actionPack.Add(new SpawnAction(normalAgentSO, board, new Vector2Int(4, 5)));
-            actionPack.Add(new SpawnAction(normalAgentSO, board, new Vector2Int(5, 5)));
-            actionPack.Add(new SpawnAction(slowAgentSO, board, new Vector2Int(6, 3)));
-            actionPack.Add(new SpawnAction(boxEntitySO, board, new Vector2Int(3, 7)));
+            newAction.Add(new SpawnAction(fastAgentSO, board, turnManager, new Vector2Int(3, 5)));
+            newAction.Add(new SpawnAction(normalAgentSO, board, turnManager, new Vector2Int(4, 5)));
+            newAction.Add(new SpawnAction(normalAgentSO, board, turnManager, new Vector2Int(5, 5)));
+            newAction.Add(new SpawnAction(slowAgentSO, board, turnManager, new Vector2Int(6, 3)));
+            newAction.Add(new SpawnAction(boxEntitySO, board, turnManager, new Vector2Int(3, 7)));
 
-            actionConsumer.TryToConsumeActionPack(actionPack);
-            if (!actionPack.IsCompleted()) actionConsumer.ConsumeTurnActionPack(actionPack);
+            currentAction = newAction;
 
+            // TODO: maybe terrain modification should also be done through actions
             var upRight = board.Size - Vector2Int.one;
             var downRight = new Vector2Int(board.Size.x - 1, 0);
             var downLeft = Vector2Int.zero;
             var upLeft = new Vector2Int(0, board.Size.y - 1);
-            board.ModifyBoxTerrain(downLeft, upRight, floorTile);
-            board.ModifyBoxTerrain(upLeft, upRight + new Vector2Int(0, -1), wallTile);
-            board.ModifyBoxTerrain(upRight, downRight + new Vector2Int(-1, 0), wallTile);
-            board.ModifyBoxTerrain(downRight, downLeft + new Vector2Int(0, 1), wallTile);
-            board.ModifyBoxTerrain(downLeft, upLeft + new Vector2Int(1, 0), wallTile);
+            board.ModifyBoxTerrain(downLeft, upRight, floorTileSO);
+            board.ModifyBoxTerrain(upLeft, upRight + new Vector2Int(0, -1), wallTileSO);
+            board.ModifyBoxTerrain(upRight, downRight + new Vector2Int(-1, 0), wallTileSO);
+            board.ModifyBoxTerrain(downRight, downLeft + new Vector2Int(0, 1), wallTileSO);
+            board.ModifyBoxTerrain(downLeft, upLeft + new Vector2Int(1, 0), wallTileSO);
         }
 
-        public void CustomUpdate()
+        public void GameLoop()
         {
-            if (actionConsumer == null) return;
-            if (actionProducer == null) return;
+            if (currentAction.IsCompleted) currentAction = ProcessTurns();
+            else currentAction.Process();
+        }
 
-            if (!actionConsumer.IsCompleted())
+        public Action ProcessTurns()
+        {
+            if (playerController == null) return new NullAction();
+            if (aiController == null) return new NullAction();
+            if (turnManager == null) return new NullAction();
+            if (board == null) return new NullAction();
+
+            var turnAction = new ParallelAction();
+            var processedAgents = new HashSet<Agent>();
+            Agent? agent;
+            while (((agent = turnManager.GetCurrent()) != null) && !processedAgents.Contains(agent))
             {
-                actionConsumer.CustomUpdate();
+                Action? agentAction;
+                if (agent.isPlayer)
+                {
+                    LastPlayer = agent;
+                    agentAction = playerController.ProduceAction(agent, board);
+                }
+                else agentAction = aiController.ProduceAction(agent, board);
+
+                if (agentAction == null) break;
+
+                agentAction.Process();
+
+                if (!agentAction.IsCompleted) turnAction.Add(agentAction);
+
+                processedAgents.Add(agent);
+                turnManager.Next();
+
+                // TODO: if (actionPack.AreGameActionsLeft()) break;
             }
-            else if (actionProducer.CanProduceTurnActionPack())
-            {
-                var turnActionPack = actionProducer.ProduceTurnActionPack();
-                actionConsumer.ConsumeTurnActionPack(turnActionPack);
-            }
-        }
 
-        public bool IsPlayerTurn()
-        {
-            if (actionConsumer == null) return false;
-            if (actionProducer == null) return false;
-            return actionProducer.IsPlayerTurn() && actionConsumer.IsCompleted();
-        }
-
-        public void SetPlayerActionPack(ActionPack actionPack)
-        {
-            if (!IsPlayerTurn()) throw new IsNotPlayerTurnException();
-
-            actionProducer?.SetPlayerActionPack(actionPack);
+            return turnAction;
         }
     }
 }

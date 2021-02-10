@@ -9,10 +9,8 @@ namespace Zongband.Game.Controllers
         public readonly Vector2Int position;
         public readonly bool relative;
 
-        public PlayerAction(Vector2Int position) : this(position, false)
-        {
-
-        }
+        public PlayerAction(Vector2Int position)
+        : this(position, false) { }
 
         public PlayerAction(Vector2Int position, bool relative)
         {

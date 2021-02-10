@@ -6,9 +6,7 @@ namespace Zongband.Game.Boards
 {
     public class EmptyTileException : TileException
     {
-        public EmptyTileException(Vector2Int position) : base(position)
-        {
-            
-        }
+        public EmptyTileException(Vector2Int position)
+        : base(position) { }
     }
 }

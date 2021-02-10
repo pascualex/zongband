@@ -7,6 +7,8 @@ namespace Zongband.Game.Entities
 {
     public class Agent : Entity
     {
+        public bool isPlayer = false;
+        
         public int TurnCooldown { get; private set; } = 100;
         public int TurnPriority { get; private set; } = 0;
         public int MaxHealth { get; private set; } = 100;

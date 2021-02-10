@@ -11,6 +11,8 @@ namespace Zongband.Game.Boards
 
         public override void ChangeSize(Vector2Int size)
         {
+            base.ChangeSize(size);
+
             tiles = new Tile[size.y][];
             for (var i = 0; i < size.y; i++)
             {

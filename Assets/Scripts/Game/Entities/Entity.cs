@@ -14,8 +14,14 @@ namespace Zongband.Game.Entities
 
         public void ApplySO(EntitySO entitySO)
         {
+            name = entitySO.name;
+
             if (gameModel != null) Destroy(gameModel);
-            gameModel = Instantiate(entitySO.gameModel);
+            
+            // TODO: spawn something debug by default
+            if (entitySO.gameModel == null) return;
+            gameModel = Instantiate(entitySO.gameModel, transform);
+            gameModel.name = "GameModel";
         }
     }
 }

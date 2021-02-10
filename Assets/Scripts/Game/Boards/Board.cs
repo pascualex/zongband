@@ -20,7 +20,7 @@ namespace Zongband.Game.Boards
         private readonly EntityLayer entityLayer = new EntityLayer();
         private readonly TerrainLayer terrainLayer = new TerrainLayer();
 
-        private void Start()
+        private void Awake()
         {
             if (initialBoardSO != null) ApplySO(initialBoardSO);
         }
@@ -49,7 +49,7 @@ namespace Zongband.Game.Boards
 
         public void Move(Entity entity, Vector2Int to, bool relative)
         {
-            if (!IsPositionAvailable(entity, to)) throw new NotEmptyTileException(to);
+            if (!IsPositionAvailable(entity, to, relative)) throw new NotEmptyTileException(to);
 
             if (entity is Agent) agentLayer.Move(entity, to, relative);
             else entityLayer.Move(entity, to, relative);
@@ -104,7 +104,7 @@ namespace Zongband.Game.Boards
         {
             if (relative)
             {
-                if (CheckEntityPosition(entity)) throw new NotInTileException(entity);
+                if (!CheckEntityPosition(entity)) throw new NotInTileException(entity);
                 position += entity.position;
             }
 

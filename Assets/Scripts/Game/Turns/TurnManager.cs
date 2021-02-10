@@ -35,7 +35,7 @@ namespace Zongband.Game.Turns
 
         public void Next()
         {
-            if (turns.Count == 0) throw new NoTurnsException();
+            if (turns.Count == 0) return;
 
             hasStarted = true;
 
@@ -43,9 +43,9 @@ namespace Zongband.Game.Turns
             turns.RemoveFirst();
         }
 
-        public Agent GetCurrent()
+        public Agent? GetCurrent()
         {
-            if (turns.Count == 0) throw new NoTurnsException();
+            if (turns.Count == 0) return null;
 
             return turns.First.Value.agent;
         }

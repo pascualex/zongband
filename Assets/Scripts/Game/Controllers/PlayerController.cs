@@ -12,21 +12,25 @@ namespace Zongband.Game.Controllers
     {
         public PlayerAction? PlayerAction { private get; set; }
 
-        public override ActionPack? GetActionPack(Agent agent, Board board)
+        public override Action? ProduceAction(Agent agent, Board board)
         {
-            if (PlayerAction != null) return AttemptMovement(PlayerAction, agent, board);
+            if (PlayerAction != null) return ProduceMovement(PlayerAction, agent, board);
             return null;
         }
 
-        private ActionPack? AttemptMovement(PlayerAction playerAction, Agent agent, Board board)
+        public void Clear()
+        {
+            PlayerAction = null;
+        }
+
+        private Action? ProduceMovement(PlayerAction playerAction, Agent agent, Board board)
         {
             var position = playerAction.position;
             var relative = playerAction.relative;
 
             if (!board.IsPositionAvailable(agent, position, relative)) return null;
 
-            var action = new MovementAction(agent, board, position, relative);
-            return new BasicActionPack(action);
+            return new MovementAction(agent, board, position, relative);
         }
     }
 }

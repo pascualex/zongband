@@ -8,9 +8,7 @@ namespace Zongband.Game.Boards
 {
     public class NotInTileException : TileException
     {
-        public NotInTileException(Entity entity) : base(entity.position)
-        {
-
-        }
+        public NotInTileException(Entity entity)
+        : base(entity.position) { }
     }
 }

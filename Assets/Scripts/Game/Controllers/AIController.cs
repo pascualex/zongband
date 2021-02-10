@@ -11,12 +11,12 @@ namespace Zongband.Game.Controllers
 {
     public class AIController : Controller
     {
-        public override ActionPack? GetActionPack(Agent agent, Board board)
+        public override Action? ProduceAction(Agent agent, Board board)
         {
-            return GenerateRandomMovement(agent, board);
+            return ProduceRandomMovement(agent, board);
         }
 
-        private ActionPack? GenerateRandomMovement(Agent agent, Board board)
+        private Action? ProduceRandomMovement(Agent agent, Board board)
         {
             var directions = Directions.Randomized();
             var selectedDirection = Vector2Int.zero;
@@ -29,10 +29,9 @@ namespace Zongband.Game.Controllers
                 }
             }
 
-            if (selectedDirection == Vector2Int.zero) return new NullActionPack();
+            if (selectedDirection == Vector2Int.zero) return new NullAction();
 
-            var action = new MovementAction(agent, board, selectedDirection, true);
-            return new BasicActionPack(action);
+            return new MovementAction(agent, board, selectedDirection, true);
         }
     }
 }

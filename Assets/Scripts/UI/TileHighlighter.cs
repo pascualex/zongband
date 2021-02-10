@@ -39,7 +39,7 @@ namespace Zongband.UI
 
             var highlight = false;
 
-            var agent = gameManager.PlayerAgent;
+            var agent = gameManager.LastPlayer;
             if (agent == null) return;
 
             var board = gameManager.board;

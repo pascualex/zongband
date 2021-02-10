@@ -14,6 +14,8 @@ namespace Zongband.Game.Boards
 
         public override void ChangeSize(Vector2Int size)
         {
+            base.ChangeSize(size);
+
             foreach (var row in entities)
             {
                 foreach (var entity in row)
@@ -36,6 +38,7 @@ namespace Zongband.Game.Boards
             entity.position = at;
             entities[at.y][at.x] = entity;
         }
+
         public void Move(Entity entity, Vector2Int to)
         {
             Move(entity, to, false);

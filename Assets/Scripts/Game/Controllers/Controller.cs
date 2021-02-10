@@ -10,6 +10,6 @@ namespace Zongband.Game.Controllers
 {
     public abstract class Controller : MonoBehaviour
     {
-        public abstract ActionPack? GetActionPack(Agent agent, Board board);
+        public abstract Action? ProduceAction(Agent agent, Board board);
     }
 }

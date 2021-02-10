@@ -8,9 +8,12 @@ namespace Zongband.Game.Boards
 {
     public abstract class Layer
     {
-        public readonly Vector2Int size = Vector2Int.zero;
+        public Vector2Int size = Vector2Int.zero;
 
-        public abstract void ChangeSize(Vector2Int size);
+        public virtual void ChangeSize(Vector2Int size)
+        {
+            this.size = size;
+        }
 
         public bool IsPositionValid(Vector2Int position)
         {
