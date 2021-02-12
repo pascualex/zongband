@@ -52,29 +52,29 @@ namespace Zongband.Game.Core
 
             var playerAction = new SequentialAction();
             // TODO: fix verbose
-            var spawnPlayerAction = new SpawnAction(playerAgentSO, board, turnManager, new Vector2Int(3, 3), true);
+            var spawnPlayerAction = new SpawnAction(playerAgentSO, board, turnManager, new Location(3, 3), true);
             playerAction.Add(spawnPlayerAction);
             playerAction.Add(new MakePlayerAction(spawnPlayerAction));
             newAction.Add(playerAction);
 
-            newAction.Add(new SpawnAction(fastAgentSO, board, turnManager, new Vector2Int(3, 5)));
-            newAction.Add(new SpawnAction(normalAgentSO, board, turnManager, new Vector2Int(4, 5)));
-            newAction.Add(new SpawnAction(normalAgentSO, board, turnManager, new Vector2Int(5, 5)));
-            newAction.Add(new SpawnAction(slowAgentSO, board, turnManager, new Vector2Int(6, 3)));
-            newAction.Add(new SpawnAction(boxEntitySO, board, turnManager, new Vector2Int(3, 7)));
+            newAction.Add(new SpawnAction(fastAgentSO, board, turnManager, new Location(3, 5)));
+            newAction.Add(new SpawnAction(normalAgentSO, board, turnManager, new Location(4, 5)));
+            newAction.Add(new SpawnAction(normalAgentSO, board, turnManager, new Location(5, 5)));
+            newAction.Add(new SpawnAction(slowAgentSO, board, turnManager, new Location(6, 3)));
+            newAction.Add(new SpawnAction(boxEntitySO, board, turnManager, new Location(3, 7)));
 
             currentAction = newAction;
 
             // TODO: maybe terrain modification should also be done through actions
-            var upRight = board.Size - Vector2Int.one;
-            var downRight = new Vector2Int(board.Size.x - 1, 0);
-            var downLeft = Vector2Int.zero;
-            var upLeft = new Vector2Int(0, board.Size.y - 1);
+            var upRight = new Location(board.Size.x - 1, board.Size.y - 1);
+            var downRight = new Location(board.Size.x - 1, 0);
+            var downLeft = Location.Zero;
+            var upLeft = new Location(0, board.Size.y - 1);
             board.ModifyBoxTerrain(downLeft, upRight, floorTileSO);
-            board.ModifyBoxTerrain(upLeft, upRight + new Vector2Int(0, -1), wallTileSO);
-            board.ModifyBoxTerrain(upRight, downRight + new Vector2Int(-1, 0), wallTileSO);
-            board.ModifyBoxTerrain(downRight, downLeft + new Vector2Int(0, 1), wallTileSO);
-            board.ModifyBoxTerrain(downLeft, upLeft + new Vector2Int(1, 0), wallTileSO);
+            board.ModifyBoxTerrain(upLeft, upRight + new Location(0, -1), wallTileSO);
+            board.ModifyBoxTerrain(upRight, downRight + new Location(-1, 0), wallTileSO);
+            board.ModifyBoxTerrain(downRight, downLeft + new Location(0, 1), wallTileSO);
+            board.ModifyBoxTerrain(downLeft, upLeft + new Location(1, 0), wallTileSO);
         }
 
         public void GameLoop()

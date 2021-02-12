@@ -3,39 +3,41 @@
 using UnityEngine;
 using System;
 
+using Zongband.Utils;
+
 namespace Zongband.Game.Boards
 {
     public class TerrainLayer : Layer
     {
         private Tile[][] tiles = new Tile[0][];
 
-        public override void ChangeSize(Vector2Int size)
+        public override void ChangeSize(Size size)
         {
             base.ChangeSize(size);
 
-            tiles = new Tile[size.y][];
-            for (var i = 0; i < size.y; i++)
+            tiles = new Tile[Size.y][];
+            for (var i = 0; i < Size.y; i++)
             {
-                tiles[i] = new Tile[size.x];
-                for (var j = 0; j < size.x; j++)
+                tiles[i] = new Tile[Size.x];
+                for (var j = 0; j < Size.x; j++)
                 {
                     tiles[i][j] = new Tile();
                 }
             }
         }
 
-        public void Modify(Vector2Int position, TileSO tileSO)
+        public void Modify(Location at, TileSO tileSO)
         {
-            if (!IsPositionValid(position)) throw new ArgumentOutOfRangeException();
+            if (!Size.Contains(at)) throw new ArgumentOutOfRangeException();
 
-            tiles[position.y][position.x].ApplySO(tileSO);
+            tiles[at.y][at.x].ApplySO(tileSO);
         }
 
-        public Tile GetTile(Vector2Int position)
+        public Tile GetTile(Location at)
         {
-            if (!IsPositionValid(position)) throw new ArgumentOutOfRangeException();
+            if (!Size.Contains(at)) throw new ArgumentOutOfRangeException();
 
-            return tiles[position.y][position.x];
+            return tiles[at.y][at.x];
         }
     }
 }

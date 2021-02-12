@@ -2,12 +2,14 @@
 
 using UnityEngine;
 
+using Zongband.Utils;
+
 namespace Zongband.Game.Boards
 {
     [CreateAssetMenu(fileName = "Board", menuName = "ScriptableObjects/Board")]
     public class BoardSO : ScriptableObject
     {
-        public Vector2Int size = new Vector2Int(10, 10);
+        public Size size = new Size(10, 10);
         public float scale = 1.0f;
 
         private void OnValidate()

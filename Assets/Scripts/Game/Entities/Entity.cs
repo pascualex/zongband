@@ -1,13 +1,14 @@
 ﻿#nullable enable
 
 using UnityEngine;
-using System;
+
+using Zongband.Utils;
 
 namespace Zongband.Game.Entities
 {
     public class Entity : MonoBehaviour
     {
-        public Vector2Int position = new Vector2Int(-1, -1);
+        public Location location = Location.MinusOne;
         public bool removed = false;
 
         private GameObject? gameModel;

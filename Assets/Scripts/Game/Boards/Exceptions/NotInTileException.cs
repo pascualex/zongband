@@ -9,6 +9,6 @@ namespace Zongband.Game.Boards
     public class NotInTileException : TileException
     {
         public NotInTileException(Entity entity)
-        : base(entity.position) { }
+        : base(entity.location) { }
     }
 }

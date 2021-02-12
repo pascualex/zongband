@@ -5,6 +5,7 @@ using UnityEngine;
 using Zongband.Game.Turns;
 using Zongband.Game.Boards;
 using Zongband.Game.Entities;
+using Zongband.Utils;
 
 namespace Zongband.Game.Actions
 {
@@ -15,18 +16,18 @@ namespace Zongband.Game.Actions
         private readonly EntitySO entitySO;
         private readonly Board board;
         private readonly TurnManager turnManager;
-        private readonly Vector2Int position;
+        private readonly Location location;
         private readonly bool priority;
 
-        public SpawnAction(EntitySO entitySO, Board board, TurnManager turnManager, Vector2Int position)
-        : this(entitySO, board, turnManager, position, false) { }
+        public SpawnAction(EntitySO entitySO, Board board, TurnManager turnManager, Location location)
+        : this(entitySO, board, turnManager, location, false) { }
 
-        public SpawnAction(EntitySO entitySO, Board board, TurnManager turnManager, Vector2Int position, bool priority)
+        public SpawnAction(EntitySO entitySO, Board board, TurnManager turnManager, Location location, bool priority)
         {
             this.entitySO = entitySO;
             this.board = board;
             this.turnManager = turnManager;
-            this.position = position;
+            this.location = location;
             this.priority = priority;
         }
 
@@ -79,8 +80,8 @@ namespace Zongband.Game.Actions
 
         private bool AddToBoard(Entity entity)
         {
-            if (!board.IsPositionAvailable(entity, position)) return false;
-            board.Add(entity, position);
+            if (!board.IsLocationAvailable(entity, location)) return false;
+            board.Add(entity, location);
             return true;
         }
 
@@ -96,10 +97,10 @@ namespace Zongband.Game.Actions
 
         private Vector3 GetSpawnPosition(Entity entity)
         {
-            var position = entity.position;
+            var location = entity.location;
             var scale = board.Scale;
 
-            var relativePosition = new Vector3(position.x + 0.5f, 0, position.y + 0.5f) * scale;
+            var relativePosition = new Vector3(location.x + 0.5f, 0, location.y + 0.5f) * scale;
             var absolutePosition = board.transform.position + relativePosition;
 
             return absolutePosition;

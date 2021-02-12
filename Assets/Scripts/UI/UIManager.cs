@@ -2,7 +2,6 @@
 
 using UnityEngine;
 
-using Zongband.Game.Core;
 using Zongband.Utils;
 
 namespace Zongband.UI
@@ -24,14 +23,14 @@ namespace Zongband.UI
             var ray = mainCamera.ScreenPointToRay(mousePosition);
             var plane = new Plane(Vector3.up, Vector3.zero);
             
-            var boardPosition = new Vector2Int(-1, -1);
+            var boardLocation = Location.MinusOne;
             if (plane.Raycast(ray, out var distance))
             {
                 var position = ray.GetPoint(distance);
-                boardPosition = new Vector2Int((int)position.x, (int)position.z);
+                boardLocation = new Location((int)position.x, (int)position.z);
             }
 
-            if (tileHighlighter != null) tileHighlighter.boardPosition = boardPosition;
+            if (tileHighlighter != null) tileHighlighter.boardLocation = boardLocation;
         }
     }
 }

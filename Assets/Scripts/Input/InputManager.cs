@@ -28,8 +28,9 @@ namespace Zongband.Input
         public void OnMove(InputValue value)
         {
             if (playerController == null) return;
-            var direction = value.Get<Vector2>();
-            playerController.PlayerAction = new PlayerAction(direction.ToInt(), true);
+            var vector = value.Get<Vector2>();
+            var direction = new Coordinates((int)vector.x, (int)vector.y, true);
+            playerController.PlayerAction = new PlayerAction(direction);
         }
 
         public void OnMoveMouse(InputValue value)

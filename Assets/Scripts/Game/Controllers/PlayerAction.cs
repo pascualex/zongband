@@ -2,20 +2,17 @@
 
 using UnityEngine;
 
+using Zongband.Utils;
+
 namespace Zongband.Game.Controllers
 {
     public class PlayerAction
     {
-        public readonly Vector2Int position;
-        public readonly bool relative;
+        public readonly Coordinates coordinates;
 
-        public PlayerAction(Vector2Int position)
-        : this(position, false) { }
-
-        public PlayerAction(Vector2Int position, bool relative)
+        public PlayerAction(Coordinates coordinates)
         {
-            this.position = position;
-            this.relative = relative;
+            this.coordinates = coordinates;
         }
     }
 }

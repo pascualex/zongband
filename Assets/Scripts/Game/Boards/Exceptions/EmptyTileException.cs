@@ -2,11 +2,13 @@
 
 using UnityEngine;
 
+using Zongband.Utils;
+
 namespace Zongband.Game.Boards
 {
     public class EmptyTileException : TileException
     {
-        public EmptyTileException(Vector2Int position)
-        : base(position) { }
+        public EmptyTileException(Location location)
+        : base(location) { }
     }
 }

@@ -12,7 +12,7 @@ namespace Zongband.Game.Boards
     {
         private Entity?[][] entities = new Entity[0][];
 
-        public override void ChangeSize(Vector2Int size)
+        public override void ChangeSize(Size size)
         {
             base.ChangeSize(size);
 
@@ -24,71 +24,65 @@ namespace Zongband.Game.Boards
                 }
             }
 
-            entities = new Entity[size.y][];
-            for (var i = 0; i < size.y; i++)
+            entities = new Entity[Size.y][];
+            for (var i = 0; i < Size.y; i++)
             {
-                entities[i] = new Entity[size.x];
+                entities[i] = new Entity[Size.x];
             }
         }
 
-        public void Add(Entity entity, Vector2Int at)
+        public void Add(Entity entity, Location at)
         {
-            if (!IsPositionEmpty(at)) throw new ArgumentOutOfRangeException();
+            if (!IsLocationEmpty(at)) throw new ArgumentOutOfRangeException();
 
-            entity.position = at;
+            entity.location = at;
             entities[at.y][at.x] = entity;
         }
 
-        public void Move(Entity entity, Vector2Int to)
+        public void Move(Entity entity, Location to)
         {
-            Move(entity, to, false);
+            if (!CheckEntityLocation(entity)) throw new NotInTileException(entity);
+
+            Move(entity.location, to);
         }
 
-        public void Move(Entity entity, Vector2Int to, bool relative)
+        public void Move(Location from, Location to)
         {
-            if (!CheckEntityPosition(entity)) throw new NotInTileException(entity);
-
-            if (relative) Move(entity.position, entity.position + to);
-            else Move(entity.position, to);
-        }
-
-        public void Move(Vector2Int from, Vector2Int to)
-        {
-            if (IsPositionEmpty(from)) throw new EmptyTileException(from);
-            if (!IsPositionEmpty(to)) throw new NotEmptyTileException(to);
+            if (IsLocationEmpty(from)) throw new EmptyTileException(from);
+            if (!IsLocationEmpty(to)) throw new NotEmptyTileException(to);
 
             entities[to.y][to.x] = entities[from.y][from.x];
             entities[from.y][from.x] = null;
-            entities[to.y][to.x]!.position = to;
+            entities[to.y][to.x]!.location = to;
         }
 
         public void Remove(Entity entity)
         {
-            if (!CheckEntityPosition(entity)) throw new NotInTileException(entity);
+            if (!CheckEntityLocation(entity)) throw new NotInTileException(entity);
 
-            Remove(entity.position);
+            Remove(entity.location);
         }
 
-        public void Remove(Vector2Int at)
+        public void Remove(Location at)
         {
-            if (IsPositionEmpty(at)) throw new EmptyTileException(at);
+            if (IsLocationEmpty(at)) throw new EmptyTileException(at);
 
             entities[at.y][at.x]!.removed = true;
             entities[at.y][at.x] = null;
         }
 
-        public bool IsPositionEmpty(Vector2Int position)
+        public bool IsLocationEmpty(Location location)
         {
-            if (!IsPositionValid(position)) throw new ArgumentOutOfRangeException();
+            if (!Size.Contains(location)) throw new ArgumentOutOfRangeException();
 
-            return entities[position.y][position.x] == null;
+            return entities[location.y][location.x] == null;
         }
 
-        public bool CheckEntityPosition(Entity entity)
+        public bool CheckEntityLocation(Entity entity)
         {
-            if (!Checker.Range(entity.position, size)) throw new ArgumentOutOfRangeException();
+            if (!Size.Contains(entity.location)) throw new ArgumentOutOfRangeException();
 
-            return entities[entity.position.y][entity.position.x] == entity;
+            return entities[entity.location.y][entity.location.x] == entity;
         }
     }
 }

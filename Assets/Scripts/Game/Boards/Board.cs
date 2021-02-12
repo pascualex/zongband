@@ -13,7 +13,7 @@ namespace Zongband.Game.Boards
         [SerializeField] private BoardSO? initialBoardSO;
         [SerializeField] private Tilemap? terrainTilemap;
 
-        public Vector2Int Size { get; private set; } = Vector2Int.zero;
+        public Size Size { get; private set; } = Size.Zero;
         public float Scale { get; private set; } = 1.0f;
 
         private readonly EntityLayer agentLayer = new EntityLayer();
@@ -34,25 +34,22 @@ namespace Zongband.Game.Boards
             terrainLayer.ChangeSize(Size);
         }
 
-        public void Add(Entity entity, Vector2Int at)
+        public void Add(Entity entity, Location at)
         {
-            if (!IsPositionAvailable(entity, at)) throw new NotEmptyTileException(at);
+            if (!IsLocationAvailable(entity, at)) throw new NotEmptyTileException(at);
 
             if (entity is Agent) agentLayer.Add(entity, at);
             else entityLayer.Add(entity, at);
         }
 
-        public void Move(Entity entity, Vector2Int to)
+        public void Move(Entity entity, Coordinates to)
         {
-            Move(entity, to, false);
-        }
+            var location = to.ToLocation(entity.location);
 
-        public void Move(Entity entity, Vector2Int to, bool relative)
-        {
-            if (!IsPositionAvailable(entity, to, relative)) throw new NotEmptyTileException(to);
+            if (!IsLocationAvailable(entity, location)) throw new NotEmptyTileException(location);
 
-            if (entity is Agent) agentLayer.Move(entity, to, relative);
-            else entityLayer.Move(entity, to, relative);
+            if (entity is Agent) agentLayer.Move(entity, location);
+            else entityLayer.Move(entity, location);
         }
 
         public void Remove(Entity entity)
@@ -61,74 +58,57 @@ namespace Zongband.Game.Boards
             else entityLayer.Remove(entity);
         }
 
-        public void ModifyTerrain(Vector2Int position, TileSO tile)
+        public void ModifyTerrain(Location at, TileSO tile)
         {
-            if (!IsPositionAvailable(tile, position)) throw new NotEmptyTileException(position);
+            if (!IsLocationAvailable(tile, at)) throw new NotEmptyTileException(at);
 
-            terrainLayer.Modify(position, tile);
-            terrainTilemap?.SetTile((Vector3Int)position, tile.tileBase);
+            terrainLayer.Modify(at, tile);
+            terrainTilemap?.SetTile(at.ToVector3Int(), tile.tileBase);
         }
 
-        public void ModifyBoxTerrain(Vector2Int from, Vector2Int to, TileSO tile)
+        public void ModifyBoxTerrain(Location from, Location to, TileSO tile)
         {
-            var lower = new Vector2Int(Mathf.Min(from.x, to.x), Mathf.Min(from.y, to.y));
-            var higher = new Vector2Int(Mathf.Max(from.x, to.x), Mathf.Max(from.y, to.y));
-
+            var lower = new Location(Mathf.Min(from.x, to.x), Mathf.Min(from.y, to.y));
+            var higher = new Location(Mathf.Max(from.x, to.x), Mathf.Max(from.y, to.y));
             for (var i = lower.y; i <= higher.y; i++)
             {
                 for (var j = lower.x; j <= higher.x; j++)
                 {
-                    ModifyTerrain(new Vector2Int(j, i), tile);
+                    ModifyTerrain(new Location(j, i), tile);
                 }
             }
         }
 
-        public bool IsPositionValid(Vector2Int position)
+        public bool IsLocationEmpty(Location location)
         {
-            return Checker.Range(position, Size);
-        }
-
-        public bool IsPositionEmpty(Vector2Int position)
-        {
-            if (!agentLayer.IsPositionEmpty(position)) return false;
-            if (!entityLayer.IsPositionEmpty(position)) return false;
+            if (!agentLayer.IsLocationEmpty(location)) return false;
+            if (!entityLayer.IsLocationEmpty(location)) return false;
             return true;
         }
-        
-        public bool IsPositionAvailable(Entity entity, Vector2Int position)
+
+        public bool AreCoordinatesAvailable(Entity entity, Coordinates coordinates)
         {
-            return IsPositionAvailable(entity, position, false);
+            return IsLocationAvailable(entity, coordinates.ToLocation(entity.location));
         }
 
-        public bool IsPositionAvailable(Entity entity, Vector2Int position, bool relative)
+        public bool IsLocationAvailable(Entity entity, Location location)
         {
-            if (relative)
-            {
-                if (!CheckEntityPosition(entity)) throw new NotInTileException(entity);
-                position += entity.position;
-            }
-
-            if (!IsPositionValid(position)) return false;
+            if (!Size.Contains(location)) return false;
             /* Add here special interactions in the future */
-            if (!agentLayer.IsPositionEmpty(position)) return false;
+            if (!agentLayer.IsLocationEmpty(location)) return false;
             var isGhost = (entity is Agent agent) && agent.IsGhost;
-            if (!isGhost && !entityLayer.IsPositionEmpty(position)) return false;
-            if (!isGhost && terrainLayer.GetTile(position).BlocksGround) return false;
+            if (!isGhost && !entityLayer.IsLocationEmpty(location)) return false;
+            if (!isGhost && terrainLayer.GetTile(location).BlocksGround) return false;
             return true;
         }
 
-        public bool IsPositionAvailable(TileSO tile, Vector2Int position)
+        public bool IsLocationAvailable(TileSO tile, Location location)
         {
-            if (!IsPositionValid(position)) return false;
+            if (!Size.Contains(location)) return false;
             /* Add here special interactions in the future */
-            if (tile.blocksGround && !agentLayer.IsPositionEmpty(position)) return false;
-            if (tile.blocksGround && !entityLayer.IsPositionEmpty(position)) return false;
+            if (tile.blocksGround && !agentLayer.IsLocationEmpty(location)) return false;
+            if (tile.blocksGround && !entityLayer.IsLocationEmpty(location)) return false;
             return true;
-        }
-
-        public bool CheckEntityPosition(Entity entity) {
-            if (entity is Agent) return agentLayer.CheckEntityPosition(entity);
-            else return entityLayer.CheckEntityPosition(entity);
         }
     }
 }
