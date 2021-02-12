@@ -11,10 +11,12 @@ namespace Zongband.Game.Controllers
     public class PlayerController : Controller
     {
         public PlayerAction? PlayerAction { private get; set; }
+        public bool SkipTurn { private get; set; } = false;
 
         public override Action? ProduceAction(Agent agent, Board board)
         {
             if (PlayerAction != null) return ProduceMovement(PlayerAction, agent, board);
+            if (SkipTurn) return new NullAction();
             return null;
         }
 

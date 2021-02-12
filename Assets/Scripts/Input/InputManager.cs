@@ -25,7 +25,7 @@ namespace Zongband.Input
             playerController?.Clear();
         }
 
-        public void OnMove(InputValue value)
+        private void OnMove(InputValue value)
         {
             if (playerController == null) return;
             var vector = value.Get<Vector2>();
@@ -33,7 +33,14 @@ namespace Zongband.Input
             playerController.PlayerAction = new PlayerAction(direction);
         }
 
-        public void OnMoveMouse(InputValue value)
+        private void OnSkipTurn(InputValue value)
+        {
+            if (playerController == null) return;
+            var skipTurn = value.Get<float>() >= 0.5f;
+            playerController.SkipTurn = skipTurn;
+        }
+
+        private void OnMoveMouse(InputValue value)
         {
             var mousePosition = value.Get<Vector2>();
             uiManager?.SetMousePosition(mousePosition);

@@ -14,6 +14,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "SkipTurn",
+                    "type": "PassThrough",
+                    "id": "6eef598d-15df-4520-8ec1-85aa51f5bf4e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "MoveMouse",
                     "type": "PassThrough",
                     "id": "3c68b871-3fbb-46d1-b21b-2919e305a2cf",
@@ -88,6 +96,17 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "02390cdb-d054-4a53-9fe4-e4bafd91795e",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardAndMouse",
+                    "action": "SkipTurn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
