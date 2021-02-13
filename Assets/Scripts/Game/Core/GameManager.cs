@@ -115,7 +115,7 @@ namespace Zongband.Game.Core
                 processedAgents.Add(agent);
                 turnManager.Next();
 
-                // TODO: if (actionPack.AreGameActionsLeft()) break;
+                if (!(agentAction is MovementAction)) break;
             }
 
             return turnAction;
