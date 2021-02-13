@@ -1,7 +1,6 @@
 #nullable enable
 
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 using Zongband.Game.Entities;
 using Zongband.Utils;
@@ -11,7 +10,7 @@ namespace Zongband.Game.Boards
     public class Board : MonoBehaviour
     {
         [SerializeField] private BoardSO? initialBoardSO;
-        [SerializeField] private Tilemap? terrainTilemap;
+        [SerializeField] private UnityEngine.Tilemaps.Tilemap? terrainTilemap;
 
         public Size Size { get; private set; } = Size.Zero;
         public float Scale { get; private set; } = 1.0f;
@@ -34,19 +33,19 @@ namespace Zongband.Game.Boards
             terrainLayer.ChangeSize(Size);
         }
 
-        public void Add(Entity entity, Location at)
+        public void Add(Entity entity, Tile at)
         {
-            if (!IsLocationAvailable(entity, at, false)) throw new NotEmptyTileException(at);
+            if (!IsTileAvailable(entity, at, false)) throw new NotEmptyTileException(at);
 
             if (entity is Agent) agentLayer.Add(entity, at);
             else entityLayer.Add(entity, at);
         }
 
-        public void Move(Entity entity, Location to, bool relative)
+        public void Move(Entity entity, Tile to, bool relative)
         {
-            if (relative) to += entity.location;
+            if (relative) to += entity.tile;
 
-            if (!IsLocationAvailable(entity, to, false)) throw new NotEmptyTileException(to);
+            if (!IsTileAvailable(entity, to, false)) throw new NotEmptyTileException(to);
 
             if (entity is Agent) agentLayer.Move(entity, to);
             else entityLayer.Move(entity, to);
@@ -58,52 +57,52 @@ namespace Zongband.Game.Boards
             else entityLayer.Remove(entity);
         }
 
-        public void ModifyTerrain(Location at, TerrainSO terrainSO)
+        public void ModifyTerrain(Tile at, TerrainSO terrainSO)
         {
-            if (!IsLocationAvailable(terrainSO, at)) throw new NotEmptyTileException(at);
+            if (!IsTileAvailable(terrainSO, at)) throw new NotEmptyTileException(at);
 
             terrainLayer.Modify(at, terrainSO);
             terrainTilemap?.SetTile(at.ToVector3Int(), terrainSO.tileBase);
         }
 
-        public void ModifyBoxTerrain(Location from, Location to, TerrainSO terrainSO)
+        public void ModifyBoxTerrain(Tile from, Tile to, TerrainSO terrainSO)
         {
-            var lower = new Location(Mathf.Min(from.x, to.x), Mathf.Min(from.y, to.y));
-            var higher = new Location(Mathf.Max(from.x, to.x), Mathf.Max(from.y, to.y));
+            var lower = new Tile(Mathf.Min(from.x, to.x), Mathf.Min(from.y, to.y));
+            var higher = new Tile(Mathf.Max(from.x, to.x), Mathf.Max(from.y, to.y));
             for (var i = lower.y; i <= higher.y; i++)
             {
                 for (var j = lower.x; j <= higher.x; j++)
                 {
-                    ModifyTerrain(new Location(j, i), terrainSO);
+                    ModifyTerrain(new Tile(j, i), terrainSO);
                 }
             }
         }
 
-        public bool IsLocationEmpty(Location location)
+        public bool IsTileEmpty(Tile tile)
         {
-            if (!agentLayer.IsLocationEmpty(location)) return false;
-            if (!entityLayer.IsLocationEmpty(location)) return false;
+            if (!agentLayer.IsTileEmpty(tile)) return false;
+            if (!entityLayer.IsTileEmpty(tile)) return false;
             return true;
         }
 
-        public bool IsLocationAvailable(Entity entity, Location location, bool relative)
+        public bool IsTileAvailable(Entity entity, Tile tile, bool relative)
         {
-            if (relative) location += entity.location;
-            if (!Size.Contains(location)) return false;
+            if (relative) tile += entity.tile;
+            if (!Size.Contains(tile)) return false;
             /* Add here special interactions in the future */
-            if (!agentLayer.IsLocationEmpty(location)) return false;
+            if (!agentLayer.IsTileEmpty(tile)) return false;
             var isGhost = (entity is Agent agent) && agent.IsGhost;
-            if (!isGhost && !entityLayer.IsLocationEmpty(location)) return false;
-            if (!isGhost && terrainLayer.GetTile(location).BlocksGround) return false;
+            if (!isGhost && !entityLayer.IsTileEmpty(tile)) return false;
+            if (!isGhost && terrainLayer.GetTile(tile).BlocksGround) return false;
             return true;
         }
 
-        public bool IsLocationAvailable(TerrainSO terrainSO, Location location)
+        public bool IsTileAvailable(TerrainSO terrainSO, Tile tile)
         {
-            if (!Size.Contains(location)) return false;
+            if (!Size.Contains(tile)) return false;
             /* Add here special interactions in the future */
-            if (terrainSO.blocksGround && !agentLayer.IsLocationEmpty(location)) return false;
-            if (terrainSO.blocksGround && !entityLayer.IsLocationEmpty(location)) return false;
+            if (terrainSO.blocksGround && !agentLayer.IsTileEmpty(tile)) return false;
+            if (terrainSO.blocksGround && !entityLayer.IsTileEmpty(tile)) return false;
             return true;
         }
     }

@@ -16,18 +16,18 @@ namespace Zongband.Game.Actions
         private readonly EntitySO entitySO;
         private readonly Board board;
         private readonly TurnManager turnManager;
-        private readonly Location location;
+        private readonly Tile tile;
         private readonly bool priority;
 
-        public SpawnAction(EntitySO entitySO, Board board, TurnManager turnManager, Location location)
-        : this(entitySO, board, turnManager, location, false) { }
+        public SpawnAction(EntitySO entitySO, Board board, TurnManager turnManager, Tile tile)
+        : this(entitySO, board, turnManager, tile, false) { }
 
-        public SpawnAction(EntitySO entitySO, Board board, TurnManager turnManager, Location location, bool priority)
+        public SpawnAction(EntitySO entitySO, Board board, TurnManager turnManager, Tile tile, bool priority)
         {
             this.entitySO = entitySO;
             this.board = board;
             this.turnManager = turnManager;
-            this.location = location;
+            this.tile = tile;
             this.priority = priority;
         }
 
@@ -80,8 +80,8 @@ namespace Zongband.Game.Actions
 
         private bool AddToBoard(Entity entity)
         {
-            if (!board.IsLocationAvailable(entity, location, false)) return false;
-            board.Add(entity, location);
+            if (!board.IsTileAvailable(entity, tile, false)) return false;
+            board.Add(entity, tile);
             return true;
         }
 
@@ -97,10 +97,10 @@ namespace Zongband.Game.Actions
 
         private Vector3 GetSpawnPosition(Entity entity)
         {
-            var location = entity.location;
+            var tile = entity.tile;
             var scale = board.Scale;
 
-            var relativePosition = new Vector3(location.x + 0.5f, 0, location.y + 0.5f) * scale;
+            var relativePosition = new Vector3(tile.x + 0.5f, 0, tile.y + 0.5f) * scale;
             var absolutePosition = board.transform.position + relativePosition;
 
             return absolutePosition;

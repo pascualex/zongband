@@ -9,7 +9,7 @@ namespace Zongband.UI
 {
     public class TileHighlighter : MonoBehaviour
     {
-        public Location boardLocation = Location.MinusOne;
+        public Tile boardTile = Tile.MinusOne;
 
         [SerializeField] private GameObject? initialCursorPrefab;
         [SerializeField] private GameManager? gameManager;
@@ -45,9 +45,9 @@ namespace Zongband.UI
             var board = gameManager.board;
             if (board == null) return;
 
-            if (board.IsLocationAvailable(agent, boardLocation, false))
+            if (board.IsTileAvailable(agent, boardTile, false))
             {
-                var position = new Vector3(boardLocation.x, 0, boardLocation.y);
+                var position = new Vector3(boardTile.x, 0, boardTile.y);
                 position += new Vector3(0.5f, 0, 0.5f);
                 position *= board.Scale;
 

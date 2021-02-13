@@ -9,7 +9,7 @@ namespace Zongband.Game.Boards
 {
     public class TileException : Exception
     {
-        public TileException(Location location)
-        : base(Warnings.TileWarning(location)) { }
+        public TileException(Tile tile)
+        : base(Warnings.TileWarning(tile)) { }
     }
 }

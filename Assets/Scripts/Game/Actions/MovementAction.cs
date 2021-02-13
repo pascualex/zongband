@@ -15,18 +15,18 @@ namespace Zongband.Game.Actions
 
         private readonly Entity entity;
         private readonly Board board;
-        private readonly Location location;
+        private readonly Tile tile;
         private readonly bool relative;
         private readonly bool instant;
 
-        public MovementAction(Entity entity, Board board, Location location, bool relative)
-        : this(entity, board, location, relative, false) { }
+        public MovementAction(Entity entity, Board board, Tile tile, bool relative)
+        : this(entity, board, tile, relative, false) { }
 
-        public MovementAction(Entity entity, Board board, Location location, bool relative, bool instant)
+        public MovementAction(Entity entity, Board board, Tile tile, bool relative, bool instant)
         {
             this.entity = entity;
             this.board = board;
-            this.location = location;
+            this.tile = tile;
             this.relative = relative;
             this.instant = instant;
         }
@@ -51,8 +51,8 @@ namespace Zongband.Game.Actions
 
         public bool MoveInBoard()
         {
-            if (!board.IsLocationAvailable(entity, location, relative)) return false;
-            board.Move(entity, location, relative);
+            if (!board.IsTileAvailable(entity, tile, relative)) return false;
+            board.Move(entity, tile, relative);
             return true;
         }
 
@@ -76,10 +76,10 @@ namespace Zongband.Game.Actions
 
         private Vector3 GetTargetPosition()
         {
-            var location = entity.location;
+            var tile = entity.tile;
             var scale = board.Scale;
 
-            var relativePosition = new Vector3(location.x + 0.5f, 0, location.y + 0.5f) * scale;
+            var relativePosition = new Vector3(tile.x + 0.5f, 0, tile.y + 0.5f) * scale;
             var absolutePosition = board.transform.position + relativePosition;
 
             return absolutePosition;

@@ -19,9 +19,9 @@ namespace Zongband.Utils
             this.y = y;
         }
 
-        public bool Contains(Location coordinates)
+        public bool Contains(Tile tile)
         {
-            return Checker.Range(coordinates.x, x) && Checker.Range(coordinates.y, y);
+            return Checker.Range(tile.x, x) && Checker.Range(tile.y, y);
         }
 
         public static Size operator +(Size a, Size b)

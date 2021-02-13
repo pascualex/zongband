@@ -26,14 +26,14 @@ namespace Zongband.Game.Boards
             }
         }
 
-        public void Modify(Location at, TerrainSO terrainSO)
+        public void Modify(Tile at, TerrainSO terrainSO)
         {
             if (!Size.Contains(at)) throw new ArgumentOutOfRangeException();
 
             terrains[at.y][at.x].ApplySO(terrainSO);
         }
 
-        public Terrain GetTile(Location at)
+        public Terrain GetTile(Tile at)
         {
             if (!Size.Contains(at)) throw new ArgumentOutOfRangeException();
 

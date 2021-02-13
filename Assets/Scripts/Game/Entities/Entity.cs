@@ -8,7 +8,7 @@ namespace Zongband.Game.Entities
 {
     public class Entity : MonoBehaviour
     {
-        public Location location = Location.MinusOne;
+        public Tile tile = Tile.MinusOne;
         public bool removed = false;
 
         private GameObject? gameModel;

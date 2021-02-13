@@ -9,8 +9,8 @@ namespace Zongband.Utils
         public const string missingEntityTransformer =
             "Entity was moved but doesn't have an EntityTransformer attached";
 
-        public static string TileWarning(Location location) {
-            return "In tile at location " + location;
+        public static string TileWarning(Tile tile) {
+            return "In tile at tile " + tile;
         }
     }
 }

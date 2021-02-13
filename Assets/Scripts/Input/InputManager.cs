@@ -29,7 +29,7 @@ namespace Zongband.Input
         {
             if (playerController == null) return;
             var vector = value.Get<Vector2>();
-            var direction = new Location((int)vector.x, (int)vector.y);
+            var direction = new Tile((int)vector.x, (int)vector.y);
             playerController.PlayerAction = new PlayerAction(direction, true);
         }
 

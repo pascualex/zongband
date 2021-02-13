@@ -31,58 +31,58 @@ namespace Zongband.Game.Boards
             }
         }
 
-        public void Add(Entity entity, Location at)
+        public void Add(Entity entity, Tile at)
         {
-            if (!IsLocationEmpty(at)) throw new ArgumentOutOfRangeException();
+            if (!IsTileEmpty(at)) throw new ArgumentOutOfRangeException();
 
-            entity.location = at;
+            entity.tile = at;
             entities[at.y][at.x] = entity;
         }
 
-        public void Move(Entity entity, Location to)
+        public void Move(Entity entity, Tile to)
         {
-            if (!CheckEntityLocation(entity)) throw new NotInTileException(entity);
+            if (!CheckEntityTile(entity)) throw new NotInTileException(entity);
 
-            Move(entity.location, to);
+            Move(entity.tile, to);
         }
 
-        public void Move(Location from, Location to)
+        public void Move(Tile from, Tile to)
         {
-            if (IsLocationEmpty(from)) throw new EmptyTileException(from);
-            if (!IsLocationEmpty(to)) throw new NotEmptyTileException(to);
+            if (IsTileEmpty(from)) throw new EmptyTileException(from);
+            if (!IsTileEmpty(to)) throw new NotEmptyTileException(to);
 
             entities[to.y][to.x] = entities[from.y][from.x];
             entities[from.y][from.x] = null;
-            entities[to.y][to.x]!.location = to;
+            entities[to.y][to.x]!.tile = to;
         }
 
         public void Remove(Entity entity)
         {
-            if (!CheckEntityLocation(entity)) throw new NotInTileException(entity);
+            if (!CheckEntityTile(entity)) throw new NotInTileException(entity);
 
-            Remove(entity.location);
+            Remove(entity.tile);
         }
 
-        public void Remove(Location at)
+        public void Remove(Tile at)
         {
-            if (IsLocationEmpty(at)) throw new EmptyTileException(at);
+            if (IsTileEmpty(at)) throw new EmptyTileException(at);
 
             entities[at.y][at.x]!.removed = true;
             entities[at.y][at.x] = null;
         }
 
-        public bool IsLocationEmpty(Location location)
+        public bool IsTileEmpty(Tile tile)
         {
-            if (!Size.Contains(location)) throw new ArgumentOutOfRangeException();
+            if (!Size.Contains(tile)) throw new ArgumentOutOfRangeException();
 
-            return entities[location.y][location.x] == null;
+            return entities[tile.y][tile.x] == null;
         }
 
-        public bool CheckEntityLocation(Entity entity)
+        public bool CheckEntityTile(Entity entity)
         {
-            if (!Size.Contains(entity.location)) throw new ArgumentOutOfRangeException();
+            if (!Size.Contains(entity.tile)) throw new ArgumentOutOfRangeException();
 
-            return entities[entity.location.y][entity.location.x] == entity;
+            return entities[entity.tile.y][entity.tile.x] == entity;
         }
     }
 }

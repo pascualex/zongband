@@ -8,7 +8,7 @@ namespace Zongband.Game.Boards
 {
     public class EmptyTileException : TileException
     {
-        public EmptyTileException(Location location)
-        : base(location) { }
+        public EmptyTileException(Tile tile)
+        : base(tile) { }
     }
 }

@@ -8,12 +8,12 @@ namespace Zongband.Game.Controllers
 {
     public class PlayerAction
     {
-        public readonly Location location;
+        public readonly Tile tile;
         public readonly bool relative;
 
-        public PlayerAction(Location location, bool relative)
+        public PlayerAction(Tile tile, bool relative)
         {
-            this.location = location;
+            this.tile = tile;
             this.relative = relative;
         }
     }

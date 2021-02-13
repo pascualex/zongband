@@ -23,14 +23,14 @@ namespace Zongband.UI
             var ray = mainCamera.ScreenPointToRay(mousePosition);
             var plane = new Plane(Vector3.up, Vector3.zero);
             
-            var boardLocation = Location.MinusOne;
+            var boardTile = Tile.MinusOne;
             if (plane.Raycast(ray, out var distance))
             {
                 var position = ray.GetPoint(distance);
-                boardLocation = new Location((int)position.x, (int)position.z);
+                boardTile = new Tile((int)position.x, (int)position.z);
             }
 
-            if (tileHighlighter != null) tileHighlighter.boardLocation = boardLocation;
+            if (tileHighlighter != null) tileHighlighter.boardTile = boardTile;
         }
     }
 }

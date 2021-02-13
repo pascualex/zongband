@@ -18,18 +18,18 @@ namespace Zongband.Game.Controllers
 
         private Action? ProduceRandomMovement(Agent agent, Board board)
         {
-            var directions = Location.RandomizedDirections();
-            var selectedDirection = Location.Zero;
+            var directions = Tile.RandomizedDirections();
+            var selectedDirection = Tile.Zero;
             foreach (var direction in directions)
             {
-                if (board.IsLocationAvailable(agent, direction, true))
+                if (board.IsTileAvailable(agent, direction, true))
                 {
                     selectedDirection = direction;
                     break;
                 }
             }
 
-            if (selectedDirection == Location.Zero) return new NullAction();
+            if (selectedDirection == Tile.Zero) return new NullAction();
 
             return new MovementAction(agent, board, selectedDirection, true);
         }
