@@ -80,7 +80,7 @@ namespace Zongband.Game.Actions
 
         private bool AddToBoard(Entity entity)
         {
-            if (!board.IsLocationAvailable(entity, location)) return false;
+            if (!board.IsLocationAvailable(entity, location, false)) return false;
             board.Add(entity, location);
             return true;
         }

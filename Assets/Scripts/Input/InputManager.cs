@@ -29,8 +29,8 @@ namespace Zongband.Input
         {
             if (playerController == null) return;
             var vector = value.Get<Vector2>();
-            var direction = new Coordinates((int)vector.x, (int)vector.y, true);
-            playerController.PlayerAction = new PlayerAction(direction);
+            var direction = new Location((int)vector.x, (int)vector.y);
+            playerController.PlayerAction = new PlayerAction(direction, true);
         }
 
         private void OnSkipTurn(InputValue value)

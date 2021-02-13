@@ -45,7 +45,7 @@ namespace Zongband.UI
             var board = gameManager.board;
             if (board == null) return;
 
-            if (board.IsLocationAvailable(agent, boardLocation))
+            if (board.IsLocationAvailable(agent, boardLocation, false))
             {
                 var position = new Vector3(boardLocation.x, 0, boardLocation.y);
                 position += new Vector3(0.5f, 0, 0.5f);

@@ -27,9 +27,12 @@ namespace Zongband.Game.Controllers
 
         private Action? ProduceMovement(PlayerAction playerAction, Agent agent, Board board)
         {
-            if (!board.AreCoordinatesAvailable(agent, playerAction.coordinates)) return null;
+            var location = playerAction.location;
+            var relative = playerAction.relative;
 
-            return new MovementAction(agent, board, playerAction.coordinates);
+            if (!board.IsLocationAvailable(agent, location, relative)) return null;
+
+            return new MovementAction(agent, board, location, relative);
         }
     }
 }

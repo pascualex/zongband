@@ -36,20 +36,20 @@ namespace Zongband.Game.Boards
 
         public void Add(Entity entity, Location at)
         {
-            if (!IsLocationAvailable(entity, at)) throw new NotEmptyTileException(at);
+            if (!IsLocationAvailable(entity, at, false)) throw new NotEmptyTileException(at);
 
             if (entity is Agent) agentLayer.Add(entity, at);
             else entityLayer.Add(entity, at);
         }
 
-        public void Move(Entity entity, Coordinates to)
+        public void Move(Entity entity, Location to, bool relative)
         {
-            var location = to.ToLocation(entity.location);
+            if (relative) to += entity.location;
 
-            if (!IsLocationAvailable(entity, location)) throw new NotEmptyTileException(location);
+            if (!IsLocationAvailable(entity, to, false)) throw new NotEmptyTileException(to);
 
-            if (entity is Agent) agentLayer.Move(entity, location);
-            else entityLayer.Move(entity, location);
+            if (entity is Agent) agentLayer.Move(entity, to);
+            else entityLayer.Move(entity, to);
         }
 
         public void Remove(Entity entity)
@@ -86,13 +86,9 @@ namespace Zongband.Game.Boards
             return true;
         }
 
-        public bool AreCoordinatesAvailable(Entity entity, Coordinates coordinates)
+        public bool IsLocationAvailable(Entity entity, Location location, bool relative)
         {
-            return IsLocationAvailable(entity, coordinates.ToLocation(entity.location));
-        }
-
-        public bool IsLocationAvailable(Entity entity, Location location)
-        {
+            if (relative) location += entity.location;
             if (!Size.Contains(location)) return false;
             /* Add here special interactions in the future */
             if (!agentLayer.IsLocationEmpty(location)) return false;

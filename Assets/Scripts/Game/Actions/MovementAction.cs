@@ -15,17 +15,19 @@ namespace Zongband.Game.Actions
 
         private readonly Entity entity;
         private readonly Board board;
-        private readonly Coordinates coordinates;
+        private readonly Location location;
+        private readonly bool relative;
         private readonly bool instant;
 
-        public MovementAction(Entity entity, Board board, Coordinates coordinates)
-        : this(entity, board, coordinates, false) { }
+        public MovementAction(Entity entity, Board board, Location location, bool relative)
+        : this(entity, board, location, relative, false) { }
 
-        public MovementAction(Entity entity, Board board, Coordinates coordinates, bool instant)
+        public MovementAction(Entity entity, Board board, Location location, bool relative, bool instant)
         {
             this.entity = entity;
             this.board = board;
-            this.coordinates = coordinates;
+            this.location = location;
+            this.relative = relative;
             this.instant = instant;
         }
 
@@ -49,8 +51,8 @@ namespace Zongband.Game.Actions
 
         public bool MoveInBoard()
         {
-            if (!board.AreCoordinatesAvailable(entity, coordinates)) return false;
-            board.Move(entity, coordinates);
+            if (!board.IsLocationAvailable(entity, location, relative)) return false;
+            board.Move(entity, location, relative);
             return true;
         }
 

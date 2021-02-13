@@ -8,11 +8,13 @@ namespace Zongband.Game.Controllers
 {
     public class PlayerAction
     {
-        public readonly Coordinates coordinates;
+        public readonly Location location;
+        public readonly bool relative;
 
-        public PlayerAction(Coordinates coordinates)
+        public PlayerAction(Location location, bool relative)
         {
-            this.coordinates = coordinates;
+            this.location = location;
+            this.relative = relative;
         }
     }
 }
