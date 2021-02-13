@@ -40,10 +40,15 @@ namespace Zongband.Input
             playerController.SkipTurn = skipTurn;
         }
 
-        private void OnMoveMouse(InputValue value)
+        private void OnMouseMove(InputValue value)
         {
             var mousePosition = value.Get<Vector2>();
             uiManager?.SetMousePosition(mousePosition);
+        }
+
+        private void OnMouseClick()
+        {
+            uiManager?.HandleMouseClick();
         }
     }
 }

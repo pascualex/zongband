@@ -11,11 +11,13 @@ namespace Zongband.UI
         [SerializeField] private Camera? mainCamera;
         [SerializeField] private TileHighlighter? tileHighlighter;
         [SerializeField] private PlayerHighlighter? playerHighlighter;
+        [SerializeField] private AgentInspector? agentInspector;
 
         public void Refresh()
         {
             tileHighlighter?.Refresh();
             playerHighlighter?.Refresh();
+            agentInspector?.Refresh();
         }
 
         public void SetMousePosition(Vector2 mousePosition)
@@ -32,7 +34,13 @@ namespace Zongband.UI
                 mouseTile = new Tile((int)position.x, (int)position.z);
             }
 
-            if (tileHighlighter != null) tileHighlighter.mouseTile = mouseTile;
+            if (tileHighlighter != null) tileHighlighter.MouseTile = mouseTile;
+            if (agentInspector != null) agentInspector.MouseTile = mouseTile;
+        }
+
+        public void HandleMouseClick()
+        {
+            agentInspector?.HandleMouseClick();
         }
     }
 }

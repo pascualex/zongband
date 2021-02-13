@@ -8,9 +8,9 @@ using Zongband.Utils;
 
 namespace Zongband.Game.Boards
 {
-    public class EntityLayer : Layer
+    public class EntityLayer<EntityT> : Layer where EntityT : Entity
     {
-        private Entity?[][] entities = new Entity[0][];
+        private EntityT?[][] entities = new EntityT[0][];
 
         public override void ChangeSize(Size size)
         {
@@ -24,14 +24,14 @@ namespace Zongband.Game.Boards
                 }
             }
 
-            entities = new Entity[Size.y][];
+            entities = new EntityT[Size.y][];
             for (var i = 0; i < Size.y; i++)
             {
-                entities[i] = new Entity[Size.x];
+                entities[i] = new EntityT[Size.x];
             }
         }
 
-        public void Add(Entity entity, Tile at)
+        public void Add(EntityT entity, Tile at)
         {
             if (!IsTileEmpty(at)) throw new ArgumentOutOfRangeException();
 
@@ -39,7 +39,7 @@ namespace Zongband.Game.Boards
             entities[at.y][at.x] = entity;
         }
 
-        public void Move(Entity entity, Tile to)
+        public void Move(EntityT entity, Tile to)
         {
             if (!CheckEntityTile(entity)) throw new NotInTileException(entity);
 
@@ -56,7 +56,7 @@ namespace Zongband.Game.Boards
             entities[to.y][to.x]!.tile = to;
         }
 
-        public void Remove(Entity entity)
+        public void Remove(EntityT entity)
         {
             if (!CheckEntityTile(entity)) throw new NotInTileException(entity);
 
@@ -71,6 +71,13 @@ namespace Zongband.Game.Boards
             entities[at.y][at.x] = null;
         }
 
+        public EntityT? Get(Tile at)
+        {
+            if (!Size.Contains(at)) throw new ArgumentOutOfRangeException();
+
+            return entities[at.y][at.x];
+        }
+
         public bool IsTileEmpty(Tile tile)
         {
             if (!Size.Contains(tile)) throw new ArgumentOutOfRangeException();
@@ -78,7 +85,7 @@ namespace Zongband.Game.Boards
             return entities[tile.y][tile.x] == null;
         }
 
-        public bool CheckEntityTile(Entity entity)
+        public bool CheckEntityTile(EntityT entity)
         {
             if (!Size.Contains(entity.tile)) throw new ArgumentOutOfRangeException();
 

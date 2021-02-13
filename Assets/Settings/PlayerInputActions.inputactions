@@ -22,10 +22,18 @@
                     "interactions": ""
                 },
                 {
-                    "name": "MoveMouse",
+                    "name": "MouseMove",
                     "type": "PassThrough",
                     "id": "3c68b871-3fbb-46d1-b21b-2919e305a2cf",
                     "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "MouseClick",
+                    "type": "Button",
+                    "id": "bf4ba8ed-490a-4dd5-8ae1-8362e50ed57a",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -38,7 +46,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardAndMouse",
-                    "action": "MoveMouse",
+                    "action": "MouseMove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -105,6 +113,17 @@
                     "processors": "",
                     "groups": "KeyboardAndMouse",
                     "action": "SkipTurn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2d06844c-74ee-49e7-b05e-3b9f9ed21bed",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardAndMouse",
+                    "action": "MouseClick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

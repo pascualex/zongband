@@ -8,8 +8,8 @@ namespace Zongband.UI
 {
     public class PlayerHighlighter : MonoBehaviour
     {
-        [SerializeField] private GameObject? initialCursorPrefab;
         [SerializeField] private GameManager? gameManager;
+        [SerializeField] private GameObject? initialCursorPrefab;
 
         private GameObject? cursor;
 

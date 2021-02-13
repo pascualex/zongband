@@ -9,10 +9,10 @@ namespace Zongband.UI
 {
     public class TileHighlighter : MonoBehaviour
     {
-        public Tile mouseTile = Tile.MinusOne;
+        public Tile MouseTile { private get; set; } = Tile.MinusOne;
 
-        [SerializeField] private GameObject? initialCursorPrefab;
         [SerializeField] private GameManager? gameManager;
+        [SerializeField] private GameObject? initialCursorPrefab;
         private GameObject? cursor;
 
         private void Awake()
@@ -43,9 +43,9 @@ namespace Zongband.UI
             var highlight = false;
 
             var lastPlayer = gameManager.LastPlayer;
-            if (lastPlayer != null && board.IsTileAvailable(lastPlayer, mouseTile, false))
+            if (lastPlayer != null && board.IsTileAvailable(lastPlayer, MouseTile, false))
             {
-                var position = mouseTile.ToWorld(board.Scale, board.transform.position);
+                var position = MouseTile.ToWorld(board.Scale, board.transform.position);
                 cursor.transform.position = position;
                 highlight = true;
             }

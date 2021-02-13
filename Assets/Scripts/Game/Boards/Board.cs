@@ -15,8 +15,8 @@ namespace Zongband.Game.Boards
         public Size Size { get; private set; } = Size.Zero;
         public float Scale { get; private set; } = 1.0f;
 
-        private readonly EntityLayer agentLayer = new EntityLayer();
-        private readonly EntityLayer entityLayer = new EntityLayer();
+        private readonly EntityLayer<Agent> agentLayer = new EntityLayer<Agent>();
+        private readonly EntityLayer<Entity> entityLayer = new EntityLayer<Entity>();
         private readonly TerrainLayer terrainLayer = new TerrainLayer();
 
         private void Awake()
@@ -37,7 +37,7 @@ namespace Zongband.Game.Boards
         {
             if (!IsTileAvailable(entity, at, false)) throw new NotEmptyTileException(at);
 
-            if (entity is Agent) agentLayer.Add(entity, at);
+            if (entity is Agent agent) agentLayer.Add(agent, at);
             else entityLayer.Add(entity, at);
         }
 
@@ -47,13 +47,13 @@ namespace Zongband.Game.Boards
 
             if (!IsTileAvailable(entity, to, false)) throw new NotEmptyTileException(to);
 
-            if (entity is Agent) agentLayer.Move(entity, to);
+            if (entity is Agent agent) agentLayer.Move(agent, to);
             else entityLayer.Move(entity, to);
         }
 
         public void Remove(Entity entity)
         {
-            if (entity is Agent) agentLayer.Remove(entity);
+            if (entity is Agent agent) agentLayer.Remove(agent);
             else entityLayer.Remove(entity);
         }
 
@@ -78,8 +78,15 @@ namespace Zongband.Game.Boards
             }
         }
 
+        public Agent? GetAgent(Tile at)
+        {
+            if (!Size.Contains(at)) return null;
+            return agentLayer.Get(at);
+        }
+
         public bool IsTileEmpty(Tile tile)
         {
+            if (!Size.Contains(tile)) return false;
             if (!agentLayer.IsTileEmpty(tile)) return false;
             if (!entityLayer.IsTileEmpty(tile)) return false;
             return true;

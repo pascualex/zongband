@@ -16,5 +16,5 @@ MonoBehaviour:
     type: 3}
   turnCooldown: 100
   turnPriority: 1
-  maxHealth: 100
+  maxHealth: 150
   isGhost: 0
