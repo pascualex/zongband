@@ -5,17 +5,17 @@ using UnityEngine.Tilemaps;
 
 namespace Zongband.Game.Boards
 {
-    public class Tile
+    public class Terrain
     {
         public bool BlocksGround { get; private set; } = false;
         public bool BlocksAir { get; private set; } = false;
         public TileBase? TileBase { get; private set; }
 
-        public void ApplySO(TileSO tileSO)
+        public void ApplySO(TerrainSO terrainSO)
         {
-            BlocksGround = tileSO.blocksGround;
-            BlocksAir = tileSO.blocksGround;
-            TileBase = tileSO.tileBase;
+            BlocksGround = terrainSO.blocksGround;
+            BlocksAir = terrainSO.blocksGround;
+            TileBase = terrainSO.tileBase;
         }
     }
 }

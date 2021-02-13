@@ -588,8 +588,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardSO: {fileID: 11400000, guid: ec1ac837efd28224c961953169d49385, type: 2}
-  floorTileSO: {fileID: 11400000, guid: c01a94980ed34a940989672df4bbe34d, type: 2}
-  wallTileSO: {fileID: 11400000, guid: d4733fce90b3e6042b7b3784043abe54, type: 2}
+  floorTerrainSO: {fileID: 11400000, guid: c01a94980ed34a940989672df4bbe34d, type: 2}
+  wallTerrainSO: {fileID: 11400000, guid: d4733fce90b3e6042b7b3784043abe54, type: 2}
   playerAgentSO: {fileID: 11400000, guid: 18653da16b77c5447ba598004bf5f7b4, type: 2}
   fastAgentSO: {fileID: 11400000, guid: 9ed1371c0fcf228409094b6d03a6473e, type: 2}
   normalAgentSO: {fileID: 11400000, guid: 8eda823a2b4c4b1448897a7ec2aea3d9, type: 2}
@@ -690,7 +690,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50c81ec255d1c064c854d2e0126eada7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boardPosition: {x: -1, y: -1}
   initialCursorPrefab: {fileID: 0}
   gameManager: {fileID: 0}
 --- !u!4 &1668387687

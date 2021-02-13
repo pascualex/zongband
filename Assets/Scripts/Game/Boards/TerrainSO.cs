@@ -5,8 +5,8 @@ using UnityEngine.Tilemaps;
 
 namespace Zongband.Game.Boards
 {
-    [CreateAssetMenu(fileName = "Tile", menuName = "ScriptableObjects/Tile")]
-    public class TileSO : ScriptableObject
+    [CreateAssetMenu(fileName = "Terrain", menuName = "ScriptableObjects/Terrain")]
+    public class TerrainSO : ScriptableObject
     {
         public bool blocksGround = false;
         public bool blocksAir = false;

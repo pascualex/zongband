@@ -58,15 +58,15 @@ namespace Zongband.Game.Boards
             else entityLayer.Remove(entity);
         }
 
-        public void ModifyTerrain(Location at, TileSO tile)
+        public void ModifyTerrain(Location at, TerrainSO terrainSO)
         {
-            if (!IsLocationAvailable(tile, at)) throw new NotEmptyTileException(at);
+            if (!IsLocationAvailable(terrainSO, at)) throw new NotEmptyTileException(at);
 
-            terrainLayer.Modify(at, tile);
-            terrainTilemap?.SetTile(at.ToVector3Int(), tile.tileBase);
+            terrainLayer.Modify(at, terrainSO);
+            terrainTilemap?.SetTile(at.ToVector3Int(), terrainSO.tileBase);
         }
 
-        public void ModifyBoxTerrain(Location from, Location to, TileSO tile)
+        public void ModifyBoxTerrain(Location from, Location to, TerrainSO terrainSO)
         {
             var lower = new Location(Mathf.Min(from.x, to.x), Mathf.Min(from.y, to.y));
             var higher = new Location(Mathf.Max(from.x, to.x), Mathf.Max(from.y, to.y));
@@ -74,7 +74,7 @@ namespace Zongband.Game.Boards
             {
                 for (var j = lower.x; j <= higher.x; j++)
                 {
-                    ModifyTerrain(new Location(j, i), tile);
+                    ModifyTerrain(new Location(j, i), terrainSO);
                 }
             }
         }
@@ -102,12 +102,12 @@ namespace Zongband.Game.Boards
             return true;
         }
 
-        public bool IsLocationAvailable(TileSO tile, Location location)
+        public bool IsLocationAvailable(TerrainSO terrainSO, Location location)
         {
             if (!Size.Contains(location)) return false;
             /* Add here special interactions in the future */
-            if (tile.blocksGround && !agentLayer.IsLocationEmpty(location)) return false;
-            if (tile.blocksGround && !entityLayer.IsLocationEmpty(location)) return false;
+            if (terrainSO.blocksGround && !agentLayer.IsLocationEmpty(location)) return false;
+            if (terrainSO.blocksGround && !entityLayer.IsLocationEmpty(location)) return false;
             return true;
         }
     }

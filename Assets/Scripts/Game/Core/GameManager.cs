@@ -15,8 +15,8 @@ namespace Zongband.Game.Core
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private BoardSO? boardSO;
-        [SerializeField] private TileSO? floorTileSO;
-        [SerializeField] private TileSO? wallTileSO;
+        [SerializeField] private TerrainSO? floorTerrainSO;
+        [SerializeField] private TerrainSO? wallTerrainSO;
         [SerializeField] private AgentSO? playerAgentSO;
         [SerializeField] private AgentSO? fastAgentSO;
         [SerializeField] private AgentSO? normalAgentSO;
@@ -35,8 +35,8 @@ namespace Zongband.Game.Core
         public void SetupExample()
         {
             if (boardSO == null) return;
-            if (floorTileSO == null) return;
-            if (wallTileSO == null) return;
+            if (floorTerrainSO == null) return;
+            if (wallTerrainSO == null) return;
             if (playerAgentSO == null) return;
             if (fastAgentSO == null) return;
             if (normalAgentSO == null) return;
@@ -70,11 +70,11 @@ namespace Zongband.Game.Core
             var downRight = new Location(board.Size.x - 1, 0);
             var downLeft = Location.Zero;
             var upLeft = new Location(0, board.Size.y - 1);
-            board.ModifyBoxTerrain(downLeft, upRight, floorTileSO);
-            board.ModifyBoxTerrain(upLeft, upRight + new Location(0, -1), wallTileSO);
-            board.ModifyBoxTerrain(upRight, downRight + new Location(-1, 0), wallTileSO);
-            board.ModifyBoxTerrain(downRight, downLeft + new Location(0, 1), wallTileSO);
-            board.ModifyBoxTerrain(downLeft, upLeft + new Location(1, 0), wallTileSO);
+            board.ModifyBoxTerrain(downLeft, upRight, floorTerrainSO);
+            board.ModifyBoxTerrain(upLeft, upRight + new Location(0, -1), wallTerrainSO);
+            board.ModifyBoxTerrain(upRight, downRight + new Location(-1, 0), wallTerrainSO);
+            board.ModifyBoxTerrain(downRight, downLeft + new Location(0, 1), wallTerrainSO);
+            board.ModifyBoxTerrain(downLeft, upLeft + new Location(1, 0), wallTerrainSO);
         }
 
         public void GameLoop()

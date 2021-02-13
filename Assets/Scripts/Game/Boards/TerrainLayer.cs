@@ -9,35 +9,35 @@ namespace Zongband.Game.Boards
 {
     public class TerrainLayer : Layer
     {
-        private Tile[][] tiles = new Tile[0][];
+        private Terrain[][] terrains = new Terrain[0][];
 
         public override void ChangeSize(Size size)
         {
             base.ChangeSize(size);
 
-            tiles = new Tile[Size.y][];
+            terrains = new Terrain[Size.y][];
             for (var i = 0; i < Size.y; i++)
             {
-                tiles[i] = new Tile[Size.x];
+                terrains[i] = new Terrain[Size.x];
                 for (var j = 0; j < Size.x; j++)
                 {
-                    tiles[i][j] = new Tile();
+                    terrains[i][j] = new Terrain();
                 }
             }
         }
 
-        public void Modify(Location at, TileSO tileSO)
+        public void Modify(Location at, TerrainSO terrainSO)
         {
             if (!Size.Contains(at)) throw new ArgumentOutOfRangeException();
 
-            tiles[at.y][at.x].ApplySO(tileSO);
+            terrains[at.y][at.x].ApplySO(terrainSO);
         }
 
-        public Tile GetTile(Location at)
+        public Terrain GetTile(Location at)
         {
             if (!Size.Contains(at)) throw new ArgumentOutOfRangeException();
 
-            return tiles[at.y][at.x];
+            return terrains[at.y][at.x];
         }
     }
 }
