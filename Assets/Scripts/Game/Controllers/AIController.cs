@@ -12,10 +12,32 @@ namespace Zongband.Game.Controllers
     {
         public override Action? ProduceAction(Agent agent, Action.Context context)
         {
+            var action = AttackAdjacent(agent, context);
+            if (action != null) return action;
             return ProduceRandomMovement(agent, context);
         }
 
-        private Action? ProduceRandomMovement(Agent agent, Action.Context context)
+        private Action? AttackAdjacent(Agent agent, Action.Context context)
+        {
+            var directions = Tile.RandomizedDirections();
+            Agent? selectedTarget = null;
+            foreach (var direction in directions)
+            {
+                var target = context.board.GetAgent(agent, direction);
+                if (target != null && target.isPlayer != agent.isPlayer)
+                {
+                    selectedTarget = target;
+                    break;
+                }
+            }
+
+            if (selectedTarget == null) return null;
+
+            // TODO: change damage calculation
+            return new AttackAction(selectedTarget, 10);
+        }
+
+        private Action ProduceRandomMovement(Agent agent, Action.Context context)
         {
             var directions = Tile.RandomizedDirections();
             var selectedDirection = Tile.Zero;

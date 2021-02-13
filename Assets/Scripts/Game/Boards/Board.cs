@@ -78,6 +78,11 @@ namespace Zongband.Game.Boards
             }
         }
 
+        public Agent? GetAgent(Entity entity, Tile delta)
+        {
+            return agentLayer.Get(entity.tile + delta);
+        }
+
         public Agent? GetAgent(Tile at)
         {
             if (!Size.Contains(at)) return null;
