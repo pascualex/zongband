@@ -2,6 +2,9 @@
 
 using UnityEngine;
 
+using Zongband.Game.Turns;
+using Zongband.Game.Boards;
+
 namespace Zongband.Game.Actions
 {
     public abstract class Action
@@ -29,6 +32,18 @@ namespace Zongband.Game.Actions
         protected virtual bool ProcessUpdate()
         {
             return true;
+        }
+
+        public class Context
+        {
+            public readonly TurnManager turnManager;
+            public readonly Board board;
+
+            public Context(TurnManager turnManager, Board board)
+            {
+                this.turnManager = turnManager;
+                this.board = board;
+            }
         }
     }
 }

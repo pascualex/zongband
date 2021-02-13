@@ -48,20 +48,21 @@ namespace Zongband.Game.Core
             if (turnManager == null) return;
             if (board == null) return;
 
+            var context = new Action.Context(turnManager, board);
+
             var newAction = new ParallelAction();
 
             var playerAction = new SequentialAction();
-            // TODO: fix verbose
-            var spawnPlayerAction = new SpawnAction(playerAgentSO, board, turnManager, new Tile(3, 3), true);
+            var spawnPlayerAction = new SpawnAction(playerAgentSO, new Tile(3, 3), context, true);
             playerAction.Add(spawnPlayerAction);
             playerAction.Add(new MakePlayerAction(spawnPlayerAction));
             newAction.Add(playerAction);
 
-            newAction.Add(new SpawnAction(fastAgentSO, board, turnManager, new Tile(3, 5)));
-            newAction.Add(new SpawnAction(normalAgentSO, board, turnManager, new Tile(4, 5)));
-            newAction.Add(new SpawnAction(normalAgentSO, board, turnManager, new Tile(5, 5)));
-            newAction.Add(new SpawnAction(slowAgentSO, board, turnManager, new Tile(6, 3)));
-            newAction.Add(new SpawnAction(boxEntitySO, board, turnManager, new Tile(3, 7)));
+            newAction.Add(new SpawnAction(fastAgentSO, new Tile(3, 5), context));
+            newAction.Add(new SpawnAction(normalAgentSO, new Tile(4, 5), context));
+            newAction.Add(new SpawnAction(normalAgentSO, new Tile(5, 5), context));
+            newAction.Add(new SpawnAction(slowAgentSO, new Tile(6, 3), context));
+            newAction.Add(new SpawnAction(boxEntitySO, new Tile(3, 7), context));
 
             currentAction = newAction;
 
@@ -90,6 +91,8 @@ namespace Zongband.Game.Core
             if (turnManager == null) return new NullAction();
             if (board == null) return new NullAction();
 
+            var context = new Action.Context(turnManager, board);
+
             var turnAction = new ParallelAction();
             var processedAgents = new HashSet<Agent>();
             Agent? agent;
@@ -99,9 +102,9 @@ namespace Zongband.Game.Core
                 if (agent.isPlayer)
                 {
                     LastPlayer = agent;
-                    agentAction = playerController.ProduceAction(agent, board);
+                    agentAction = playerController.ProduceAction(agent, context);
                 }
-                else agentAction = aiController.ProduceAction(agent, board);
+                else agentAction = aiController.ProduceAction(agent, context);
 
                 if (agentAction == null) break;
 

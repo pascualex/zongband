@@ -3,7 +3,6 @@
 using UnityEngine;
 
 using Zongband.Game.Actions;
-using Zongband.Game.Boards;
 using Zongband.Game.Entities;
 using Zongband.Utils;
 
@@ -11,18 +10,18 @@ namespace Zongband.Game.Controllers
 {
     public class AIController : Controller
     {
-        public override Action? ProduceAction(Agent agent, Board board)
+        public override Action? ProduceAction(Agent agent, Action.Context context)
         {
-            return ProduceRandomMovement(agent, board);
+            return ProduceRandomMovement(agent, context);
         }
 
-        private Action? ProduceRandomMovement(Agent agent, Board board)
+        private Action? ProduceRandomMovement(Agent agent, Action.Context context)
         {
             var directions = Tile.RandomizedDirections();
             var selectedDirection = Tile.Zero;
             foreach (var direction in directions)
             {
-                if (board.IsTileAvailable(agent, direction, true))
+                if (context.board.IsTileAvailable(agent, direction, true))
                 {
                     selectedDirection = direction;
                     break;
@@ -31,7 +30,7 @@ namespace Zongband.Game.Controllers
 
             if (selectedDirection == Tile.Zero) return new NullAction();
 
-            return new MovementAction(agent, board, selectedDirection, true);
+            return new MovementAction(agent, selectedDirection, true, context);
         }
     }
 }

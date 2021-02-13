@@ -14,19 +14,17 @@ namespace Zongband.Game.Actions
         public Entity? Entity { get; private set; }
 
         private readonly EntitySO entitySO;
-        private readonly Board board;
-        private readonly TurnManager turnManager;
         private readonly Tile tile;
+        private readonly Context context;
         private readonly bool priority;
 
-        public SpawnAction(EntitySO entitySO, Board board, TurnManager turnManager, Tile tile)
-        : this(entitySO, board, turnManager, tile, false) { }
+        public SpawnAction(EntitySO entitySO, Tile tile, Context context)
+        : this(entitySO, tile, context, false) { }
 
-        public SpawnAction(EntitySO entitySO, Board board, TurnManager turnManager, Tile tile, bool priority)
+        public SpawnAction(EntitySO entitySO, Tile tile, Context context, bool priority)
         {
             this.entitySO = entitySO;
-            this.board = board;
-            this.turnManager = turnManager;
+            this.context = context;
             this.tile = tile;
             this.priority = priority;
         }
@@ -53,8 +51,7 @@ namespace Zongband.Game.Actions
         {
             var gameObject = new GameObject();
             gameObject.AddComponent<Entity>();
-            // TODO: Change to turn manager?
-            gameObject.transform.SetParent(board.transform);
+            gameObject.transform.SetParent(context.board.transform);
 
             var entity = gameObject.GetComponent<Entity>();
 
@@ -68,8 +65,7 @@ namespace Zongband.Game.Actions
             var gameObject = new GameObject();
             gameObject.AddComponent<Entity>();
             gameObject.AddComponent<Agent>();
-            // TODO: Change to turn manager?
-            gameObject.transform.SetParent(board.transform);
+            gameObject.transform.SetParent(context.turnManager.transform);
             
             var agent = gameObject.GetComponent<Agent>();
 
@@ -80,14 +76,14 @@ namespace Zongband.Game.Actions
 
         private bool AddToBoard(Entity entity)
         {
-            if (!board.IsTileAvailable(entity, tile, false)) return false;
-            board.Add(entity, tile);
+            if (!context.board.IsTileAvailable(entity, tile, false)) return false;
+            context.board.Add(entity, tile);
             return true;
         }
 
         private void AddToTurnManager(Agent agent)
         {
-            turnManager.Add(agent, priority);
+            context.turnManager.Add(agent, priority);
         }
 
         private void MoveToSpawnInWorld(Entity entity)
@@ -98,10 +94,10 @@ namespace Zongband.Game.Actions
         private Vector3 GetSpawnPosition(Entity entity)
         {
             var tile = entity.tile;
-            var scale = board.Scale;
+            var scale = context.board.Scale;
 
             var relativePosition = new Vector3(tile.x + 0.5f, 0, tile.y + 0.5f) * scale;
-            var absolutePosition = board.transform.position + relativePosition;
+            var absolutePosition = context.board.transform.position + relativePosition;
 
             return absolutePosition;
         }

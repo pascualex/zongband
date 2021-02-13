@@ -14,20 +14,20 @@ namespace Zongband.Game.Actions
         private const float animationVariableSpeed = 15.0f;
 
         private readonly Entity entity;
-        private readonly Board board;
         private readonly Tile tile;
         private readonly bool relative;
+        private readonly Context context;
         private readonly bool instant;
 
-        public MovementAction(Entity entity, Board board, Tile tile, bool relative)
-        : this(entity, board, tile, relative, false) { }
+        public MovementAction(Entity entity, Tile tile, bool relative, Context context)
+        : this(entity, tile, relative, context, false) { }
 
-        public MovementAction(Entity entity, Board board, Tile tile, bool relative, bool instant)
+        public MovementAction(Entity entity, Tile tile, bool relative, Context context, bool instant)
         {
             this.entity = entity;
-            this.board = board;
             this.tile = tile;
             this.relative = relative;
+            this.context = context;
             this.instant = instant;
         }
 
@@ -51,8 +51,8 @@ namespace Zongband.Game.Actions
 
         public bool MoveInBoard()
         {
-            if (!board.IsTileAvailable(entity, tile, relative)) return false;
-            board.Move(entity, tile, relative);
+            if (!context.board.IsTileAvailable(entity, tile, relative)) return false;
+            context.board.Move(entity, tile, relative);
             return true;
         }
 
@@ -77,10 +77,10 @@ namespace Zongband.Game.Actions
         private Vector3 GetTargetPosition()
         {
             var tile = entity.tile;
-            var scale = board.Scale;
+            var scale = context.board.Scale;
 
             var relativePosition = new Vector3(tile.x + 0.5f, 0, tile.y + 0.5f) * scale;
-            var absolutePosition = board.transform.position + relativePosition;
+            var absolutePosition = context.board.transform.position + relativePosition;
 
             return absolutePosition;
         }
