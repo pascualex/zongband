@@ -3,36 +3,34 @@
 using UnityEngine;
 
 using Zongband.Game.Core;
-using Zongband.Utils;
 
 namespace Zongband.UI
 {
-    public class TileHighlighter : MonoBehaviour
+    public class PlayerHighlighter : MonoBehaviour
     {
-        public Tile mouseTile = Tile.MinusOne;
-
         [SerializeField] private GameObject? initialCursorPrefab;
         [SerializeField] private GameManager? gameManager;
+
         private GameObject? cursor;
 
-        private void Awake()
+        public void Awake()
         {
             if (initialCursorPrefab != null) ChangeCursor(initialCursorPrefab);
         }
 
         public void Refresh()
         {
-            HighlightTile();
+            HighlightPlayer();
         }
 
         public void ChangeCursor(GameObject cursorPrefab)
         {
             if (cursor != null) Destroy(cursor);
             cursor = Instantiate(cursorPrefab, transform);
-            cursor.SetActive(false);
+            cursor.gameObject.SetActive(false);
         }
 
-        private void HighlightTile()
+        private void HighlightPlayer()
         {
             if (gameManager == null) return;
             if (cursor == null) return;
@@ -43,14 +41,16 @@ namespace Zongband.UI
             var highlight = false;
 
             var lastPlayer = gameManager.LastPlayer;
-            if (lastPlayer != null && board.IsTileAvailable(lastPlayer, mouseTile, false))
+            // TODO: check if dead
+            if (lastPlayer != null && lastPlayer.isPlayer)
             {
-                var position = mouseTile.ToWorld(board.Scale, board.transform.position);
-                cursor.transform.position = position;
+                cursor.transform.parent = lastPlayer.transform;
+                cursor.transform.localPosition = Vector3.zero;
                 highlight = true;
             }
 
-            cursor.SetActive(highlight);
+            if (!highlight) cursor.transform.parent = transform;
+            cursor.gameObject.SetActive(highlight);
         }
     }
 }

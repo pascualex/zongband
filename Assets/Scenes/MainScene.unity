@@ -690,8 +690,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50c81ec255d1c064c854d2e0126eada7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialCursorPrefab: {fileID: 0}
-  gameManager: {fileID: 0}
+  initialCursorPrefab: {fileID: 5770532021267404179, guid: b613f723b0e3be740bfa35e9837e4ac9,
+    type: 3}
+  gameManager: {fileID: 1379493068}
 --- !u!4 &1668387687
 Transform:
   m_ObjectHideFlags: 0
@@ -822,6 +823,52 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!1 &1694573083
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1694573084}
+  - component: {fileID: 1694573085}
+  m_Layer: 0
+  m_Name: PlayerHighlighter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1694573084
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1694573083}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1733355589}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1694573085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1694573083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07b9ebd95a26c2f4f81dc81f0f42c65a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialCursorPrefab: {fileID: 5770532021267404179, guid: 641216743f14e374e8ca9529a9f06749,
+    type: 3}
+  gameManager: {fileID: 1379493068}
 --- !u!1 &1733355588
 GameObject:
   m_ObjectHideFlags: 0
@@ -851,6 +898,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1668387687}
+  - {fileID: 1694573084}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -868,6 +916,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 1687258584}
   tileHighlighter: {fileID: 1668387686}
+  playerHighlighter: {fileID: 1694573085}
 --- !u!1 &1929379172
 GameObject:
   m_ObjectHideFlags: 0

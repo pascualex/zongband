@@ -28,6 +28,11 @@ namespace Zongband.Utils
             return new Vector3Int(x, y, 0);
         }
 
+        public Vector3 ToWorld(float scale, Vector3 origin)
+        {
+            return origin + (new Vector3(x + 0.5f, 0, y + 0.5f) * scale);
+        }
+
         public override bool Equals(object o)
         {
             if (o is Tile tile)

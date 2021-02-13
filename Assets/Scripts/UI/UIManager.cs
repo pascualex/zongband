@@ -10,10 +10,12 @@ namespace Zongband.UI
     {
         [SerializeField] private Camera? mainCamera;
         [SerializeField] private TileHighlighter? tileHighlighter;
+        [SerializeField] private PlayerHighlighter? playerHighlighter;
 
         public void Refresh()
         {
             tileHighlighter?.Refresh();
+            playerHighlighter?.Refresh();
         }
 
         public void SetMousePosition(Vector2 mousePosition)
@@ -23,14 +25,14 @@ namespace Zongband.UI
             var ray = mainCamera.ScreenPointToRay(mousePosition);
             var plane = new Plane(Vector3.up, Vector3.zero);
             
-            var boardTile = Tile.MinusOne;
+            var mouseTile = Tile.MinusOne;
             if (plane.Raycast(ray, out var distance))
             {
                 var position = ray.GetPoint(distance);
-                boardTile = new Tile((int)position.x, (int)position.z);
+                mouseTile = new Tile((int)position.x, (int)position.z);
             }
 
-            if (tileHighlighter != null) tileHighlighter.boardTile = boardTile;
+            if (tileHighlighter != null) tileHighlighter.mouseTile = mouseTile;
         }
     }
 }

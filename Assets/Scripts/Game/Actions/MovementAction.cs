@@ -58,12 +58,15 @@ namespace Zongband.Game.Actions
 
         private void MoveToTargetInWorld()
         {
-            entity.transform.position = GetTargetPosition();
+            var board = context.board;
+            var targetPosition = entity.tile.ToWorld(board.Scale, board.transform.position);
+            entity.transform.position = targetPosition;
         }
 
         private bool MoveTowardsTarget()
         {
-            var targetPosition = GetTargetPosition();
+            var board = context.board;
+            var targetPosition = entity.tile.ToWorld(board.Scale, board.transform.position);
 
             var transform = entity.transform;
             var remainingDistance = Vector3.Distance(transform.position, targetPosition);
@@ -72,17 +75,6 @@ namespace Zongband.Game.Actions
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, distance);
 
             return transform.position == targetPosition;
-        }
-
-        private Vector3 GetTargetPosition()
-        {
-            var tile = entity.tile;
-            var scale = context.board.Scale;
-
-            var relativePosition = new Vector3(tile.x + 0.5f, 0, tile.y + 0.5f) * scale;
-            var absolutePosition = context.board.transform.position + relativePosition;
-
-            return absolutePosition;
         }
     }
 }

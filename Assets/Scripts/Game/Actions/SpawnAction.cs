@@ -88,18 +88,9 @@ namespace Zongband.Game.Actions
 
         private void MoveToSpawnInWorld(Entity entity)
         {
-            entity.transform.position = GetSpawnPosition(entity);
-        }
-
-        private Vector3 GetSpawnPosition(Entity entity)
-        {
-            var tile = entity.tile;
-            var scale = context.board.Scale;
-
-            var relativePosition = new Vector3(tile.x + 0.5f, 0, tile.y + 0.5f) * scale;
-            var absolutePosition = context.board.transform.position + relativePosition;
-
-            return absolutePosition;
+            var board = context.board;
+            var spawnPosition = entity.tile.ToWorld(board.Scale, board.transform.position);
+            entity.transform.position = spawnPosition;
         }
     }
 }

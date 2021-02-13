@@ -15,11 +15,10 @@ namespace Zongband.Game.Controllers
         public override Action? ProduceAction(Agent agent, Action.Context context)
         {
             var agentAction = ProduceMovement(agent, context);
-            if (agentAction != null) return agentAction;
+            if (agentAction == null && SkipTurn) return new NullAction();
 
-            if (SkipTurn) return new NullAction();
-
-            return null;
+            Clear();
+            return agentAction;
         }
 
         public void Clear()
