@@ -27,6 +27,8 @@ namespace Zongband.Game.Core
         public AIController? aiController;
         public TurnManager? turnManager;
         public Board? board;
+        public Agent? agentPrefab;
+        public Entity? entityPrefab;
 
         public Agent? LastPlayer { get; private set; }
 
@@ -47,8 +49,10 @@ namespace Zongband.Game.Core
             if (aiController == null) return;
             if (turnManager == null) return;
             if (board == null) return;
+            if (agentPrefab == null) return;
+            if (entityPrefab == null) return;
 
-            var context = new Action.Context(turnManager, board);
+            var context = new Action.Context(turnManager, board, agentPrefab, entityPrefab);
 
             var newAction = new ParallelAction();
 
@@ -90,8 +94,10 @@ namespace Zongband.Game.Core
             if (aiController == null) return new NullAction();
             if (turnManager == null) return new NullAction();
             if (board == null) return new NullAction();
+            if (agentPrefab == null) return new NullAction();
+            if (entityPrefab == null) return new NullAction();
 
-            var context = new Action.Context(turnManager, board);
+            var context = new Action.Context(turnManager, board, agentPrefab, entityPrefab);
 
             var turnAction = new ParallelAction();
             var processedAgents = new HashSet<Agent>();

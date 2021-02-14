@@ -1459,6 +1459,10 @@ MonoBehaviour:
   aiController: {fileID: 470883251}
   turnManager: {fileID: 848178843}
   board: {fileID: 1211860784}
+  agentPrefab: {fileID: 8907060410573984850, guid: 5fac1060013cf604aa3f4f970a126d39,
+    type: 3}
+  entityPrefab: {fileID: 429636144554296982, guid: 2e3316ef898defd4fa0138eb9bc05222,
+    type: 3}
 --- !u!4 &1379493069
 Transform:
   m_ObjectHideFlags: 0

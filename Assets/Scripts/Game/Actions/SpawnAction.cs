@@ -47,31 +47,18 @@ namespace Zongband.Game.Actions
             return true;
         }
 
-        private Entity Spawn(EntitySO entitySO)
-        {
-            var gameObject = new GameObject();
-            gameObject.AddComponent<Entity>();
-            gameObject.transform.SetParent(context.board.transform);
-
-            var entity = gameObject.GetComponent<Entity>();
-
-            entity.ApplySO(entitySO);
-
-            return entity;
-        }
-
         private Agent Spawn(AgentSO agentSO)
         {
-            var gameObject = new GameObject();
-            gameObject.AddComponent<Entity>();
-            gameObject.AddComponent<Agent>();
-            gameObject.transform.SetParent(context.turnManager.transform);
-            
-            var agent = gameObject.GetComponent<Agent>();
-
+            var agent = GameObject.Instantiate(context.agentPrefab, context.board.transform);
             agent.ApplySO(agentSO);
-
             return agent;
+        }
+
+        private Entity Spawn(EntitySO entitySO)
+        {
+            var entity = GameObject.Instantiate(context.entityPrefab, context.board.transform);
+            entity.ApplySO(entitySO);
+            return entity;
         }
 
         private bool AddToBoard(Entity entity)

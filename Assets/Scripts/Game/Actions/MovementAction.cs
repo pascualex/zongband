@@ -33,6 +33,8 @@ namespace Zongband.Game.Actions
 
         protected override bool ProcessStart()
         {
+            var oldTile = entity.tile;
+
             if (!MoveInBoard()) return true;
 
             if (instant)
@@ -40,6 +42,7 @@ namespace Zongband.Game.Actions
                 MoveToTargetInWorld();
                 return true;
             }
+            else FaceTowardsDirection(oldTile);
             
             return false;
         }
@@ -49,7 +52,14 @@ namespace Zongband.Game.Actions
             return MoveTowardsTarget();
         }
 
-        public bool MoveInBoard()
+        private void FaceTowardsDirection(Tile oldTile)
+        {
+            var tileDirection = entity.tile - oldTile;
+            var direction = tileDirection.ToWorldVector3();
+            entity.transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
+        }
+
+        private bool MoveInBoard()
         {
             if (!context.board.IsTileAvailable(entity, tile, relative)) return false;
             context.board.Move(entity, tile, relative);

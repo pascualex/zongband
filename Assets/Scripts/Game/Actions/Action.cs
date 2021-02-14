@@ -4,6 +4,7 @@ using UnityEngine;
 
 using Zongband.Game.Turns;
 using Zongband.Game.Boards;
+using Zongband.Game.Entities;
 
 namespace Zongband.Game.Actions
 {
@@ -38,11 +39,15 @@ namespace Zongband.Game.Actions
         {
             public readonly TurnManager turnManager;
             public readonly Board board;
+            public readonly Agent agentPrefab;
+            public readonly Entity entityPrefab;
 
-            public Context(TurnManager turnManager, Board board)
+            public Context(TurnManager turnManager, Board board, Agent agentPrefab, Entity entityPrefab)
             {
                 this.turnManager = turnManager;
                 this.board = board;
+                this.agentPrefab = agentPrefab;
+                this.entityPrefab = entityPrefab;
             }
         }
     }
