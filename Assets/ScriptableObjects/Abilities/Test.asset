@@ -9,12 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6658499214b3b3b499cf3ee3c315a901, type: 3}
+  m_Script: {fileID: 11500000, guid: 638fc4f5ebd660046ac628899380a233, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
-  ManaCost: 80
+  ManaCost: 10
+  Targets:
+  - Main Caster
+  - Main Target
   Effects:
-  - Type: 4
+  - Type: 2
+    Caster: 1
     Target: 0
     AttackPrms:
       BaseDamage: 0
@@ -25,94 +29,27 @@ MonoBehaviour:
       Duration: 1
       Ease: 0
       Delay: 0
-      ProjectilePrefab: {fileID: 0}
-    Effects:
-    - Type: 2
-      Target: 0
-      AttackPrms:
-        BaseDamage: 0
-        AttackMultiplier: 0
-      HealPrms:
-        BaseHeal: 0
-      ProjectilePrms:
-        Duration: 1
-        Ease: 14
-        Delay: 0
-        ProjectilePrefab: {fileID: 5770532021267404179, guid: 5084656ea045fb54aa613a558b96c708,
-          type: 3}
-      Effects: []
-    - Type: 2
-      Target: 0
-      AttackPrms:
-        BaseDamage: 0
-        AttackMultiplier: 0
-      HealPrms:
-        BaseHeal: 0
-      ProjectilePrms:
-        Duration: 1
-        Ease: 14
-        Delay: 0.3
-        ProjectilePrefab: {fileID: 5770532021267404179, guid: 5084656ea045fb54aa613a558b96c708,
-          type: 3}
-      Effects: []
-    - Type: 2
-      Target: 0
-      AttackPrms:
-        BaseDamage: 0
-        AttackMultiplier: 0
-      HealPrms:
-        BaseHeal: 0
-      ProjectilePrms:
-        Duration: 1
-        Ease: 14
-        Delay: 0.55
-        ProjectilePrefab: {fileID: 5770532021267404179, guid: 5084656ea045fb54aa613a558b96c708,
-          type: 3}
-      Effects: []
-    - Type: 2
-      Target: 0
-      AttackPrms:
-        BaseDamage: 0
-        AttackMultiplier: 0
-      HealPrms:
-        BaseHeal: 0
-      ProjectilePrms:
-        Duration: 1
-        Ease: 14
-        Delay: 0.75
-        ProjectilePrefab: {fileID: 5770532021267404179, guid: 5084656ea045fb54aa613a558b96c708,
-          type: 3}
-      Effects: []
-    - Type: 2
-      Target: 0
-      AttackPrms:
-        BaseDamage: 0
-        AttackMultiplier: 0
-      HealPrms:
-        BaseHeal: 0
-      ProjectilePrms:
-        Duration: 1
-        Ease: 14
-        Delay: 0.9
-        ProjectilePrefab: {fileID: 5770532021267404179, guid: 5084656ea045fb54aa613a558b96c708,
-          type: 3}
-      Effects: []
-    - Type: 2
-      Target: 0
-      AttackPrms:
-        BaseDamage: 0
-        AttackMultiplier: 0
-      HealPrms:
-        BaseHeal: 0
-      ProjectilePrms:
-        Duration: 1
-        Ease: 14
-        Delay: 1
-        ProjectilePrefab: {fileID: 5770532021267404179, guid: 5084656ea045fb54aa613a558b96c708,
-          type: 3}
-      Effects: []
+      ProjectilePrefab: {fileID: 5770532021267404179, guid: 5084656ea045fb54aa613a558b96c708,
+        type: 3}
+    Effects: []
+  - Type: 2
+    Caster: 0
+    Target: 1
+    AttackPrms:
+      BaseDamage: 0
+      AttackMultiplier: 0
+    HealPrms:
+      BaseHeal: 0
+    ProjectilePrms:
+      Duration: 1
+      Ease: 0
+      Delay: 0
+      ProjectilePrefab: {fileID: 5770532021267404179, guid: 5084656ea045fb54aa613a558b96c708,
+        type: 3}
+    Effects: []
   - Type: 0
-    Target: 0
+    Caster: 0
+    Target: 1
     AttackPrms:
       BaseDamage: 50
       AttackMultiplier: 0

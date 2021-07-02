@@ -20,7 +20,7 @@ namespace Zongband.Game.Controllers
 
         private void Awake()
         {
-            if (PlayerAction == null) throw new ArgumentNullException(nameof(PlayerAction));
+            if (AbilitySO == null) throw new ArgumentNullException(nameof(AbilitySO));
         }
 
         public override Action? ProduceAction(Agent agent, Action.Context ctx)
@@ -52,8 +52,8 @@ namespace Zongband.Game.Controllers
             var targetAgent = ctx.Board.GetAgent(agent, tile, relative);
             if (canAttack && targetAgent != agent && targetAgent != null)
             {
-                if (AbilitySO == null) return null;
-                return AbilitySO.CreateAction(agent, targetAgent, ctx);
+                if (AbilitySO is AgentAbilitySO a)
+                    return a.CreateAction(agent, targetAgent, ctx);
             }
 
             return null;
