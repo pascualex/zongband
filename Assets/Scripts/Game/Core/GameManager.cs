@@ -14,6 +14,7 @@ using Zongband.Utils;
 
 using Action = Zongband.Game.Actions.Action;
 using Random = UnityEngine.Random;
+using ANE = System.ArgumentNullException;
 
 namespace Zongband.Game.Core
 {
@@ -38,17 +39,17 @@ namespace Zongband.Game.Core
 
         public void SetupExample1()
         {
-            if (PlayerAgentSO == null) throw new ArgumentNullException(nameof(PlayerAgentSO));
-            if (EnemiesSOs == null) throw new ArgumentNullException(nameof(EnemiesSOs));
-            if (BoxEntitySO == null) throw new ArgumentNullException(nameof(BoxEntitySO));
+            if (PlayerAgentSO == null) throw new ANE(nameof(PlayerAgentSO));
+            if (EnemiesSOs == null) throw new ANE(nameof(EnemiesSOs));
+            if (BoxEntitySO == null) throw new ANE(nameof(BoxEntitySO));
 
-            if (PlayerController == null) throw new ArgumentNullException(nameof(PlayerController));
-            if (DungeonGenerator == null) throw new ArgumentNullException(nameof(DungeonGenerator));
-            if (AIController == null) throw new ArgumentNullException(nameof(AIController));
-            if (TurnManager == null) throw new ArgumentNullException(nameof(TurnManager));
-            if (Board == null) throw new ArgumentNullException(nameof(Board));
-            if (AgentPrefab == null) throw new ArgumentNullException(nameof(AgentPrefab));
-            if (EntityPrefab == null) throw new ArgumentNullException(nameof(EntityPrefab));
+            if (PlayerController == null) throw new ANE(nameof(PlayerController));
+            if (DungeonGenerator == null) throw new ANE(nameof(DungeonGenerator));
+            if (AIController == null) throw new ANE(nameof(AIController));
+            if (TurnManager == null) throw new ANE(nameof(TurnManager));
+            if (Board == null) throw new ANE(nameof(Board));
+            if (AgentPrefab == null) throw new ANE(nameof(AgentPrefab));
+            if (EntityPrefab == null) throw new ANE(nameof(EntityPrefab));
 
             var ctx = new Action.Context(TurnManager, Board, AgentPrefab, EntityPrefab);
             var newAction = new ParallelAction();
@@ -76,15 +77,15 @@ namespace Zongband.Game.Core
 
         public void SetupExample2()
         {
-            if (PlayerAgentSO == null) throw new ArgumentNullException(nameof(PlayerAgentSO));
-            if (EnemiesSOs == null) throw new ArgumentNullException(nameof(EnemiesSOs));
+            if (PlayerAgentSO == null) throw new ANE(nameof(PlayerAgentSO));
+            if (EnemiesSOs == null) throw new ANE(nameof(EnemiesSOs));
 
-            if (DungeonGenerator == null) throw new ArgumentNullException(nameof(DungeonGenerator));
-            if (DungeonVisualizer == null) throw new ArgumentNullException(nameof(DungeonVisualizer));
-            if (TurnManager == null) throw new ArgumentNullException(nameof(TurnManager));
-            if (Board == null) throw new ArgumentNullException(nameof(Board));
-            if (AgentPrefab == null) throw new ArgumentNullException(nameof(AgentPrefab));
-            if (EntityPrefab == null) throw new ArgumentNullException(nameof(EntityPrefab));
+            if (DungeonGenerator == null) throw new ANE(nameof(DungeonGenerator));
+            if (DungeonVisualizer == null) throw new ANE(nameof(DungeonVisualizer));
+            if (TurnManager == null) throw new ANE(nameof(TurnManager));
+            if (Board == null) throw new ANE(nameof(Board));
+            if (AgentPrefab == null) throw new ANE(nameof(AgentPrefab));
+            if (EntityPrefab == null) throw new ANE(nameof(EntityPrefab));
 
             var ctx = new Action.Context(TurnManager, Board, AgentPrefab, EntityPrefab);
             var newAction = new ParallelAction();
@@ -123,12 +124,12 @@ namespace Zongband.Game.Core
 
         private Action ProcessTurns()
         {
-            if (PlayerController == null) throw new ArgumentNullException(nameof(PlayerController));
-            if (AIController == null) throw new ArgumentNullException(nameof(AIController));
-            if (TurnManager == null) throw new ArgumentNullException(nameof(TurnManager));
-            if (Board == null) throw new ArgumentNullException(nameof(Board));
-            if (AgentPrefab == null) throw new ArgumentNullException(nameof(AgentPrefab));
-            if (EntityPrefab == null) throw new ArgumentNullException(nameof(EntityPrefab));
+            if (PlayerController == null) throw new ANE(nameof(PlayerController));
+            if (AIController == null) throw new ANE(nameof(AIController));
+            if (TurnManager == null) throw new ANE(nameof(TurnManager));
+            if (Board == null) throw new ANE(nameof(Board));
+            if (AgentPrefab == null) throw new ANE(nameof(AgentPrefab));
+            if (EntityPrefab == null) throw new ANE(nameof(EntityPrefab));
 
             var ctx = new Action.Context(TurnManager, Board, AgentPrefab, EntityPrefab);
 

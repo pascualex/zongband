@@ -16,11 +16,11 @@ namespace Zongband.Game.Entities
         public int Attack { get; private set; } = 10;
         public bool IsGhost { get; private set; } = false;
         public bool IsRoamer { get; private set; } = true;
-        public int CurrentHealth { get; private set; }
+        public int Health { get; private set; }
 
         public Agent()
         {
-            CurrentHealth = MaxHealth;
+            Health = MaxHealth;
         }
 
         public void ApplySO(AgentSO agentSO)
@@ -35,7 +35,7 @@ namespace Zongband.Game.Entities
             IsGhost = agentSO.IsGhost;
             IsRoamer = agentSO.IsRoamer;
 
-            CurrentHealth = MaxHealth;
+            Health = MaxHealth;
         }
 
         public void Damage(int amount)
@@ -52,7 +52,7 @@ namespace Zongband.Game.Entities
 
         private void ChangeHealth(int amount)
         {
-            CurrentHealth = Mathf.Max(Mathf.Min(CurrentHealth + amount, MaxHealth), 0);
+            Health = Mathf.Max(Mathf.Min(Health + amount, MaxHealth), 0);
         }
     }
 }

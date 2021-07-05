@@ -1,9 +1,10 @@
 ﻿#nullable enable
 
 using UnityEngine;
-using System;
 
 using Zongband.Utils;
+
+using ANE = System.ArgumentNullException;
 
 namespace Zongband.Game.Entities
 {
@@ -20,8 +21,8 @@ namespace Zongband.Game.Entities
 
         private void Awake()
         {
-            if (GameModelContainer == null) throw new ArgumentNullException(nameof(GameModelContainer));
-            if (DefaultGameModel == null) throw new ArgumentNullException(nameof(DefaultGameModel));
+            if (GameModelContainer == null) throw new ANE(nameof(GameModelContainer));
+            if (DefaultGameModel == null) throw new ANE(nameof(DefaultGameModel));
 
             if (GameModel != null) Destroy(GameModel);
 
@@ -41,8 +42,8 @@ namespace Zongband.Game.Entities
 
         public void ApplySO(EntitySO entitySO)
         {
-            if (GameModelContainer == null) throw new ArgumentNullException(nameof(GameModelContainer));
-            if (DefaultGameModel == null) throw new ArgumentNullException(nameof(DefaultGameModel));
+            if (GameModelContainer == null) throw new ANE(nameof(GameModelContainer));
+            if (DefaultGameModel == null) throw new ANE(nameof(DefaultGameModel));
 
             if (GameModel != null) Destroy(GameModel);
 

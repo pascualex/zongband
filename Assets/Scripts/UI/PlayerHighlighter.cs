@@ -1,9 +1,10 @@
 #nullable enable
 
 using UnityEngine;
-using System;
 
 using Zongband.Game.Core;
+
+using ANE = System.ArgumentNullException;
 
 namespace Zongband.UI
 {
@@ -33,15 +34,15 @@ namespace Zongband.UI
 
         private void HighlightPlayer()
         {
-            if (GameManager == null) throw new ArgumentNullException(nameof(GameManager));
-            if (Cursor == null) throw new ArgumentNullException(nameof(Cursor));
+            if (GameManager == null) throw new ANE(nameof(GameManager));
+            if (Cursor == null) throw new ANE(nameof(Cursor));
 
             var highlight = false;
             var lastPlayer = GameManager.LastPlayer;
             if (lastPlayer != null && lastPlayer.IsAlive && lastPlayer.IsPlayer)
             {
                 var gameModelContainer = lastPlayer.GameModelContainer;
-                if (gameModelContainer == null) throw new ArgumentNullException(nameof(gameModelContainer));
+                if (gameModelContainer == null) throw new ANE(nameof(gameModelContainer));
 
                 Cursor.transform.position = gameModelContainer.transform.position;
                 highlight = true;

@@ -1,9 +1,10 @@
 #nullable enable
 
 using UnityEngine;
-using System;
 
 using Zongband.Game.Core;
+
+using ANE = System.ArgumentNullException;
 
 namespace Zongband.UI
 {
@@ -23,9 +24,9 @@ namespace Zongband.UI
 
         public void MoveCamera()
         {
-            if (MainCamera == null) throw new ArgumentNullException(nameof(MainCamera));
-            if (GameManager == null) throw new ArgumentNullException(nameof(GameManager));
-            if (GameManager.Board == null) throw new ArgumentNullException(nameof(GameManager.Board));
+            if (MainCamera == null) throw new ANE(nameof(MainCamera));
+            if (GameManager == null) throw new ANE(nameof(GameManager));
+            if (GameManager.Board == null) throw new ANE(nameof(GameManager.Board));
 
             var lastPlayer = GameManager.LastPlayer;
             if (lastPlayer == null) return;

@@ -1,13 +1,13 @@
 #nullable enable
 
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-using System;
+using UnityEngine.UIElements;
 
 using Zongband.Game.Core;
 using Zongband.Game.Entities;
 using Zongband.Utils;
+
+using ANE = System.ArgumentNullException;
 
 namespace Zongband.UI
 {
@@ -16,18 +16,33 @@ namespace Zongband.UI
         public Tile MouseTile { private get; set; } = Tile.MinusOne;
 
         [SerializeField] private GameManager? GameManager;
-        [SerializeField] private Image? InspectorMenu;
-        [SerializeField] private TextMeshProUGUI? Name;
-        [SerializeField] private Slider? HealthBar;
-        [SerializeField] private TextMeshProUGUI? HealthStat;
-        [SerializeField] private TextMeshProUGUI? TurnCDStat;
-        [SerializeField] private TextMeshProUGUI? HostileTag;
+        [SerializeField] private UIDocument? UIDocument;
 
+        private VisualElement? Menu;
+        private Label? Name;
+        private VisualElement? HealthBar;
+        private Label? Health;
+        private Label? MaxHealth;
+        private Label? TurnCD;
+        private Label? HostileTag;
         private Agent? FixedAgent;
 
         private void Awake()
         {
-            if (InspectorMenu != null) InspectorMenu.gameObject.SetActive(false);
+            if (UIDocument == null) throw new ANE(nameof(UIDocument));
+            var UI = UIDocument.rootVisualElement;
+            if (UI == null) throw new ANE(nameof(UI));
+
+            Menu = UI.Q<VisualElement>("agent-inspector");
+            if (Menu == null) throw new ANE(nameof(Menu));
+            Menu.style.display = DisplayStyle.None;
+
+            Name = Menu.Q<Label>("name");
+            Health = Menu.Q<Label>("health");
+            HealthBar = Menu.Q<VisualElement>("health-bar");
+            MaxHealth = Menu.Q<Label>("max-health");
+            TurnCD = Menu.Q<Label>("turn-cd");
+            HostileTag = Menu.Q<Label>("hostile-tag");
         }
 
         public void Refresh()
@@ -37,22 +52,23 @@ namespace Zongband.UI
 
         public void LockAgent()
         {
-            if (GameManager == null) throw new ArgumentNullException(nameof(GameManager));
-            if (GameManager.Board == null) throw new ArgumentNullException(nameof(GameManager.Board));
+            if (GameManager == null) throw new ANE(nameof(GameManager));
+            if (GameManager.Board == null) throw new ANE(nameof(GameManager.Board));
 
             FixedAgent = GameManager.Board.GetAgent(MouseTile);
         }
 
         private void InspectAgent()
         {
-            if (GameManager == null) throw new ArgumentNullException(nameof(GameManager));
-            if (GameManager.Board == null) throw new ArgumentNullException(nameof(GameManager.Board));
-            if (InspectorMenu == null) throw new ArgumentNullException(nameof(InspectorMenu));
-            if (Name == null) throw new ArgumentNullException(nameof(Name));
-            if (HealthBar == null) throw new ArgumentNullException(nameof(HealthBar));
-            if (HealthStat == null) throw new ArgumentNullException(nameof(HealthStat));
-            if (TurnCDStat == null) throw new ArgumentNullException(nameof(TurnCDStat));
-            if (HostileTag == null) throw new ArgumentNullException(nameof(HostileTag));
+            if (GameManager == null) throw new ANE(nameof(GameManager));
+            if (GameManager.Board == null) throw new ANE(nameof(GameManager.Board));
+            if (Menu == null) throw new ANE(nameof(Menu));
+            if (Name == null) throw new ANE(nameof(Menu));
+            if (HealthBar == null) throw new ANE(nameof(HealthBar));
+            if (Health == null) throw new ANE(nameof(Health));
+            if (MaxHealth == null) throw new ANE(nameof(MaxHealth));
+            if (TurnCD == null) throw new ANE(nameof(TurnCD));
+            if (HostileTag == null) throw new ANE(nameof(HostileTag));
 
             var inspect = false;
             var agent = FixedAgent;
@@ -60,15 +76,17 @@ namespace Zongband.UI
             if (agent != null)
             {
                 Name.text = agent.Name;
-                HealthBar.maxValue = agent.MaxHealth;
-                HealthBar.value = agent.CurrentHealth;
-                HealthStat.text = agent.CurrentHealth + " / " + agent.MaxHealth;
-                TurnCDStat.text = agent.TurnCooldown.ToString();
-                HostileTag.gameObject.SetActive(!agent.IsPlayer);
+                var progress = agent.MaxHealth > 0 ? (float)agent.Health / agent.MaxHealth : 0f;
+                progress *= 100;
+                HealthBar.style.width = new StyleLength(new Length(progress, LengthUnit.Percent));
+                Health.text = agent.Health.ToString();
+                MaxHealth.text = agent.MaxHealth.ToString();
+                TurnCD.text = agent.TurnCooldown.ToString();
+                HostileTag.style.display = agent.IsPlayer ? DisplayStyle.None : DisplayStyle.Flex;
                 inspect = true;
             }
 
-            InspectorMenu.gameObject.SetActive(inspect);
+            Menu.style.display = inspect ? DisplayStyle.Flex : DisplayStyle.None;
         }
     }
 }

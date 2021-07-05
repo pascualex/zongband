@@ -1,9 +1,10 @@
 #nullable enable
 
 using UnityEngine;
-using System;
 
 using Zongband.Utils;
+
+using ANE = System.ArgumentNullException;
 
 namespace Zongband.UI
 {
@@ -21,10 +22,10 @@ namespace Zongband.UI
 
         public void Refresh()
         {
-            if (CameraController == null) throw new ArgumentNullException(nameof(CameraController));
-            if (TileHighlighter == null) throw new ArgumentNullException(nameof(TileHighlighter));
-            if (PlayerHighlighter == null) throw new ArgumentNullException(nameof(PlayerHighlighter));
-            if (AgentInspector == null) throw new ArgumentNullException(nameof(AgentInspector));
+            if (CameraController == null) throw new ANE(nameof(CameraController));
+            if (TileHighlighter == null) throw new ANE(nameof(TileHighlighter));
+            if (PlayerHighlighter == null) throw new ANE(nameof(PlayerHighlighter));
+            if (AgentInspector == null) throw new ANE(nameof(AgentInspector));
 
             TileHighlighter.Refresh();
             PlayerHighlighter.Refresh();
@@ -52,14 +53,14 @@ namespace Zongband.UI
 
         public void HandleCtrlMouseLeftClick()
         {
-            if (AgentInspector == null) throw new ArgumentNullException(nameof(AgentInspector));
+            if (AgentInspector == null) throw new ANE(nameof(AgentInspector));
 
             AgentInspector.LockAgent();
         }
 
         private void UpdateMouseTile()
         {
-            if (MainCamera == null) throw new ArgumentNullException(nameof(MainCamera));
+            if (MainCamera == null) throw new ANE(nameof(MainCamera));
 
             var ray = MainCamera.ScreenPointToRay(MousePosition);
             var plane = new Plane(Vector3.up, Vector3.zero);

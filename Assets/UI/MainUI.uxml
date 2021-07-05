@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="AgentInspector" src="project://database/Assets/UI/AgentInspector.uxml?fileID=9197481963319205126&amp;guid=12ac3b2a9085a1d44bb0112f39a95f03&amp;type=3#AgentInspector" />
+    <Style src="project://database/Assets/UI/MainUI.uss?fileID=7433441132597879392&amp;guid=ff6bbe50226fd76499954dfc41b8774e&amp;type=3#MainUI" />
+    <ui:Instance template="AgentInspector" name="agent-inspector" />
+</ui:UXML>

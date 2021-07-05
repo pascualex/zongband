@@ -1,10 +1,11 @@
 #nullable enable
 
 using UnityEngine;
-using System;
 
 using Zongband.Game.Entities;
 using Zongband.Utils;
+
+using ANE = System.ArgumentNullException;
 
 namespace Zongband.Game.Boards
 {
@@ -60,7 +61,7 @@ namespace Zongband.Game.Boards
 
         public void Modify(Tile at, TerrainSO terrainSO)
         {
-            if (TerrainTilemap == null) throw new ArgumentNullException(nameof(TerrainTilemap));
+            if (TerrainTilemap == null) throw new ANE(nameof(TerrainTilemap));
             if (!IsTileAvailable(terrainSO, at)) throw new NotEmptyTileException(at);
 
             TerrainLayer.Modify(at, terrainSO);

@@ -1,8 +1,9 @@
 ﻿#nullable enable
 
 using UnityEngine;
-using System;
 using System.Collections.Generic;
+
+using ANE = System.ArgumentNullException;
 
 namespace Zongband.Game.Entities
 {
@@ -14,7 +15,7 @@ namespace Zongband.Game.Entities
 
         public AnimationState Attack()
         {
-            if (Animator == null) throw new ArgumentNullException(nameof(Animator));
+            if (Animator == null) throw new ANE(nameof(Animator));
 
             Animator.SetTrigger("Attack");
             var state = new AnimationState();
@@ -24,7 +25,7 @@ namespace Zongband.Game.Entities
 
         public void ReadyAttack()
         {
-            if (Animator == null) throw new ArgumentNullException(nameof(Animator));
+            if (Animator == null) throw new ANE(nameof(Animator));
 
             Animator.ResetTrigger("Attack");
             foreach (var state in AttackStates) state.IsReady = true;

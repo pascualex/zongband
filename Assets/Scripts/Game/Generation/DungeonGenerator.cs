@@ -8,6 +8,7 @@ using Zongband.Game.Boards;
 using Zongband.Utils;
 
 using Random = UnityEngine.Random;
+using ANE = System.ArgumentNullException;
 
 namespace Zongband.Game.Generation
 {
@@ -19,8 +20,8 @@ namespace Zongband.Game.Generation
 
         public DungeonData? GenerateDungeon(Size size, int rooms, int minSide, int maxSide, int padding)
         {
-            if (Floor == null) throw new ArgumentNullException(nameof(Floor));
-            if (Wall == null) throw new ArgumentNullException(nameof(Wall));
+            if (Floor == null) throw new ANE(nameof(Floor));
+            if (Wall == null) throw new ANE(nameof(Wall));
 
             var roomList = GenerateRooms(rooms, size, minSide, maxSide);
             var iterations = 0;
@@ -49,8 +50,8 @@ namespace Zongband.Game.Generation
 
         public DungeonData GenerateTestDungeon(Size size, int wallWidth)
         {
-            if (Floor == null) throw new ArgumentNullException(nameof(Floor));
-            if (Wall == null) throw new ArgumentNullException(nameof(Wall));
+            if (Floor == null) throw new ANE(nameof(Floor));
+            if (Wall == null) throw new ANE(nameof(Wall));
 
             var dungeonData = new DungeonData(size, Floor, Wall);
 

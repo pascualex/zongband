@@ -1,12 +1,13 @@
 ﻿#nullable enable
 
 using UnityEngine;
-using System;
 using DG.Tweening;
 
 using Zongband.Input;
 using Zongband.UI;
 using Zongband.Game.Core;
+
+using ANE = System.ArgumentNullException;
 
 namespace Zongband.Core
 {
@@ -18,7 +19,7 @@ namespace Zongband.Core
 
         private void Start()
         {
-            if (GameManager == null) throw new ArgumentNullException(nameof(GameManager));
+            if (GameManager == null) throw new ANE(nameof(GameManager));
 
             DOTween.Init(false, true, LogBehaviour.ErrorsOnly);
             DOTween.defaultUpdateType = UpdateType.Manual;
@@ -28,9 +29,9 @@ namespace Zongband.Core
 
         private void Update()
         {
-            if (InputManager == null) throw new ArgumentNullException(nameof(InputManager));
-            if (GameManager == null) throw new ArgumentNullException(nameof(GameManager));
-            if (UIManager == null) throw new ArgumentNullException(nameof(UIManager));
+            if (InputManager == null) throw new ANE(nameof(InputManager));
+            if (GameManager == null) throw new ANE(nameof(GameManager));
+            if (UIManager == null) throw new ANE(nameof(UIManager));
 
             InputManager.ProcessInput();
             DOTween.ManualUpdate(Time.deltaTime, Time.unscaledDeltaTime);

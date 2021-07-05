@@ -40,7 +40,7 @@ namespace Zongband.Game.Actions
 
         private void CheckTargetDeath()
         {
-            if (Target.CurrentHealth == 0)
+            if (Target.Health == 0)
             {
                 Ctx.Board.Remove(Target);
                 Ctx.TurnManager.Remove(Target);

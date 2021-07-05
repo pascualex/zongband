@@ -1,10 +1,11 @@
 #nullable enable
 
 using UnityEngine;
-using System;
 
 using Zongband.Game.Core;
 using Zongband.Utils;
+
+using ANE = System.ArgumentNullException;
 
 namespace Zongband.UI
 {
@@ -35,9 +36,9 @@ namespace Zongband.UI
 
         private void HighlightTile()
         {
-            if (GameManager == null) throw new ArgumentNullException(nameof(GameManager));
-            if (GameManager.Board == null) throw new ArgumentNullException(nameof(GameManager.Board));
-            if (Cursor == null) throw new ArgumentNullException(nameof(Cursor));
+            if (GameManager == null) throw new ANE(nameof(GameManager));
+            if (GameManager.Board == null) throw new ANE(nameof(GameManager.Board));
+            if (Cursor == null) throw new ANE(nameof(Cursor));
 
             var board = GameManager.Board;
             var lastPlayer = GameManager.LastPlayer;

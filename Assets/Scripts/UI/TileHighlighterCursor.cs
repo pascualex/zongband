@@ -1,7 +1,8 @@
 #nullable enable
 
 using UnityEngine;
-using System;
+
+using ANE = System.ArgumentNullException;
 
 namespace Zongband.UI
 {
@@ -17,8 +18,8 @@ namespace Zongband.UI
 
         public void SetNormal()
         {
-            if (NormalCursor == null) throw new ArgumentNullException(nameof(NormalCursor));
-            if (WarningCursor == null) throw new ArgumentNullException(nameof(WarningCursor));
+            if (NormalCursor == null) throw new ANE(nameof(NormalCursor));
+            if (WarningCursor == null) throw new ANE(nameof(WarningCursor));
 
             NormalCursor.SetActive(true);
             WarningCursor.SetActive(false);
@@ -26,8 +27,8 @@ namespace Zongband.UI
 
         public void SetWarning()
         {
-            if (NormalCursor == null) throw new ArgumentNullException(nameof(NormalCursor));
-            if (WarningCursor == null) throw new ArgumentNullException(nameof(WarningCursor));
+            if (NormalCursor == null) throw new ANE(nameof(NormalCursor));
+            if (WarningCursor == null) throw new ANE(nameof(WarningCursor));
 
             NormalCursor.SetActive(false);
             WarningCursor.SetActive(true);
@@ -35,8 +36,8 @@ namespace Zongband.UI
 
         public void SetNone()
         {
-            if (NormalCursor == null) throw new ArgumentNullException(nameof(NormalCursor));
-            if (WarningCursor == null) throw new ArgumentNullException(nameof(WarningCursor));
+            if (NormalCursor == null) throw new ANE(nameof(NormalCursor));
+            if (WarningCursor == null) throw new ANE(nameof(WarningCursor));
 
             NormalCursor.SetActive(false);
             WarningCursor.SetActive(false);

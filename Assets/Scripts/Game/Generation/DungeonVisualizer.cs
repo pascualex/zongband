@@ -1,9 +1,10 @@
 #nullable enable
 
 using UnityEngine;
-using System;
 
 using Zongband.Game.Boards;
+
+using ANE = System.ArgumentNullException;
 
 namespace Zongband.Game.Generation
 {
@@ -16,7 +17,7 @@ namespace Zongband.Game.Generation
 
         private void OnDrawGizmosSelected()
         {
-            if (Board == null) throw new ArgumentNullException(nameof(Board));
+            if (Board == null) throw new ANE(nameof(Board));
             if (DungeonData == null) return;
 
             Gizmos.color = Color.cyan;
