@@ -8,7 +8,7 @@ using Zongband.Game.Abilities;
 
 namespace ZongbandEditor
 {
-    [CustomPropertyDrawer(typeof(Effect))]
+    // [CustomPropertyDrawer(typeof(Effect))]
     public class EffectDrawer : CustomDrawer
     {
         private static readonly Type Type = typeof(Effect);
