@@ -110,6 +110,12 @@ namespace Zongband.Game.Boards
             return AgentLayer.Get(at);
         }
 
+        public Entity? GetEntity(Tile at)
+        {
+            if (!Size.Contains(at)) return null;
+            return EntityLayer.Get(at);
+        }
+
         public bool IsTileEmpty(Tile tile)
         {
             if (!Size.Contains(tile)) return false;
