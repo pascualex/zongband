@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-using Zongband.Utils;
+﻿using Zongband.Utils;
 
 namespace Zongband.Games.Core.Boards
 {

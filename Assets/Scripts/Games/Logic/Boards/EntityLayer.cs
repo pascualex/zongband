@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-using System;
+﻿using System;
 
 using Zongband.Games.Logic.Entities;
 using Zongband.Utils;

@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 
 using Zongband.Games.Core.Boards;

@@ -1,5 +1,3 @@
-#nullable enable
-
 using UnityEngine;
 
 using Zongband.Games.Core;

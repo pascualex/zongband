@@ -1,5 +1,3 @@
-#nullable enable
-
 namespace Zongband.Games.Core.Boards
 {
     public interface ITerrainTypeData<T>

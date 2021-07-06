@@ -1,5 +1,3 @@
-#nullable enable
-
 using Zongband.Utils;
 
 namespace Zongband.Games.Logic.Boards

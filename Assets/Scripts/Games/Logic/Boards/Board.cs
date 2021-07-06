@@ -1,5 +1,3 @@
-#nullable enable
-
 using System;
 
 using Zongband.Games.Core.Boards;

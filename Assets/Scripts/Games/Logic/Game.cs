@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-using Zongband.Games.Core;
+﻿using Zongband.Games.Core;
 using Zongband.Games.Core.Boards;
 using Zongband.Games.Logic.Boards;
 

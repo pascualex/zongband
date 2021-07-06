@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 
 namespace Zongband.Games.Logic.Entities
