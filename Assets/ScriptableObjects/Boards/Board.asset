@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04f4324f4efa09c4f8c48f8542b48fd2, type: 3}
+  m_Script: {fileID: 11500000, guid: 80b087dffc2d7b94e8bbd8edc7436289, type: 3}
   m_Name: Board
   m_EditorClassIdentifier: 
-  Size:
-    X: 100
-    Y: 100
-  Scale: 1
+  _DefaultTerrainType: {fileID: 11400000, guid: c01a94980ed34a940989672df4bbe34d,
+    type: 2}

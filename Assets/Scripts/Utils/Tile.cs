@@ -43,11 +43,6 @@ namespace Zongband.Utils
             return Mathf.Max(Mathf.Abs(X - tile.X), Mathf.Abs(Y - tile.Y));
         }
 
-        public Vector3Int ToVector3Int()
-        {
-            return new Vector3Int(X, Y, 0);
-        }
-
         public Vector3 ToWorld()
         {
             return new Vector3(X, 0, Y);

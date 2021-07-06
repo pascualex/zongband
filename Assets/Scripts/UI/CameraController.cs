@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-using Zongband.Game.Core;
+using Zongband.Games.Core;
 
 using ANE = System.ArgumentNullException;
 
@@ -15,31 +15,31 @@ namespace Zongband.UI
         public float VariableSpeed = 15f;
 
         [SerializeField] private Camera? MainCamera;
-        [SerializeField] private GameManager? GameManager;
 
-        public void Refresh()
+        public void Refresh(IGame game)
         {
-            MoveCamera();
+            MoveCamera(game);
         }
 
-        public void MoveCamera()
+        public void MoveCamera(IGame game)
         {
             if (MainCamera == null) throw new ANE(nameof(MainCamera));
-            if (GameManager == null) throw new ANE(nameof(GameManager));
-            if (GameManager.Board == null) throw new ANE(nameof(GameManager.Board));
+            if (game == null) throw new ANE(nameof(game));
+            if (game.Board == null) throw new ANE(nameof(game.Board));
 
-            var lastPlayer = GameManager.LastPlayer;
-            if (lastPlayer == null) return;
+            return;
+            // var lastPlayer = game.LastPlayer;
+            // if (lastPlayer == null) return;
 
-            var board = GameManager.Board;
-            var playerPosition = lastPlayer.Tile.ToWorld(board.Scale, board.transform.position);
-            var targetPosition = playerPosition + CameraOffset;
+            // var board = game.Board;
+            // var playerPosition = lastPlayer.Tile.ToWorld(board.Scale, board.Position);
+            // var targetPosition = playerPosition + CameraOffset;
 
-            var transform = MainCamera.transform;
-            var remainingDistance = Vector3.Distance(transform.position, targetPosition);
-            var variableDistance = remainingDistance * VariableSpeed;
-            var distance = (variableDistance + FixedSpeed) * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, distance);
+            // var transform = MainCamera.transform;
+            // var remainingDistance = Vector3.Distance(transform.position, targetPosition);
+            // var variableDistance = remainingDistance * VariableSpeed;
+            // var distance = (variableDistance + FixedSpeed) * Time.deltaTime;
+            // transform.position = Vector3.MoveTowards(transform.position, targetPosition, distance);
         }
     }
 }
