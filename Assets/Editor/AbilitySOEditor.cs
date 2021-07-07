@@ -1,7 +1,7 @@
 // // using UnityEngine;
 // using UnityEditor;
 
-// using Zongband.Games.Logic.Abilities;
+// using Zongband.Games.Abilities;
 
 // namespace ZongbandEditor
 // {

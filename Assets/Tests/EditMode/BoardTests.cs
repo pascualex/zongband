@@ -3,8 +3,8 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using System;
 
-using Zongband.Games.Logic.Boards;
-using Zongband.Games.Logic.Entities;
+using Zongband.Games.Boards;
+using Zongband.Games.Entities;
 using Zongband.Utils;
 
 using Random = System.Random;

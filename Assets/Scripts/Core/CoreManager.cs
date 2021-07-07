@@ -2,12 +2,10 @@
 using UnityEngine.Tilemaps;
 using DG.Tweening;
 
-using Zongband.Games.Logic;
-using Zongband.Games.View;
-using Zongband.Games.View.Boards;
-using Zongband.Games.Data;
+using Zongband.Content;
+using Zongband.View;
+using Zongband.Games;
 using Zongband.Input;
-using Zongband.UI;
 
 using ANE = System.ArgumentNullException;
 
@@ -18,7 +16,7 @@ namespace Zongband.Core
         [SerializeField] private InputManager? InputManager;
         // [SerializeField] private UIManager? UIManager;
         [SerializeField] private Tilemap? Tilemap;
-        [SerializeField] private GameData? GameData;
+        [SerializeField] private GameContent? GameContent;
 
         private Game<TileBase>? Game;
 
@@ -28,10 +26,10 @@ namespace Zongband.Core
             DOTween.defaultUpdateType = UpdateType.Manual;
 
             if (Tilemap == null) throw new ANE(nameof(Tilemap));
-            if (GameData == null) throw new ANE(nameof(GameData));
+            if (GameContent == null) throw new ANE(nameof(GameContent));
 
             var gameView = new GameView(Tilemap);
-            Game = new(GameData, gameView);
+            Game = new(GameContent, gameView);
         }
 
         private void Update()
