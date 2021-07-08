@@ -37,20 +37,20 @@ namespace  Zongband.Engine.Boards
             if (!Size.Contains(at)) return false;
 
             if (!tiles[at.Y][at.X].Add(entity)) return false;
-            entities[entity] = at;
+            entities.Add(entity, at);
+            view.Add(entity, at);
             return true;
         }
 
-        public bool Move(Entity entity, Coords to, bool relative)
+        public bool Move(Entity entity, Coords to)
         {
             if (!entities.TryGetValue(entity, out var from)) return false;
             if (!Size.Contains(to)) return false;
 
-            if (relative) to += from;
-
             if (!tiles[to.Y][to.X].Add(entity)) return false;
             tiles[from.Y][from.X].Remove(entity);
             entities[entity] = to;
+            view.Move(entity, to);
             return true;
         }
 
@@ -60,6 +60,7 @@ namespace  Zongband.Engine.Boards
 
             tiles[at.Y][at.X].Remove(entity);
             entities.Remove(entity);
+            view.Remove(entity);
         }
 
         public bool SetTerrain(ITerrain terrain, Coords at)

@@ -4,6 +4,6 @@ namespace  Zongband.Engine.Boards
     {
         bool BlocksGround { get; }
         bool BlocksAir { get; }
-        object Visuals { get; }
+        object? Visuals { get; }
     }
 }

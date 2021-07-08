@@ -8,7 +8,7 @@ namespace Zongband.Content.Entities
     [CreateAssetMenu(fileName = "EntityType", menuName = "Content/EntityType")]
     public class EntityType : ScriptableObject, IEntityType
     {
-        public object Visuals => visuals.Value();
+        public object? Visuals => visuals;
 
         [SerializeField] private GameObject? visuals;
     }

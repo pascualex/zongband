@@ -39,8 +39,6 @@ namespace  Zongband.Engine
 
         private void SetupExample1()
         {
-            var entity = new Entity(content.PlayerEntityType);
-            board.Add(entity, new Coords(2, 2));
         //     var newAction = new ParallelAction();
 
         //     var playerAction = new SequentialAction();

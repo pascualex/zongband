@@ -11,7 +11,7 @@ namespace Zongband.Content.Boards
     {
         public bool BlocksGround => blocksGround;
         public bool BlocksAir => blockAir;
-        public object Visuals => visuals.Value();
+        public object? Visuals => visuals;
 
         [SerializeField] private bool blocksGround = false;
         [SerializeField] private bool blockAir = false;
