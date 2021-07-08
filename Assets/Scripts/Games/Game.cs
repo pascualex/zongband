@@ -1,21 +1,24 @@
 ﻿using Zongband.Games.Boards;
+using Zongband.Games.Entities;
+using Zongband.Utils;
 
 namespace Zongband.Games
 {
-    public class Game<T>
+    public class Game
     {
         // public readonly PlayerController PlayerController;
         // public readonly AIController AIController;
         // public readonly Pathfinder Pathfinder;
         // public readonly DungeonGenerator DungeonGenerator;
         // public readonly TurnManager TurnManager;
-        private readonly Board<T> Board;
+        private readonly Board Board;
         // public readonly Action.Context Ctx;
         // public Agent? LastPlayer { get; private set; }
 
         // private Action MainAction = new NullAction();
+        private readonly IGameContent Content;
 
-        public Game(IGameContent<T> content, IGameView<T> view)
+        public Game(IGameContent content, IGameView view)
         {
             // var defaultMovement = gameSO.DefaultMovement;
             // var testAbilitySO = gameSO.TestAbilitySO.Value();
@@ -28,12 +31,15 @@ namespace Zongband.Games
             // var agentPrefab = gameSO.AgentPrefab.Value();
             // var entityPrefab = gameSO.EntityPrefab.Value();
             // Ctx = new Action.Context(TurnManager, Board, agentPrefab, entityPrefab);
+            Content = content;
 
-            // SetupExample1(gameSO);
+            SetupExample1();
         }
 
-        // private void SetupExample1(GameSO gameSO)
-        // {
+        private void SetupExample1()
+        {
+            var entity = new Entity(Content.PlayerEntityType);
+            Board.Add(entity, new Tile(2, 2));
         //     var newAction = new ParallelAction();
 
         //     var playerAction = new SequentialAction();
@@ -87,7 +93,7 @@ namespace Zongband.Games
         //     }
 
         //     MainAction = newAction;
-        // }
+        }
 
         public void GameLoop()
         {

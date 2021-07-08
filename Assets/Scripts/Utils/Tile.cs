@@ -41,16 +41,6 @@ namespace Zongband.Utils
             return Mathf.Max(Mathf.Abs(X - tile.X), Mathf.Abs(Y - tile.Y));
         }
 
-        public Vector3 ToWorld()
-        {
-            return new Vector3(X, 0, Y);
-        }
-
-        public Vector3 ToWorld(float scale, Vector3 origin)
-        {
-            return origin + (new Vector3(X + 0.5f, 0, Y + 0.5f) * scale);
-        }
-
         public override bool Equals(object o)
         {
             if (o is Tile tile)

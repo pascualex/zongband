@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e122dd980202e6742a5570f167d8e0a8, type: 3}
   m_Name: Game
   m_EditorClassIdentifier: 
-  _Size:
+  boardSize:
     X: 10
     Y: 10
-  _DefaultTerrainType: {fileID: 11400000, guid: c01a94980ed34a940989672df4bbe34d,
-    type: 2}
+  defaultTerrainType: {fileID: 11400000, guid: c01a94980ed34a940989672df4bbe34d, type: 2}
+  entityType: {fileID: 11400000, guid: 5da8cc898d6021943b5128a3fdfcadde, type: 2}

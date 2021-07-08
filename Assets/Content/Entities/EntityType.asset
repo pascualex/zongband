@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 374fb3f55da16d74fb8c284fefb0fd3a, type: 3}
-  m_Name: BoxEntity
+  m_Script: {fileID: 11500000, guid: dd620a462c1583e45addfb9f1a2bdf25, type: 3}
+  m_Name: EntityType
   m_EditorClassIdentifier: 
-  GameModel: {fileID: 4644097584919031478, guid: c94917070f7eaf54ba6d8acf1f6a3023,
-    type: 3}
+  visuals: {fileID: 4644097584919031478, guid: c94917070f7eaf54ba6d8acf1f6a3023, type: 3}

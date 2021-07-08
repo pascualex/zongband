@@ -14,6 +14,8 @@ namespace Zongband.Utils
             "Rows could not advance because they exceed the maximum height";
         public const string AlreadyExecuted =
             "Action was not added because the combined action was already executed";
+        public const string UnexpectedVisualsObject =
+            "The visuals object received does not match the type expected";
 
         public static string Tile(Tile tile)
         {

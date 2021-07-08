@@ -2,12 +2,13 @@
 using UnityEngine.Tilemaps;
 
 using Zongband.Games.Boards;
+using Zongband.Utils;
 
 using Tile = Zongband.Utils.Tile;
 
 namespace Zongband.View.Boards
 {
-    public class TerrainLayerView : ITerrainLayerView<TileBase>
+    public class TerrainLayerView : ITerrainLayerView
     {
         public readonly Tilemap Tilemap;
 
@@ -16,11 +17,16 @@ namespace Zongband.View.Boards
             Tilemap = tilemap;
         }
 
-        public void Modify(Tile at, TileBase terrainTypeVisuals)
+        public void Modify(Tile at, object terrainTypeVisuals)
         {
-            if (Tilemap == null) return;
+            if (terrainTypeVisuals is not TileBase tilebase)
+            {
+                Debug.Log(Warnings.UnexpectedVisualsObject);
+                return;
+            }
+
             var position = new Vector3Int(at.X, at.Y, 0);
-            Tilemap.SetTile(position, terrainTypeVisuals);
+            Tilemap.SetTile(position, tilebase);
         }
     }
 }

@@ -1,9 +1,9 @@
 namespace Zongband.Games.Boards
 {
-    public interface ITerrainType<T>
+    public interface ITerrainType
     {
         bool BlocksGround { get; }
         bool BlocksAir { get; }
-        T Visuals { get; }
+        object Visuals { get; }
     }
 }

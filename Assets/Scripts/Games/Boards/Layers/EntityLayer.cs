@@ -8,9 +8,12 @@ namespace Zongband.Games.Boards
     public class EntityLayer<EntityT> : Layer where EntityT : Entity
     {
         private EntityT?[][] Entities = new EntityT[0][];
+        private IEntityLayerView View;
 
-        public EntityLayer(Size size) : base(size)
+        public EntityLayer(Size size, IEntityLayerView view)
+        : base(size)
         {
+            View = view;
             Entities = new EntityT[Size.Y][];
             for (var i = 0; i < Size.Y; i++) Entities[i] = new EntityT[Size.X];
         }
@@ -21,6 +24,7 @@ namespace Zongband.Games.Boards
 
             entity.Tile = at;
             Entities[at.Y][at.X] = entity;
+            View.Add(entity.Type.Visuals, at);
         }
 
         public void Move(EntityT entity, Tile to)

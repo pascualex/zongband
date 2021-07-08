@@ -2,8 +2,8 @@
 
 namespace Zongband.Games.Boards
 {
-    public interface ITerrainLayerView<T>
+    public interface ITerrainLayerView
     {
-        void Modify(Tile at, T terrainTypeVisuals);
+        void Modify(Tile at, object terrainTypeVisuals);
     }
 }

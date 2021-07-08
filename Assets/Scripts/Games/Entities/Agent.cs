@@ -1,56 +1,58 @@
-﻿using UnityEngine;
-using System;
+﻿// using UnityEngine;
+// using System;
 
 namespace Zongband.Games.Entities
 {
     public class Agent : Entity
     {
-        public bool IsPlayer = false;
+        public Agent(IEntityType type)
+        : base(type) {}
+//         public bool IsPlayer = false;
         
-        public string Name { get; private set; } = "Example name";
-        public int TurnCooldown { get; private set; } = 100;
-        public int TurnPriority { get; private set; } = 0;
-        public int MaxHealth { get; private set; } = 100;
-        public int Attack { get; private set; } = 10;
+//         public string Name { get; private set; } = "Example name";
+//         public int TurnCooldown { get; private set; } = 100;
+//         public int TurnPriority { get; private set; } = 0;
+//         public int MaxHealth { get; private set; } = 100;
+//         public int Attack { get; private set; } = 10;
         public bool IsGhost { get; private set; } = false;
-        public bool IsRoamer { get; private set; } = true;
-        public int Health { get; private set; }
+//         public bool IsRoamer { get; private set; } = true;
+//         public int Health { get; private set; }
 
-        public Agent()
-        {
-            Health = MaxHealth;
-        }
+//         public Agent()
+//         {
+//             Health = MaxHealth;
+//         }
 
-        public void ApplySO(AgentSO agentSO)
-        {
-            base.ApplySO(agentSO);
+//         public void ApplySO(AgentSO agentSO)
+//         {
+//             base.ApplySO(agentSO);
 
-            Name = agentSO.Name;
-            TurnCooldown = agentSO.TurnCooldown;
-            TurnPriority = agentSO.TurnPriority;
-            MaxHealth = agentSO.MaxHealth;
-            Attack = agentSO.Attack;
-            IsGhost = agentSO.IsGhost;
-            IsRoamer = agentSO.IsRoamer;
+//             Name = agentSO.Name;
+//             TurnCooldown = agentSO.TurnCooldown;
+//             TurnPriority = agentSO.TurnPriority;
+//             MaxHealth = agentSO.MaxHealth;
+//             Attack = agentSO.Attack;
+//             IsGhost = agentSO.IsGhost;
+//             IsRoamer = agentSO.IsRoamer;
 
-            Health = MaxHealth;
-        }
+//             Health = MaxHealth;
+//         }
 
-        public void Damage(int amount)
-        {
-            if (amount <= 0) return;
-            ChangeHealth(-amount);
-        }
+//         public void Damage(int amount)
+//         {
+//             if (amount <= 0) return;
+//             ChangeHealth(-amount);
+//         }
 
-        public void Heal(int amount)
-        {
-            if (amount <= 0) return;
-            ChangeHealth(amount);
-        }
+//         public void Heal(int amount)
+//         {
+//             if (amount <= 0) return;
+//             ChangeHealth(amount);
+//         }
 
-        private void ChangeHealth(int amount)
-        {
-            Health = Mathf.Max(Mathf.Min(Health + amount, MaxHealth), 0);
-        }
+//         private void ChangeHealth(int amount)
+//         {
+//             Health = Mathf.Max(Mathf.Min(Health + amount, MaxHealth), 0);
+//         }
     }
 }

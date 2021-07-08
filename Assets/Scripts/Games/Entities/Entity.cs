@@ -1,56 +1,58 @@
-﻿using UnityEngine;
-
-using Zongband.Utils;
-
-using ANE = System.ArgumentNullException;
+﻿using Zongband.Utils;
 
 namespace Zongband.Games.Entities
 {
-    public class Entity : MonoBehaviour
+    public class Entity
     {
         public Tile Tile = Tile.MinusOne;
-        public bool IsAlive => IsSpawned && !IsDestroyed;
+        public readonly IEntityType Type;
 
-        public Transform? GameModelContainer;
-        [SerializeField] private GameObject? DefaultGameModel;
-        [SerializeField] private GameObject? GameModel;
-        private bool IsSpawned = false;
-        private bool IsDestroyed = false;
+        // public bool IsAlive => IsSpawned && !IsDestroyed;
+        // public Transform? GameModelContainer;
+        // [SerializeField] private GameObject? DefaultGameModel;
+        // [SerializeField] private GameObject? GameModel;
+        // private bool IsSpawned = false;
+        // private bool IsDestroyed = false;
 
-        private void Awake()
+        public Entity(IEntityType type)
         {
-            if (GameModelContainer == null) throw new ANE(nameof(GameModelContainer));
-            if (DefaultGameModel == null) throw new ANE(nameof(DefaultGameModel));
-
-            if (GameModel != null) Destroy(GameModel);
-
-            GameModel = Instantiate(DefaultGameModel, GameModelContainer);
-            GameModel.name = "GameModel";
+            Type = type;
         }
 
-        private void OnDestroy()
-        {
-            IsDestroyed = true;
-        }
+        // private void Awake()
+        // {
+        //     if (GameModelContainer == null) throw new ANE(nameof(GameModelContainer));
+        //     if (DefaultGameModel == null) throw new ANE(nameof(DefaultGameModel));
 
-        public void OnSpawn()
-        {
-            IsSpawned = true;
-        }
+        //     if (GameModel != null) Destroy(GameModel);
 
-        public void ApplySO(EntitySO entitySO)
-        {
-            if (GameModelContainer == null) throw new ANE(nameof(GameModelContainer));
-            if (DefaultGameModel == null) throw new ANE(nameof(DefaultGameModel));
+        //     GameModel = Instantiate(DefaultGameModel, GameModelContainer);
+        //     GameModel.name = "GameModel";
+        // }
 
-            if (GameModel != null) Destroy(GameModel);
+        // private void OnDestroy()
+        // {
+        //     IsDestroyed = true;
+        // }
 
-            var parent = GameModelContainer;
-            if (entitySO.GameModel != null) GameModel = Instantiate(entitySO.GameModel, parent);
-            else GameModel = Instantiate(DefaultGameModel, parent);
+        // public void OnSpawn()
+        // {
+        //     IsSpawned = true;
+        // }
 
-            name = entitySO.name;
-            GameModel.name = "GameModel";
-        }
+        // public void ApplySO(EntitySO entitySO)
+        // {
+        //     if (GameModelContainer == null) throw new ANE(nameof(GameModelContainer));
+        //     if (DefaultGameModel == null) throw new ANE(nameof(DefaultGameModel));
+
+        //     if (GameModel != null) Destroy(GameModel);
+
+        //     var parent = GameModelContainer;
+        //     if (entitySO.GameModel != null) GameModel = Instantiate(entitySO.GameModel, parent);
+        //     else GameModel = Instantiate(DefaultGameModel, parent);
+
+        //     name = entitySO.name;
+        //     GameModel.name = "GameModel";
+        // }
     }
 }

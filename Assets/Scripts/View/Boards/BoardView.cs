@@ -1,15 +1,18 @@
-﻿using UnityEngine.Tilemaps;
+﻿using UnityEngine;
+using UnityEngine.Tilemaps;
 
 using Zongband.Games.Boards;
 
 namespace Zongband.View.Boards
 {
-    public class BoardView : IBoardView<TileBase>
+    public class BoardView : IBoardView
     {
-        public ITerrainLayerView<TileBase> TerrainLayerView { get; }
+        public IEntityLayerView EntityLayerView { get; }
+        public ITerrainLayerView TerrainLayerView { get; }
 
         public BoardView(Tilemap tilemap)
         {
+            EntityLayerView = new EntityLayerView(tilemap.transform.position, tilemap.cellSize);
             TerrainLayerView = new TerrainLayerView(tilemap);
         }
     }

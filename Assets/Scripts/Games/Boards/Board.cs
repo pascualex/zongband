@@ -5,20 +5,20 @@ using Zongband.Utils;
 
 namespace Zongband.Games.Boards
 {
-    public class Board<T>
+    public class Board
     {
         public readonly Size Size;
 
         private readonly EntityLayer<Agent> AgentLayer;
         private readonly EntityLayer<Entity> EntityLayer;
-        private readonly TerrainLayer<T> TerrainLayer;
+        private readonly TerrainLayer TerrainLayer;
 
-        public Board(Size size, ITerrainType<T> defaultTerrainType, IBoardView<T> view)
+        public Board(Size size, ITerrainType defaultTerrainType, IBoardView view)
         {
             Size = size;
-            AgentLayer = new EntityLayer<Agent>(Size);
-            EntityLayer = new EntityLayer<Entity>(Size);
-            TerrainLayer = new TerrainLayer<T>(Size, defaultTerrainType, view.TerrainLayerView);
+            AgentLayer = new EntityLayer<Agent>(Size, view.EntityLayerView);
+            EntityLayer = new EntityLayer<Entity>(Size, view.EntityLayerView);
+            TerrainLayer = new TerrainLayer(Size, defaultTerrainType, view.TerrainLayerView);
         }
 
         public void Add(Entity entity, Tile at)
@@ -45,14 +45,14 @@ namespace Zongband.Games.Boards
             else EntityLayer.Remove(entity);
         }
 
-        public void Modify(Tile at, ITerrainType<T> terrainType)
+        public void Modify(Tile at, ITerrainType terrainType)
         {
             if (!IsTileAvailable(terrainType, at)) throw new NotEmptyTileException(at);
 
             TerrainLayer.Modify(at, terrainType);
         }
 
-        public void Box(Tile from, Tile to, ITerrainType<T> terrainType)
+        public void Box(Tile from, Tile to, ITerrainType terrainType)
         {
             var lower = new Tile(Math.Min(from.X, to.X), Math.Min(from.Y, to.Y));
             var higher = new Tile(Math.Max(from.X, to.X), Math.Max(from.Y, to.Y));
@@ -120,7 +120,7 @@ namespace Zongband.Games.Boards
             return true;
         }
 
-        public bool IsTileAvailable(ITerrainType<T> terrainType, Tile tile)
+        public bool IsTileAvailable(ITerrainType terrainType, Tile tile)
         {
             if (!Size.Contains(tile)) return false;
             /* Add here special interactions in the future */

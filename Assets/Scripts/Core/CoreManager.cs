@@ -18,7 +18,7 @@ namespace Zongband.Core
         [SerializeField] private Tilemap? Tilemap;
         [SerializeField] private GameContent? GameContent;
 
-        private Game<TileBase>? Game;
+        private Game? Game;
 
         private void Start()
         {

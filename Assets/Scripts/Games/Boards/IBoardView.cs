@@ -1,7 +1,8 @@
 ﻿namespace Zongband.Games.Boards
 {
-    public interface IBoardView<T>
+    public interface IBoardView
     {
-        ITerrainLayerView<T> TerrainLayerView { get; }
+        IEntityLayerView EntityLayerView { get; }
+        ITerrainLayerView TerrainLayerView { get; }
     }
 }

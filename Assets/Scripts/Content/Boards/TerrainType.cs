@@ -7,13 +7,14 @@ using Zongband.Utils;
 namespace Zongband.Content.Boards
 {
     [CreateAssetMenu(fileName = "TerrainType", menuName = "Content/TerrainType")]
-    public class TerrainType : ScriptableObject, ITerrainType<TileBase>
+    public class TerrainType : ScriptableObject, ITerrainType
     {
-        public bool _BlocksGround = false;
-        public bool BlocksGround => _BlocksGround;
-        public bool _BlockAir = false;
-        public bool BlocksAir => _BlockAir;
-        public TileBase? _Visuals;
-        public TileBase Visuals => _Visuals.Value();
+        public bool blocksGround = false;
+        public bool blockAir = false;
+        public TileBase? visuals;
+
+        public bool BlocksGround => blocksGround;
+        public bool BlocksAir => blockAir;
+        public object Visuals => visuals.Value();
     }
 }

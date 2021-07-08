@@ -2,8 +2,8 @@
 
 namespace Zongband.Games
 {
-    public interface IGameView<T>
+    public interface IGameView
     {
-        IBoardView<T> Board { get; }
+        IBoardView Board { get; }
     }
 }

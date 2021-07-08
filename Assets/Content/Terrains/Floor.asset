@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74e4f4717d9503446946cb2a4fd37cab, type: 3}
   m_Name: Floor
   m_EditorClassIdentifier: 
-  _BlocksGround: 0
-  _BlockAir: 0
-  _Visuals: {fileID: 11400000, guid: f39c456624b2fee4f994c40070103ea2, type: 2}
+  blocksGround: 0
+  blockAir: 0
+  visuals: {fileID: 11400000, guid: f39c456624b2fee4f994c40070103ea2, type: 2}
