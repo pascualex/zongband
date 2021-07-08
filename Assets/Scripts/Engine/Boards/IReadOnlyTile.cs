@@ -7,6 +7,6 @@ namespace  Zongband.Engine.Boards
     public interface IReadOnlyTile
     {
         ITerrain Terrain { get; }
-        IEnumerable<Entity> Entities { get; }
+        IReadOnlyCollection<Entity> Entities { get; }
     }
 }

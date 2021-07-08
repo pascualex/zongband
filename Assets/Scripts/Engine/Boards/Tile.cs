@@ -7,7 +7,7 @@ namespace  Zongband.Engine.Boards
     public class Tile : IReadOnlyTile
     {
         public ITerrain Terrain { get; private set; }
-        public IEnumerable<Entity> Entities => entities;
+        public IReadOnlyCollection<Entity> Entities => entities;
 
         private readonly HashSet<Entity> entities = new();
 
@@ -22,9 +22,10 @@ namespace  Zongband.Engine.Boards
             return true;
         }
 
-        public void Remove(Entity entity)
+        public bool Remove(Entity entity)
         {
             entities.Remove(entity);
+            return true;
         }
 
         public bool SetTerrain(ITerrain terrain)

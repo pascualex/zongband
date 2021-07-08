@@ -47,6 +47,7 @@ namespace  Zongband.Engine.Boards
             if (!entities.TryGetValue(entity, out var from)) return false;
             if (!Size.Contains(to)) return false;
 
+            if (to == from) return true;
             if (!tiles[to.Y][to.X].Add(entity)) return false;
             tiles[from.Y][from.X].Remove(entity);
             entities[entity] = to;
@@ -54,13 +55,14 @@ namespace  Zongband.Engine.Boards
             return true;
         }
 
-        public void Remove(Entity entity)
+        public bool Remove(Entity entity)
         {
-            if (!entities.TryGetValue(entity, out var at)) return;
+            if (!entities.TryGetValue(entity, out var at)) return false;
 
-            tiles[at.Y][at.X].Remove(entity);
+            if (!tiles[at.Y][at.X].Remove(entity)) return false;
             entities.Remove(entity);
             view.Remove(entity);
+            return true;
         }
 
         public bool SetTerrain(ITerrain terrain, Coords at)
