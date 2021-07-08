@@ -15,5 +15,6 @@ MonoBehaviour:
   boardSize:
     X: 10
     Y: 10
-  defaultTerrainType: {fileID: 11400000, guid: c01a94980ed34a940989672df4bbe34d, type: 2}
+  floorTerrain: {fileID: 11400000, guid: c01a94980ed34a940989672df4bbe34d, type: 2}
+  wallTerrain: {fileID: 11400000, guid: af22969d07b4d9441b9db3c56dac123c, type: 2}
   entityType: {fileID: 11400000, guid: 5da8cc898d6021943b5128a3fdfcadde, type: 2}

@@ -2,51 +2,42 @@ using UnityEngine;
 
 namespace Zongband.Utils
 {
-    public struct Tile
+    public struct Coords
     {
-        public static Tile Zero { get; } = new Tile(0, 0);
-        public static Tile One { get; } = new Tile(1, 1);
-        public static Tile MinusOne { get; } = new Tile(-1, -1);
-        public static Tile Up { get; } = new Tile(0, 1);
-        public static Tile Right { get; } = new Tile(1, 0);
-        public static Tile Down { get; } = new Tile(0, -1);
-        public static Tile Left { get; } = new Tile(-1, 0);
-        public static Tile UpRight { get; } = new Tile(1, 1);
-        public static Tile DownRight { get; } = new Tile(1, -1);
-        public static Tile DownLeft { get; } = new Tile(-1, -1);
-        public static Tile UpLeft { get; } = new Tile(-1, 1);
+        public static Coords Zero { get; } = new Coords(0, 0);
+        public static Coords One { get; } = new Coords(1, 1);
+        public static Coords MinusOne { get; } = new Coords(-1, -1);
+        public static Coords Up { get; } = new Coords(0, 1);
+        public static Coords Right { get; } = new Coords(1, 0);
+        public static Coords Down { get; } = new Coords(0, -1);
+        public static Coords Left { get; } = new Coords(-1, 0);
+        public static Coords UpRight { get; } = new Coords(1, 1);
+        public static Coords DownRight { get; } = new Coords(1, -1);
+        public static Coords DownLeft { get; } = new Coords(-1, -1);
+        public static Coords UpLeft { get; } = new Coords(-1, 1);
 
         public int X;
         public int Y;
 
-        public Tile(int x, int y)
+        public Coords(int x, int y)
         {
             X = x;
             Y = y;
         }
-
-        public Tile(int xy)
-        : this(xy, xy) { }
-
-        public Tile(Vector2 vector2)
-        : this((int)vector2.x, (int)vector2.y) { }
 
         public int GetDistance()
         {
             return GetDistance(Zero);
         }
 
-        public int GetDistance(Tile tile)
+        public int GetDistance(Coords coords)
         {
-            return Mathf.Max(Mathf.Abs(X - tile.X), Mathf.Abs(Y - tile.Y));
+            return Mathf.Max(Mathf.Abs(X - coords.X), Mathf.Abs(Y - coords.Y));
         }
 
         public override bool Equals(object o)
         {
-            if (o is Tile tile)
-            {
-                return (tile.X == X) && (tile.Y == Y);
-            }
+            if (o is Coords coords) return (coords.X == X) && (coords.Y == Y);
             else return false;
         }
 
@@ -55,29 +46,29 @@ namespace Zongband.Utils
             return X ^ Y;
         }
 
-        public static Tile operator +(Tile a, Tile b)
+        public static Coords operator +(Coords a, Coords b)
         {
-            return new Tile(a.X + b.X, a.Y + b.Y);
+            return new Coords(a.X + b.X, a.Y + b.Y);
         }
 
-        public static Tile operator -(Tile a, Tile b)
+        public static Coords operator -(Coords a, Coords b)
         {
-            return new Tile(a.X - b.X, a.Y - b.Y);
+            return new Coords(a.X - b.X, a.Y - b.Y);
         }
 
-        public static bool operator ==(Tile a, Tile b)
+        public static bool operator ==(Coords a, Coords b)
         {
             return Equals(a, b);
         }
 
-        public static bool operator !=(Tile a, Tile b)
+        public static bool operator !=(Coords a, Coords b)
         {
             return !Equals(a, b);
         }
 
-        public static Tile[] RandomizedDirections()
+        public static Coords[] RandomizedDirections()
         {
-            var directions = new Tile[] {
+            var directions = new Coords[] {
                 Up,
                 Right,
                 Down,

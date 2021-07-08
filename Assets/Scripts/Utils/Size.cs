@@ -20,9 +20,9 @@ namespace Zongband.Utils
         public Size(int xy)
         : this(xy, xy) { }
 
-        public bool Contains(Tile tile)
+        public bool Contains(Coords coords)
         {
-            return Checker.Range(tile.X, X) && Checker.Range(tile.Y, Y);
+            return Checker.Range(coords.X, X) && Checker.Range(coords.Y, Y);
         }
 
         public static Size operator +(Size a, Size b)

@@ -2,7 +2,7 @@
 // using UnityEditor;
 // using System;
 
-// using Zongband.Games.Abilities;
+// using Zongband.Engine.Abilities;
 
 // namespace ZongbandEditor
 // {
