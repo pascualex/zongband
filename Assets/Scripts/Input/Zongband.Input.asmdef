@@ -1,0 +1,19 @@
+{
+    "name": "Zongband.Input",
+    "rootNamespace": "",
+    "references": [
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:fa1c9123a08da7b45a144748539e9cd8",
+        "GUID:7abb8966be9513b459f11b0151281d5d",
+        "GUID:1ccfd6ff3ea80794dafa6bec4f08301d"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -132,8 +132,5 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# TextMesh Pro files
-[Aa]ssets/TextMesh*Pro/
-
-# DOTween files
+# Plugins files
 [Aa]ssets/Plugins

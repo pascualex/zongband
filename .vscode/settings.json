@@ -19,6 +19,7 @@
         "**/*.asset": true,
         "**/*.preset": true,
         "**/*.inputactions": true,
+        "**/*.asmdef": true,
         "**/Library": true,
         "**/ProjectSettings": true,
         "**/Temp": true

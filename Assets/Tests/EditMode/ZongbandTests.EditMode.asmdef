@@ -1,10 +1,11 @@
 {
-    "name": "EditMode",
+    "name": "ZongbandTests.EditMode",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Zongband"
+        "Zongband.Engine",
+        "Zongband.Utils"
     ],
     "includePlatforms": [
         "Editor"

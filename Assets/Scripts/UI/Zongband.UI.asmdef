@@ -1,0 +1,17 @@
+{
+    "name": "Zongband.UI",
+    "rootNamespace": "",
+    "references": [
+        "GUID:fa1c9123a08da7b45a144748539e9cd8",
+        "GUID:1ccfd6ff3ea80794dafa6bec4f08301d"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
