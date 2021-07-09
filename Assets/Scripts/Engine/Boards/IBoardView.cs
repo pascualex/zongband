@@ -8,6 +8,6 @@ namespace  Zongband.Engine.Boards
         void Add(Entity entity, Coords at);
         void Move(Entity entity, Coords to);
         void Remove(Entity entity);
-        void Modify(Coords at, ITerrain terrain);
+        void Modify(Coords at, ITileType tileType);
     }
 }

@@ -14,7 +14,7 @@ namespace  Zongband.Engine.Boards
         private readonly Dictionary<Entity, Coords> entities = new();
         private readonly IBoardView view;
 
-        public Board(Size size, ITerrain defaultTerrain, IBoardView view)
+        public Board(Size size, ITileType defaultTileType, IBoardView view)
         {
             Size = size;
             tiles = new Tile[Size.Y][];
@@ -25,8 +25,8 @@ namespace  Zongband.Engine.Boards
                 tiles[i] = new Tile[Size.X];
                 for (var j = 0; j < Size.X; j++)
                 {
-                    tiles[i][j] = new Tile(defaultTerrain);
-                    view.Modify(new Coords(j, i), defaultTerrain);
+                    tiles[i][j] = new Tile(defaultTileType);
+                    view.Modify(new Coords(j, i), defaultTileType);
                 }
             }
         }
@@ -39,6 +39,7 @@ namespace  Zongband.Engine.Boards
             if (!tiles[at.Y][at.X].Add(entity)) return false;
             entities.Add(entity, at);
             view.Add(entity, at);
+
             return true;
         }
 
@@ -48,10 +49,12 @@ namespace  Zongband.Engine.Boards
             if (!Size.Contains(to)) return false;
 
             if (to == from) return true;
+
             if (!tiles[to.Y][to.X].Add(entity)) return false;
             tiles[from.Y][from.X].Remove(entity);
             entities[entity] = to;
             view.Move(entity, to);
+
             return true;
         }
 
@@ -59,32 +62,21 @@ namespace  Zongband.Engine.Boards
         {
             if (!entities.TryGetValue(entity, out var at)) return false;
 
-            if (!tiles[at.Y][at.X].Remove(entity)) return false;
+            tiles[at.Y][at.X].Remove(entity);
             entities.Remove(entity);
             view.Remove(entity);
+
             return true;
         }
 
-        public bool SetTerrain(ITerrain terrain, Coords at)
+        public bool ChangeTileType(ITileType tileType, Coords at)
         {
             if (!Size.Contains(at)) return false;
 
-            if (!tiles[at.Y][at.X].SetTerrain(terrain)) return false;
-            view.Modify(at, terrain);
-            return true;
-        }
+            if (!tiles[at.Y][at.X].ChangeType(tileType)) return false;
+            view.Modify(at, tileType);
 
-        public void SetTerrain(ITerrain terrain, Coords from, Coords to)
-        {
-            var lower = new Coords(Math.Min(from.X, to.X), Math.Min(from.Y, to.Y));
-            var higher = new Coords(Math.Max(from.X, to.X), Math.Max(from.Y, to.Y));
-            for (var i = lower.Y; i <= higher.Y; i++)
-            {
-                for (var j = lower.X; j <= higher.X; j++)
-                {
-                    SetTerrain(terrain, new Coords(j, i));
-                }
-            }
+            return true;
         }
 
         public IReadOnlyTile? GetTile(Coords at)
@@ -94,45 +86,23 @@ namespace  Zongband.Engine.Boards
             return tiles[at.Y][at.X];
         }
 
-        // public Agent? GetAgent(Tile at)
-        // {
-        //     if (!Size.Contains(at)) return null;
-        //     return AgentLayer.Get(at);
-        // }
+        public IEnumerable<IReadOnlyTile> GetTiles()
+        {
+            return GetTiles(Coords.Zero, new Coords(Size.X - 1, Size.Y - 1));
+        }
 
-        // public Entity? GetEntity(Tile at)
-        // {
-        //     if (!Size.Contains(at)) return null;
-        //     return EntityLayer.Get(at);
-        // }
-
-        // public bool IsTileEmpty(Tile tile)
-        // {
-        //     if (!Size.Contains(tile)) return false;
-        //     if (!AgentLayer.IsTileEmpty(tile)) return false;
-        //     if (!EntityLayer.IsTileEmpty(tile)) return false;
-        //     return true;
-        // }
-
-        // public bool IsTileAvailable(Entity entity, Tile tile, bool relative)
-        // {
-        //     if (relative) tile += entity.Tile;
-        //     if (!Size.Contains(tile)) return false;
-        //     /* Add here special interactions in the future */
-        //     if (!AgentLayer.IsTileEmpty(tile)) return false;
-        //     var isGhost = (entity is Agent agent) && agent.IsGhost;
-        //     if (!isGhost && !EntityLayer.IsTileEmpty(tile)) return false;
-        //     if (!isGhost && TerrainLayer.GetTile(tile).Type.BlocksGround) return false;
-        //     return true;
-        // }
-
-        // public bool IsTileAvailable(ITerrainType terrainType, Tile tile)
-        // {
-        //     if (!Size.Contains(tile)) return false;
-        //     /* Add here special interactions in the future */
-        //     if (terrainType.BlocksGround && !AgentLayer.IsTileEmpty(tile)) return false;
-        //     if (terrainType.BlocksGround && !EntityLayer.IsTileEmpty(tile)) return false;
-        //     return true;
-        // }
+        public IEnumerable<IReadOnlyTile> GetTiles(Coords from, Coords to)
+        {
+            var lower = new Coords(Math.Min(from.X, to.X), Math.Min(from.Y, to.Y));
+            var higher = new Coords(Math.Max(from.X, to.X), Math.Max(from.Y, to.Y));
+            for (var i = lower.Y; i <= higher.Y; i++)
+            {
+                for (var j = lower.X; j <= higher.Y; j++)
+                {
+                    var tile = GetTile(new Coords(j, i));
+                    if (tile is not null) yield return tile;
+                }
+            }
+        }
     }
 }

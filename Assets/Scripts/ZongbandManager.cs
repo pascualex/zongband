@@ -28,8 +28,8 @@ namespace Zongband
             if (tilemap == null) throw new ANE(nameof(tilemap));
             if (gameContent == null) throw new ANE(nameof(gameContent));
 
-            var gameView = new GameView(tilemap);
-            game = new(gameContent, gameView);
+            var boardView = new BoardView(tilemap);
+            game = new(gameContent, boardView);
         }
 
         private void Update()

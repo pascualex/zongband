@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
 
+using Zongband.Content.Boards;
 using Zongband.Content.Entities;
 using Zongband.Engine;
 using Zongband.Engine.Boards;
 using Zongband.Engine.Entities;
 using Zongband.Utils;
-
-using Terrain = Zongband.Content.Boards.Terrain;
 
 namespace Zongband.Content
 {
@@ -14,13 +13,13 @@ namespace Zongband.Content
     public class GameContent : ScriptableObject, IGameContent
     {
         public Size BoardSize => boardSize;
-        public ITerrain FloorTerrain => floorTerrain.Value();
-        public ITerrain WallTerrain => wallTerrain.Value();
-        public IEntityType PlayerEntityType => entityType.Value();
+        public ITileType FloorType => floorType.Value();
+        public ITileType WallType => wallType.Value();
+        public IEntityType PlayerType => playerType.Value();
 
         [SerializeField] private Size boardSize;
-        [SerializeField] private Terrain? floorTerrain;
-        [SerializeField] private Terrain? wallTerrain;
-        [SerializeField] private EntityType? entityType;
+        [SerializeField] private TileType? floorType;
+        [SerializeField] private TileType? wallType;
+        [SerializeField] private EntityType? playerType;
     }
 }

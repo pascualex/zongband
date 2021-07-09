@@ -1,4 +1,4 @@
-using UnityEngine;
+using System.Collections.Generic;
 
 namespace Zongband.Utils
 {
@@ -8,8 +8,8 @@ namespace Zongband.Utils
         public static Size Zero { get; } = new Size(0, 0);
         public static Size One { get; } = new Size(1, 1);
 
-        public int X;
-        public int Y;
+        public int X { get; set; }
+        public int Y { get; set; }
 
         public Size(int x, int y)
         {

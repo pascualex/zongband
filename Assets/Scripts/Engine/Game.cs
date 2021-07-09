@@ -19,7 +19,7 @@ namespace  Zongband.Engine
         private readonly Board board;
         private readonly IGameContent content;
 
-        public Game(IGameContent content, IGameView view)
+        public Game(IGameContent content, IBoardView boardView)
         {
             // var defaultMovement = gameSO.DefaultMovement;
             // var testAbilitySO = gameSO.TestAbilitySO.Value();
@@ -28,7 +28,7 @@ namespace  Zongband.Engine
             // Pathfinder = new Pathfinder();
             // DungeonGenerator = new DungeonGenerator();
             // TurnManager = new TurnManager();
-            board = new(content.BoardSize, content.FloorTerrain, view.Board);
+            board = new(content.BoardSize, content.FloorType, boardView);
             // var agentPrefab = gameSO.AgentPrefab.Value();
             // var entityPrefab = gameSO.EntityPrefab.Value();
             // Ctx = new Action.Context(TurnManager, Board, agentPrefab, entityPrefab);

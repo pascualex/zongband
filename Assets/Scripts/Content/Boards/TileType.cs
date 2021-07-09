@@ -6,8 +6,8 @@ using Zongband.Utils;
 
 namespace Zongband.Content.Boards
 {
-    [CreateAssetMenu(fileName = "Terrain", menuName = "Content/Terrain")]
-    public class Terrain : ScriptableObject, ITerrain
+    [CreateAssetMenu(fileName = "TileType", menuName = "Content/TileType")]
+    public class TileType : ScriptableObject, ITileType
     {
         public bool BlocksGround => blocksGround;
         public bool BlocksAir => blockAir;

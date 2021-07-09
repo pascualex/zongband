@@ -7,8 +7,8 @@ namespace  Zongband.Engine
     public interface IGameContent
     {
         Size BoardSize { get; }
-        ITerrain FloorTerrain { get; }
-        ITerrain WallTerrain { get; }
-        IEntityType PlayerEntityType { get; }
+        ITileType FloorType { get; }
+        ITileType WallType { get; }
+        IEntityType PlayerType { get; }
     }
 }

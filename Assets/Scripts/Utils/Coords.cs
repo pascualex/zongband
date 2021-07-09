@@ -16,8 +16,8 @@ namespace Zongband.Utils
         public static Coords DownLeft { get; } = new Coords(-1, -1);
         public static Coords UpLeft { get; } = new Coords(-1, 1);
 
-        public int X;
-        public int Y;
+        public int X { get; set; }
+        public int Y { get; set; }
 
         public Coords(int x, int y)
         {

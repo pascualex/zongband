@@ -6,7 +6,7 @@ using Zongband.Engine.Boards;
 using Zongband.Engine.Entities;
 using Zongband.Utils;
 
-namespace Zongband.View.Boards
+namespace Zongband.View
 {
     public class BoardView : IBoardView
     {
@@ -48,9 +48,9 @@ namespace Zongband.View.Boards
             entities.Remove(entity);
         }
 
-        public void Modify(Coords at, ITerrain terrain)
+        public void Modify(Coords at, ITileType tileType)
         {
-            if (terrain.Visuals is not TileBase tilebase)
+            if (tileType.Visuals is not TileBase tilebase)
             {
                 Debug.Log(Warnings.UnexpectedVisualsObject);
                 return;

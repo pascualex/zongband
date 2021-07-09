@@ -1,6 +1,6 @@
 namespace  Zongband.Engine.Boards
 {
-    public interface ITerrain
+    public interface ITileType
     {
         bool BlocksGround { get; }
         bool BlocksAir { get; }

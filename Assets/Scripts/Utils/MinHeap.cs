@@ -3,19 +3,19 @@ using System;
 
 public class MinHeap<T> where T: IComparable<T>
 {
-    private T[] Items;
+    private T[] items;
     public int ItemCount { get; private set; } = 0;
 
     public MinHeap(int maxSize)
     {
-        Items = new T[maxSize];
+        items = new T[maxSize];
     }
 
     public void Add(T item)
     {
-        if (ItemCount >= Items.Length) throw new InvalidOperationException();
+        if (ItemCount >= items.Length) throw new InvalidOperationException();
 
-        Items[ItemCount] = item;
+        items[ItemCount] = item;
         ItemCount++;
 
         HeapifyUp();
@@ -25,16 +25,16 @@ public class MinHeap<T> where T: IComparable<T>
     {
         if (ItemCount < 1) throw new InvalidOperationException();
 
-        return Items[0];
+        return items[0];
     }
 
     public T Remove()
     {
         if (ItemCount < 1) throw new InvalidOperationException();
 
-        var value = Items[0];
+        var value = items[0];
 
-        Items[0] = Items[ItemCount - 1];
+        items[0] = items[ItemCount - 1];
         ItemCount--;
         HeapifyDown();
 
@@ -45,11 +45,11 @@ public class MinHeap<T> where T: IComparable<T>
     {
         var i = ItemCount - 1;
         var parent = Parent(i);
-        while (i > 0 && Items[i].CompareTo(Items[parent]) < 0)
+        while (i > 0 && items[i].CompareTo(items[parent]) < 0)
         {
-            var aux = Items[i];
-            Items[i] = Items[parent];
-            Items[parent] = aux;
+            var aux = items[i];
+            items[i] = items[parent];
+            items[parent] = aux;
 
             i = parent;
             parent = Parent(i);
@@ -66,14 +66,14 @@ public class MinHeap<T> where T: IComparable<T>
             var left = LeftChild(i);
             var right = RightChild(i);
 
-            if (left < ItemCount && Items[left].CompareTo(Items[min]) < 0) min = left;
-            if (right < ItemCount && Items[right].CompareTo(Items[min]) < 0) min = right;
+            if (left < ItemCount && items[left].CompareTo(items[min]) < 0) min = left;
+            if (right < ItemCount && items[right].CompareTo(items[min]) < 0) min = right;
 
             if (min != i)
             {
-                var aux = Items[i];
-                Items[i] = Items[min];
-                Items[min] = aux;
+                var aux = items[i];
+                items[i] = items[min];
+                items[min] = aux;
 
                 i = min;
             }
