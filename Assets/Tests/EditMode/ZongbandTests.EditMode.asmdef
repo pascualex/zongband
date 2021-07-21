@@ -4,9 +4,7 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Zongband.Engine",
-        "Zongband.Utils",
-        "ZongbandTests.Utils"
+        "Zongband.Utils"
     ],
     "includePlatforms": [
         "Editor"

@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using RLEngine;
+using RLEngine.Input;
+using RLEngine.Utils;
+
+using UnityEngine;
 using UnityEngine.InputSystem;
 
-// using Zongband.UI;
-// using Zongband.Engine.Controllers;
-using Zongband.Utils;
-
+using PlayerInput = UnityEngine.InputSystem.PlayerInput;
 using ANE = System.ArgumentNullException;
 
 namespace Zongband.Input
@@ -12,8 +13,7 @@ namespace Zongband.Input
     [RequireComponent(typeof(PlayerInput))]
     public class InputManager : MonoBehaviour
     {
-        // public UIManager? UIManager;
-        // public PlayerController? PlayerController;
+        public Game? Game { get; set; }
 
         public void ProcessInput()
         {
@@ -22,17 +22,15 @@ namespace Zongband.Input
 
         public void ClearInput()
         {
-            // if (PlayerController == null) throw new ANE(nameof(PlayerController));
-
-            // PlayerController.Clear();
+            // TODO
         }
 
         private void OnMove(InputValue value)
         {
-            // if (PlayerController == null) throw new ANE(nameof(PlayerController));
-            // var vector = value.Get<Vector2>();
-            // var direction = new Tile((int)vector.x, (int)vector.y);
-            // PlayerController.PlayerAction = new PlayerAction(direction, true, true);
+            if (Game == null) throw new ANE(nameof(Game));
+            var vector = value.Get<Vector2>();
+            var direction = new Coords((int)vector.x, (int)vector.y);
+            Game.Input = new MoveInput(direction, true);
         }
 
         private void OnSkipTurn(InputValue value)

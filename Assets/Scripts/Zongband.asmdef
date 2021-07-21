@@ -4,14 +4,15 @@
     "references": [
         "GUID:63d2572e6091ad741a0438e1009b007c",
         "GUID:2d64f4b010936ef49b34a74482eaae6f",
-        "GUID:07450cc7c7e26ad4b9d89f64efc1417b",
-        "GUID:fa1c9123a08da7b45a144748539e9cd8"
+        "GUID:07450cc7c7e26ad4b9d89f64efc1417b"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "RLEngine.dll"
+    ],
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
