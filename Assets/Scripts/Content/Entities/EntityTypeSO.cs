@@ -18,6 +18,8 @@ namespace Zongband.Content.Entities
         [SerializeField] private bool blocksAir = false;
         [SerializeField] private bool isGhost = false;
         [SerializeField] private bool isRoamer = true;
+        [SerializeField] private GameObject? gameModel = null;
+        [SerializeField] private EntityTypeSO? parent = null;
 
         public string Name => displayName;
         public bool IsAgent => isAgent;
@@ -26,7 +28,7 @@ namespace Zongband.Content.Entities
         public bool BlocksAir => blocksAir;
         public bool IsGhost => isGhost;
         public bool IsRoamer => isRoamer;
-        public object? Visuals => null;
-        public IEntityType? Parent => null;
+        public object? Visuals => gameModel;
+        public IEntityType? Parent => parent;
     }
 }

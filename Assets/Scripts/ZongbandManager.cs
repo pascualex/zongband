@@ -23,22 +23,29 @@ namespace Zongband
 
         private void Start()
         {
+            if (inputManager is null) throw new ANE(nameof(inputManager));
             if (gameView is null) throw new ANE(nameof(gameView));
             if (gameContent is null) throw new ANE(nameof(gameContent));
 
             var state = new GameState(gameContent.BoardSize, gameContent.FloorType);
             game = new Game(gameContent);
+            inputManager.Game = game;
             gameView.Represent(state);
+
+            var log = game.SetupExample();
+            gameView.Represent(log);
         }
 
         private void Update()
         {
             if (inputManager == null) throw new ANE(nameof(inputManager));
+            if (gameView is null) throw new ANE(nameof(gameView));
             if (game == null) throw new ANE(nameof(game));
 
             inputManager.ProcessInput();
-            // game.GameLoop();
-            // UIManager.Refresh();
+            var log = game.ProcessTurns();
+            if (log is not null) gameView.Represent(log);
+            gameView.Refresh();
             inputManager.ClearInput();
         }
     }

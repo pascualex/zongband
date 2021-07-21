@@ -18,4 +18,7 @@ MonoBehaviour:
   blocksGround: 1
   blocksAir: 0
   isGhost: 0
-  isRoamer: 0
+  isRoamer: 1
+  gameModel: {fileID: 4644097584919031478, guid: 09fb2cc6317f02340a0aef7cd65e0de0,
+    type: 3}
+  parent: {fileID: 0}
