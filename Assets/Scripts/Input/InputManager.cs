@@ -22,7 +22,9 @@ namespace Zongband.Input
 
         public void ClearInput()
         {
-            // TODO
+            if (Game == null) throw new ANE(nameof(Game));
+
+            Game.Input = null;
         }
 
         private void OnMove(InputValue value)

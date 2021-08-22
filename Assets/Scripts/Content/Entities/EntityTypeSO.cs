@@ -13,6 +13,7 @@ namespace Zongband.Content.Entities
     {
         [SerializeField] private string displayName = "DEFAULT NAME";
         [SerializeField] private bool isAgent = false;
+        [SerializeField] private int maxHealth = 100;
         [SerializeField] private int speed = 100;
         [SerializeField] private bool blocksGround = true;
         [SerializeField] private bool blocksAir = false;
@@ -23,6 +24,7 @@ namespace Zongband.Content.Entities
 
         public string Name => displayName;
         public bool IsAgent => isAgent;
+        public int MaxHealth => maxHealth;
         public int Speed => speed;
         public bool BlocksGround => blocksGround;
         public bool BlocksAir => blocksAir;

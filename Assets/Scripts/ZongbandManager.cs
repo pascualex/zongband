@@ -30,10 +30,10 @@ namespace Zongband
             var state = new GameState(gameContent.BoardSize, gameContent.FloorType);
             game = new Game(gameContent);
             inputManager.Game = game;
-            gameView.Represent(state);
+            gameView.EnqueueState(state);
 
             var log = game.SetupExample();
-            gameView.Represent(log);
+            gameView.EnqueueLog(log);
         }
 
         private void Update()
@@ -43,8 +43,11 @@ namespace Zongband
             if (game == null) throw new ANE(nameof(game));
 
             inputManager.ProcessInput();
-            var log = game.ProcessTurns();
-            if (log is not null) gameView.Represent(log);
+            if (gameView.IsCompleted)
+            {
+                var log = game.ProcessTurns();
+                if (log is not null) gameView.EnqueueLog(log);
+            }
             gameView.Refresh();
             inputManager.ClearInput();
         }
