@@ -16,7 +16,7 @@ namespace Zongband.View.VActions
             this.log = log;
         }
 
-        protected override bool ProcessStart()
+        protected override bool ProcessAndCheck()
         {
             if (log.NewType.Visuals is not TileBase tilebase)
             {

@@ -1,3 +1,4 @@
+using Zongband.View.Entities;
 using Zongband.Utils;
 
 using RLEngine.Logs;
@@ -16,9 +17,9 @@ namespace Zongband.View.VActions
             this.log = log;
         }
 
-        protected override bool ProcessStart()
+        protected override bool ProcessAndCheck()
         {
-            if (ctx.Entities.ContainsKey(log.Entity))
+            if (ctx.VEntities.ContainsKey(log.Entity))
             {
                 Debug.LogWarning(Warnings.EntityAlreadyPresent(log.Entity));
                 return true;
@@ -32,7 +33,8 @@ namespace Zongband.View.VActions
 
             var position = ctx.CoordsToWorld(log.At);
             var model = GameObject.Instantiate(prefab, position, Quaternion.identity);
-            ctx.Entities.Add(log.Entity, model);
+            var vEntity = new VEntity(model, position);
+            ctx.VEntities.Add(log.Entity, vEntity);
 
             return true;
         }

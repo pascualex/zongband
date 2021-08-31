@@ -15,16 +15,16 @@ namespace Zongband.View.VActions
             this.log = log;
         }
 
-        protected override bool ProcessStart()
+        protected override bool ProcessAndCheck()
         {
-            if (!ctx.Entities.TryGetValue(log.Entity, out var model))
+            if (!ctx.VEntities.TryGetValue(log.Entity, out var vEntity))
             {
                 Debug.LogWarning(Warnings.EntityNotPresent(log.Entity));
                 return true;
             }
 
-            GameObject.Destroy(model);
-            ctx.Entities.Remove(log.Entity);
+            GameObject.Destroy(vEntity.Model);
+            ctx.VEntities.Remove(log.Entity);
 
             return true;
         }

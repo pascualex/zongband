@@ -2,7 +2,7 @@ using System;
 
 namespace Zongband.Utils
 {
-    public static class ObjectExtension
+    public static class ObjectExtensions
     {
         public static T Value<T>(this T? obj)
         {

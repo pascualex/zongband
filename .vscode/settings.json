@@ -29,7 +29,9 @@
         "Behaviour",
         "Mathf",
         "childs",
+        "lerp",
         "tweener",
+        "yoyo",
         "zongband"
     ]
 }

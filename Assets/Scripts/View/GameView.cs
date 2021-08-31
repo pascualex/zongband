@@ -22,7 +22,7 @@ namespace Zongband.View
         [SerializeField] float movementDuration = 1f;
         [SerializeField] Ease movementEase = Ease.Linear;
 
-        private VAction.Context? ctx = null;
+        private Context? ctx = null;
         private VAction? currentVAction = null;
         private readonly Queue<VAction> vActions = new();
 
@@ -79,6 +79,7 @@ namespace Zongband.View
                     else if (c is MoveLog moveLog) va = new MoveVAction(moveLog, ctx);
                     else if (c is DestroyLog destroyLog) va = new DestroyVAction(destroyLog, ctx);
                     else if (c is ModifyLog modifyLog) va = new ModifyVAction(modifyLog, ctx);
+                    else if (c is DamageLog damageLog) va = new DamageVAction(damageLog, ctx);
 
                     if (va != null) vActions.Enqueue(va);
                     else Debug.LogWarning(Warnings.LogNotSupported(c));
