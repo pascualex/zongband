@@ -73,5 +73,11 @@ namespace Zongband.Input
 
             // UIManager.HandleCtrlMouseLeftClick();
         }
+
+        private void OnAreaAttack()
+        {
+            if (Game == null) throw new ANE(nameof(Game));
+            Game.Input = new AttackInput();
+        }
     }
 }

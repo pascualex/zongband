@@ -52,6 +52,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "AreaAttack",
+                    "type": "Button",
+                    "id": "e1789d1b-24b3-4790-9851-6b507b000dd2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -184,6 +192,17 @@
                     "processors": "",
                     "groups": "KeyboardAndMouse",
                     "action": "MouseRightClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0591267f-8295-4984-8136-f6b6cc4c7d08",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardAndMouse",
+                    "action": "AreaAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
