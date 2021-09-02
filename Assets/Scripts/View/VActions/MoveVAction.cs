@@ -8,7 +8,7 @@ using DG.Tweening;
 
 namespace Zongband.View.VActions
 {
-    public class MoveVAction : VAction
+    public class MoveVAction : ContextVAction
     {
         private readonly MoveLog log;
         private Tween? tween = null;

@@ -13,8 +13,9 @@ public class Context
     private readonly Vector3 origin;
     private readonly Vector3 scale;
 
-    public Context(Tilemap tilemap, Vector3 origin, Vector3 scale, float movementDuration, Ease movementEase)
+    public Context(Transform entitiesParent, Tilemap tilemap, Vector3 origin, Vector3 scale, float movementDuration, Ease movementEase)
     {
+        EntitiesParent = entitiesParent;
         Tilemap = tilemap;
         this.origin = origin;
         this.scale = scale;
@@ -23,6 +24,7 @@ public class Context
     }
 
     public Dictionary<Entity, VEntity> VEntities { get; } = new();
+    public Transform EntitiesParent { get; }
     public Tilemap Tilemap { get; }
     public float MovementDuration { get; }
     public Ease MovementEase { get; }

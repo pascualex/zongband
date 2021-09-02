@@ -7,7 +7,7 @@ using DG.Tweening;
 
 namespace Zongband.View.VActions
 {
-    public class HealVAction : VAction
+    public class HealVAction : ContextVAction
     {
         private readonly HealLog log;
         private Tween? targetTween = null;

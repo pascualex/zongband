@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Zongband.View.VActions
 {
-    public class SpawnVAction : VAction
+    public class SpawnVAction : ContextVAction
     {
         private readonly SpawnLog log;
 
@@ -32,7 +32,9 @@ namespace Zongband.View.VActions
             }
 
             var position = ctx.CoordsToWorld(log.At);
-            var model = GameObject.Instantiate(prefab, position, Quaternion.identity);
+            var parent = ctx.EntitiesParent;
+            var model = GameObject.Instantiate(prefab, position, Quaternion.identity, parent);
+            model.name = log.Entity.Name;
             var vEntity = new VEntity(model, position);
             ctx.VEntities.Add(log.Entity, vEntity);
 

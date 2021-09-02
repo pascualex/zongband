@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Zongband.View.VActions
 {
-    public class DestroyVAction : VAction
+    public class DestroyVAction : ContextVAction
     {
         private readonly DestroyLog log;
 

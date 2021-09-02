@@ -2,17 +2,12 @@ namespace Zongband.View.VActions
 {
     public abstract class VAction
     {
-        protected Context ctx;
-
-        protected VAction(Context ctx)
-        {
-            this.ctx = ctx;
-        }
-
+        public bool HasStarted { get; private set; } = false;
         public bool IsCompleted { get; private set; } = false;
 
         public void Process()
         {
+            HasStarted = true;
             if (IsCompleted) return;
             IsCompleted = ProcessAndCheck();
         }

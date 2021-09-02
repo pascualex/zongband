@@ -7,11 +7,8 @@ namespace Zongband.Utils
 {
     public static class Warnings
     {
-        public static string LogNotSupported(Log log)
-        {
-            var type = log.GetType();
-            return $"The log type \"{type}\" is not supported.";
-        }
+        public static string CombinedActionRunning =>
+            "The combined action was already running when an action was added";
 
         public static string EntityAlreadyPresent(Entity entity)
         {
@@ -23,6 +20,12 @@ namespace Zongband.Utils
         {
             var name = entity.Name;
             return $"The entity \"{name}\" was not previously added or was removed.";
+        }
+
+        public static string LogNotSupported(Log log)
+        {
+            var type = log.GetType();
+            return $"The log type \"{type}\" is not supported.";
         }
 
         public static string VisualsType(object? obj, Type expectedType)

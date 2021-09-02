@@ -7,7 +7,7 @@ using UnityEngine.Tilemaps;
 
 namespace Zongband.View.VActions
 {
-    public class ModifyVAction : VAction
+    public class ModifyVAction : ContextVAction
     {
         private readonly ModifyLog log;
 
