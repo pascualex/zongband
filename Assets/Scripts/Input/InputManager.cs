@@ -1,6 +1,6 @@
-﻿using RLEngine;
-using RLEngine.Input;
-using RLEngine.Utils;
+﻿using RLEngine.Core.Games;
+using RLEngine.Core.Input;
+using RLEngine.Core.Utils;
 
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -32,7 +32,7 @@ namespace Zongband.Input
             if (Game == null) throw new ANE(nameof(Game));
             var vector = value.Get<Vector2>();
             var direction = new Coords((int)vector.x, (int)vector.y);
-            Game.Input = new MoveInput(direction, true);
+            Game.Input = new MovementInput(direction, true);
         }
 
         private void OnSkipTurn(InputValue value)
@@ -76,8 +76,8 @@ namespace Zongband.Input
 
         private void OnAreaAttack()
         {
-            if (Game == null) throw new ANE(nameof(Game));
-            Game.Input = new AttackInput();
+            // if (Game == null) throw new ANE(nameof(Game));
+            // Game.Input = new AttackInput();
         }
     }
 }

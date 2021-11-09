@@ -11,7 +11,8 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "RLEngine.dll"
+        "RLEngine.Core.dll",
+        "RLEngine.Yaml.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

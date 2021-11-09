@@ -1,13 +1,13 @@
 ﻿using Zongband.Input;
-using Zongband.View;
-using Zongband.Content;
+using Zongband.View.Games;
 
-using RLEngine;
-using RLEngine.Actions;
-using RLEngine.State;
-using RLEngine.Utils;
+using RLEngine.Yaml.Serialization;
+using RLEngine.Core.Games;
+using RLEngine.Core.Logs;
 
 using UnityEngine;
+using System.Collections.Generic;
+using System.IO;
 
 using ANE = System.ArgumentNullException;
 
@@ -17,38 +17,42 @@ namespace Zongband
     {
         [SerializeField] private InputManager? inputManager;
         [SerializeField] private GameView? gameView;
-        [SerializeField] private GameContentSO? gameContent;
 
         private Game? game;
 
-        private void Start()
+        private void Awake()
         {
-            if (inputManager is null) throw new ANE(nameof(inputManager));
-            if (gameView is null) throw new ANE(nameof(gameView));
-            if (gameContent is null) throw new ANE(nameof(gameContent));
+            if (inputManager == null) throw new ANE(nameof(inputManager));
+            if (gameView == null) throw new ANE(nameof(gameView));
 
-            var state = new GameState(gameContent.BoardSize, gameContent.FloorType);
+            var contentPath = Path.Combine(Application.dataPath, "Content");
+            var gameContent = YamlDeserializer.Deserialize(contentPath);
             game = new Game(gameContent);
             inputManager.Game = game;
-            gameView.EnqueueState(state);
+        }
 
-            var log = game.SetupExample();
-            gameView.EnqueueLog(log);
+        private void Start()
+        {
+            if (gameView == null) throw new ANE(nameof(gameView));
+            if (game == null) throw new ANE(nameof(game));
+
+            game.SetupExample();
+            gameView.Represent(game);
         }
 
         private void Update()
         {
             if (inputManager == null) throw new ANE(nameof(inputManager));
-            if (gameView is null) throw new ANE(nameof(gameView));
+            if (gameView == null) throw new ANE(nameof(gameView));
             if (game == null) throw new ANE(nameof(game));
 
             inputManager.ProcessInput();
-            if (gameView.IsCompleted)
+            if (gameView.IsReady)
             {
-                var log = game.ProcessTurns();
-                if (log is not null) gameView.EnqueueLog(log);
+                var log = game.ProcessStep();
+                if (log != null) gameView.Represent(log);
             }
-            gameView.Refresh();
+            gameView.ManualUpdate();
             inputManager.ClearInput();
         }
     }

@@ -1,0 +1,24 @@
+name: "Test Ability"
+cost: 100
+type: entityTarget
+effects:
+- type: areaTarget
+  source: "target"
+  radius: 2
+  newGroup: "area"
+- type: group
+  group: "area"
+  newTarget: "iterator"
+  effects:
+  - type: projectile
+    target: "iterator"
+    source: "caster"
+  - type: damage
+    amount: {base: 20}
+    target: "iterator"
+  - type: healing
+    amount: {base: 5}
+    target: "caster"
+- type: healing
+  amount: {base: 10}
+  target: "caster"
