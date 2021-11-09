@@ -36,5 +36,10 @@ namespace Zongband.View.Assets
             Debug.LogWarning(Warnings.AssetNotAvailable(identifiable));
             return defaultPrefab!;
         }
+
+        public T2 GetDefault()
+        {
+            return defaultPrefab!;
+        }
     }
 }

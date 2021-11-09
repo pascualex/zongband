@@ -8,7 +8,7 @@ namespace Zongband.Utils
     {
         public static Vector3Int ToCell(this Coords coords)
         {
-            return new Vector3Int(coords.X, coords.Y, 0);
+            return new(coords.X, coords.Y, 0);
         }
     }
 }

@@ -54,7 +54,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "AreaAttack",
+                    "name": "AuxiliaryAction",
                     "type": "Button",
                     "id": "e1789d1b-24b3-4790-9851-6b507b000dd2",
                     "expectedControlType": "Button",
@@ -202,7 +202,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardAndMouse",
-                    "action": "AreaAttack",
+                    "action": "AuxiliaryAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

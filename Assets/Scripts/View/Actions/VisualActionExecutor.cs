@@ -25,13 +25,13 @@ namespace Zongband.View.Actions
 
         public Sequence? Execute(ILog log) => log switch
         {
-            // AbilityLog abilityLog => Cast(abilityLog),
+            AbilityLog      abilityLog      => Cast   (abilityLog     ),
             DamageLog       damageLog       => Damage (damageLog      ),
             DestructionLog  destructionLog  => Destroy(destructionLog ),
             HealingLog      healingLog      => Heal   (healingLog     ),
             ModificationLog modificationLog => Modify (modificationLog),
             MovementLog     movementLog     => Move   (movementLog    ),
-            // ProjectileLog projectileLog => Shoot(projectileLog),
+            ProjectileLog   projectileLog   => Shoot  (projectileLog  ),
             SpawnLog        spawnLog        => Spawn  (spawnLog       ),
             _ => null,
         };

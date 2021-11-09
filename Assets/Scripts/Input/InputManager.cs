@@ -4,6 +4,7 @@ using RLEngine.Core.Utils;
 
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Linq;
 
 using PlayerInput = UnityEngine.InputSystem.PlayerInput;
 using ANE = System.ArgumentNullException;
@@ -74,10 +75,14 @@ namespace Zongband.Input
             // UIManager.HandleCtrlMouseLeftClick();
         }
 
-        private void OnAreaAttack()
+        private void OnAuxiliaryAction()
         {
-            // if (Game == null) throw new ANE(nameof(Game));
-            // Game.Input = new AttackInput();
+            if (Game == null) throw new ANE(nameof(Game));
+            if (Game.CurrentAgent == null) return;
+            var position = Game.CurrentAgent.Position + Coords.Right;
+            var entities = Game.Board.GetEntities(position);
+            if (entities.Count == 0) return;
+            Game.Input = new AbilityInput(Game.Content.Ability, entities.First());
         }
     }
 }
