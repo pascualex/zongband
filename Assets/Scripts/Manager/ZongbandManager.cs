@@ -11,7 +11,7 @@ using System.IO;
 
 using ANE = System.ArgumentNullException;
 
-namespace Zongband
+namespace Zongband.Manager
 {
     public class ZongbandManager : MonoBehaviour
     {

@@ -1,8 +1,9 @@
 {
-    "name": "Zongband.Input",
+    "name": "Zongband.Manager",
     "rootNamespace": "",
     "references": [
-        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:2d64f4b010936ef49b34a74482eaae6f",
+        "GUID:63d2572e6091ad741a0438e1009b007c",
         "GUID:1ccfd6ff3ea80794dafa6bec4f08301d"
     ],
     "includePlatforms": [],
